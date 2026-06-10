@@ -6,7 +6,9 @@ import {
 
 } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../services/api";
+
 
 import Navbar from
 "../components/layout/Navbar";
@@ -84,7 +86,7 @@ export default function Dashboard() {
 
 
       const response =
-      await axios.get(
+      await api.get(
 
         "/api/profile",
 
@@ -146,9 +148,9 @@ export default function Dashboard() {
 
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/trades",
+        "/trades",
 
         {
 
