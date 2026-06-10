@@ -1,0 +1,33 @@
+.auth-container{
+
+  min-height:100vh;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+}
+
+.auth-card{
+
+  width:100%;
+
+  max-width:450px;
+
+  background:
+  rgba(255,255,255,0.05);
+
+  border:
+  1px solid rgba(255,255,255,0.1);
+
+  border-radius:32px;
+
+  padding:40px;
+
+  backdrop-filter:blur(20px);
+
+}
