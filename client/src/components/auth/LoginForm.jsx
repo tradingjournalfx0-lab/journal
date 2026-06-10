@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useNavigate, Link }
 from "react-router-dom";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
 
 export default function LoginForm() {
 
@@ -68,7 +69,7 @@ export default function LoginForm() {
     try {
 
       const response =
-      await axios.post(
+      await api.post(
 
         "/auth/login",
 
