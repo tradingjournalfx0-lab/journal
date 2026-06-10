@@ -46,7 +46,7 @@ export default function AvatarUpload() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/profile",
+        "/api/profile",
 
         {
 
@@ -73,7 +73,7 @@ export default function AvatarUpload() {
 
         setAvatar(
 
-          `http://localhost:5000/${response.data.avatar}`
+          `/${response.data.avatar}`
 
         );
 
@@ -164,7 +164,7 @@ export default function AvatarUpload() {
       const response =
       await axios.post(
 
-        "http://localhost:5000/api/profile/avatar",
+        "/api/profile/avatar",
 
         formData,
 
@@ -191,7 +191,7 @@ export default function AvatarUpload() {
 
       setAvatar(
 
-        `http://localhost:5000/${response.data.avatar}`
+        `/${response.data.avatar}`
 
       );
 

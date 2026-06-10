@@ -110,7 +110,7 @@ export default function JournalCard({
 
       await axios.delete(
 
-        `http://localhost:5000/api/journals/${journal._id}`,
+        `/api/journals/${journal._id}`,
 
         {
 
@@ -221,7 +221,7 @@ export default function JournalCard({
       const response =
       await axios.put(
 
-        `http://localhost:5000/api/journals/${journal._id}`,
+        `/api/journals/${journal._id}`,
 
         {
 

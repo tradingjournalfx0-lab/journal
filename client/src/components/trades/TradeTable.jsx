@@ -73,7 +73,7 @@ export default function TradeTable() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/trades",
+        "/api/trades",
 
         {
 
@@ -271,7 +271,7 @@ export default function TradeTable() {
 
       await axios.delete(
 
-        `http://localhost:5000/api/trades/${id}`,
+        `/api/trades/${id}`,
 
         {
 
@@ -378,7 +378,7 @@ export default function TradeTable() {
         const response =
         await axios.put(
 
-          `http://localhost:5000/api/trades/${editId}`,
+          `/api/trades/${editId}`,
 
           {
 
@@ -455,7 +455,7 @@ export default function TradeTable() {
         const response =
         await axios.post(
 
-          "http://localhost:5000/api/trades",
+          "/api/trades",
 
           {
 

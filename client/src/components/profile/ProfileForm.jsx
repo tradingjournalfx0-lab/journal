@@ -56,7 +56,7 @@ export default function ProfileForm() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/profile",
+        "/api/profile",
 
         {
 
@@ -182,7 +182,7 @@ export default function ProfileForm() {
 
       await axios.post(
 
-        "http://localhost:5000/api/profile",
+        "/api/profile",
 
         formData,
 

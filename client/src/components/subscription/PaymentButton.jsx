@@ -129,7 +129,7 @@ export default function PaymentButton({
       const profileResponse =
       await axios.get(
 
-        "http://localhost:5000/api/profile",
+        "/api/profile",
 
         {
 
@@ -163,7 +163,7 @@ export default function PaymentButton({
       const response =
       await axios.post(
 
-        "http://localhost:5000/api/payment/create-order",
+        "/api/payment/create-order",
 
         {
 
@@ -308,7 +308,7 @@ export default function PaymentButton({
             const saveResponse =
             await axios.post(
 
-              "http://localhost:5000/api/payment/success",
+              "/api/payment/success",
 
               {
 

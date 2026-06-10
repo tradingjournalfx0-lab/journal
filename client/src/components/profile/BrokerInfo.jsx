@@ -46,7 +46,7 @@ export default function BrokerInfo() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/profile",
+        "/api/profile",
 
         {
 

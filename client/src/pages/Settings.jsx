@@ -42,7 +42,7 @@ export default function Settings() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/settings"
+        "/api/settings"
 
       );
 
@@ -107,7 +107,7 @@ export default function Settings() {
 
       await axios.post(
 
-        "http://localhost:5000/api/settings",
+        "/api/settings",
 
         updatedSettings
 

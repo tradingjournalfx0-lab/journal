@@ -30,7 +30,7 @@ export default function BillingHistory(){
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/subscription/history",
+        "/api/subscription/history",
 
         {
 

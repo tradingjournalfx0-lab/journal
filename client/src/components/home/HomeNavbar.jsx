@@ -59,7 +59,7 @@ export default function HomeNavbar() {
       const response =
       await api.get(
 
-        "/api/profile"
+        "/profile"
 
       );
 
@@ -392,7 +392,7 @@ export default function HomeNavbar() {
 
                           ? profile.avatar
 
-                          : `http://localhost:5000/uploads/${profile.avatar}`
+                          : `/uploads/${profile.avatar}`
 
                         : `https://ui-avatars.com/api/?name=${
                             profile?.fullName ||
@@ -762,7 +762,7 @@ export default function HomeNavbar() {
 
                         ? profile.avatar
 
-                        : `http://localhost:5000/uploads/${profile.avatar}`
+                        : `/uploads/${profile.avatar}`
 
                       : `https://ui-avatars.com/api/?name=${
                           profile?.fullName ||

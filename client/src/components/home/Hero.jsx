@@ -66,7 +66,7 @@ export default function Hero({ isLoggedIn }) {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/trades",
+        "/trades",
 
         {
 

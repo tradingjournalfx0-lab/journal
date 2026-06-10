@@ -48,7 +48,7 @@ export default function JournalList() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/journals",
+        "/api/journals",
 
         {
 

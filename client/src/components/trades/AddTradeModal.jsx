@@ -98,7 +98,7 @@ export default function AddTradeModal({
 
       await axios.post(
 
-        "http://localhost:5000/api/trades",
+        "/api/trades",
 
         {
 

@@ -54,7 +54,7 @@ export default function Journal() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/journals",
+        "/api/journals",
 
         {
 

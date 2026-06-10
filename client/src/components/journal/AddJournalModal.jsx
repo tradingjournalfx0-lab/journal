@@ -67,7 +67,7 @@ export default function AddJournalModal({
 
       await axios.post(
 
-        "http://localhost:5000/api/journals",
+        "/journals",
 
         {
 

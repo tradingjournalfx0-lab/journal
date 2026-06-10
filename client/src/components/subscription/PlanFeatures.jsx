@@ -45,7 +45,7 @@ export default function PlanFeatures() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/subscription",
+        "/api/subscription",
 
         {
 

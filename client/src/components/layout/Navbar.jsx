@@ -53,7 +53,7 @@ export default function Navbar() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/profile",
+        "/api/profile",
 
         {
 
@@ -261,7 +261,7 @@ export default function Navbar() {
 
                 profile?.avatar
 
-                ? `http://localhost:5000/${profile.avatar}`
+                ? `/${profile.avatar}`
 
                 : "/avatar.png"
 

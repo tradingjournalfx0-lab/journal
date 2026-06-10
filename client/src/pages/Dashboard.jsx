@@ -86,7 +86,7 @@ export default function Dashboard() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/profile",
+        "/api/profile",
 
         {
 
@@ -148,7 +148,7 @@ export default function Dashboard() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/trades",
+        "/api/trades",
 
         {
 

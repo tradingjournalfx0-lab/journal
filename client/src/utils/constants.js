@@ -6,7 +6,7 @@ export const APP_VERSION =
 
 export const API_URL =
 import.meta.env.VITE_API_URL ||
-"http://localhost:5000/api";
+"/api";
 
 export const TRADE_STRATEGIES = [
 

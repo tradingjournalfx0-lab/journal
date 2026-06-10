@@ -58,7 +58,7 @@ export default function ProfileCard({
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/profile",
+        "/api/profile",
 
         {
 
@@ -126,7 +126,7 @@ export default function ProfileCard({
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/trades",
+        "/api/trades",
 
         {
 
@@ -280,7 +280,7 @@ export default function ProfileCard({
 
                 profile?.avatar
 
-                ? `http://localhost:5000/${profile.avatar}`
+                ? `/${profile.avatar}`
 
                 : "/avatar.png"
 

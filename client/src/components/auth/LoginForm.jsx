@@ -70,7 +70,7 @@ export default function LoginForm() {
       const response =
       await axios.post(
 
-        "http://localhost:5000/api/auth/login",
+        "/auth/login",
 
         formData
 

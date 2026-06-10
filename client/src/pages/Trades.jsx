@@ -72,7 +72,7 @@ export default function Trades() {
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/trades",
+        "/api/trades",
 
         {
 

@@ -83,7 +83,7 @@ export default function JournalEditor({
 
       await axios.post(
 
-        "http://localhost:5000/api/journals",
+        "/journals",
 
         {
 
