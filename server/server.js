@@ -1,14 +1,12 @@
-const express =
-require("express");
+const express = require("express");
 
-const dotenv =
-require("dotenv");
+const dotenv = require("dotenv");
 
-const cors =
-require("cors");
+const cors = require("cors");
 
-const connectDB =
-require("./config/db");
+const path = require("path");
+
+const connectDB = require("./config/db");
 
 
 
@@ -35,27 +33,45 @@ connectDB();
 // APP
 // ======================
 
-const app =
-express();
+const app = express();
 
 
 
 
 // ======================
-// MIDDLEWARE
+// CORS
 // ======================
 
 app.use(
 
-  cors()
+  cors({
+
+    origin: [
+
+      "http://localhost:5173",
+
+      "https://tradingjournalfx.in",
+
+      "https://www.tradingjournalfx.in",
+
+    ],
+
+    credentials: true,
+
+  })
 
 );
 
-app.use(
 
-  express.json()
 
-);
+
+// ======================
+// BODY PARSER
+// ======================
+
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 
 
 
@@ -70,7 +86,7 @@ app.use(
 
   express.static(
 
-    "uploads"
+    path.join(__dirname, "uploads")
 
   )
 
@@ -80,27 +96,33 @@ app.use(
 
 
 // ======================
+// ROOT ROUTE
+// ======================
+
+app.get("/", (req, res) => {
+
+  res.send("🚀 Trading Journal Backend Running");
+
+});
+
+
+
+
+// ======================
 // TEST API
 // ======================
 
-app.get(
+app.get("/api", (req, res) => {
 
-  "/api",
+  res.json({
 
-  (req,res)=>{
+    success: true,
 
-    res.json({
+    message: "Trading Journal API Running ✅",
 
-      success:true,
+  });
 
-      message:
-      "Trading Journal API Running ✅",
-
-    });
-
-  }
-
-);
+});
 
 
 
@@ -110,6 +132,7 @@ app.get(
 // ======================
 
 const authRoutes =
+
 require("./routes/authRoutes");
 
 app.use(
@@ -128,6 +151,7 @@ app.use(
 // ======================
 
 const tradeRoutes =
+
 require("./routes/tradeRoutes");
 
 app.use(
@@ -146,6 +170,7 @@ app.use(
 // ======================
 
 const journalRoutes =
+
 require("./routes/journalRoutes");
 
 app.use(
@@ -164,6 +189,7 @@ app.use(
 // ======================
 
 const profileRoutes =
+
 require("./routes/profileRoutes");
 
 app.use(
@@ -182,6 +208,7 @@ app.use(
 // ======================
 
 const paymentRoutes =
+
 require("./routes/paymentRoutes");
 
 app.use(
@@ -200,6 +227,7 @@ app.use(
 // ======================
 
 const subscriptionRoutes =
+
 require("./routes/subscriptionRoutes");
 
 app.use(
@@ -212,11 +240,13 @@ app.use(
 
 
 
+
 // ======================
 // ANALYTICS ROUTES
 // ======================
 
 const analyticsRoutes =
+
 require("./routes/analyticsRoutes");
 
 app.use(
@@ -229,26 +259,22 @@ app.use(
 
 
 
+
 // ======================
 // 404 ROUTE
 // ======================
 
-app.use(
+app.use((req, res) => {
 
-  (req,res)=>{
+  res.status(404).json({
 
-    res.status(404).json({
+    success: false,
 
-      success:false,
+    message: "Route Not Found",
 
-      message:
-      "Route Not Found",
+  });
 
-    });
-
-  }
-
-);
+});
 
 
 
@@ -257,21 +283,14 @@ app.use(
 // SERVER
 // ======================
 
-const PORT =
-process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(
+app.listen(PORT, () => {
 
-  PORT,
+  console.log(
 
-  ()=>{
+    `🚀 Server running on port ${PORT}`
 
-    console.log(
+  );
 
-      `🚀 Server running on port ${PORT}`
-
-    );
-
-  }
-
-);
+});
