@@ -40,6 +40,10 @@ export default function TradeFilters() {
           New York
         </option>
 
+        <option>
+          Asia
+        </option>
+
       </select>
 
     </div>
