@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 
-import axios from "axios";
+// import axios from "axios";
 
 import Sidebar from
 "../components/layout/Sidebar";
@@ -70,9 +70,9 @@ export default function Trades() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/trades",
+        "/trades",
 
         {
 

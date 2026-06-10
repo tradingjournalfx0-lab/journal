@@ -1,6 +1,6 @@
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
 
 import Sidebar from "../components/layout/Sidebar";
 
@@ -51,9 +51,9 @@ export default function Subscription() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/subscription",
+        "/subscription",
 
         {
 
