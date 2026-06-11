@@ -1,3 +1,4 @@
+
 const Profile =
 require("../models/Profile");
 
@@ -24,7 +25,9 @@ async(req,res)=>{
 
 
 
+    // ======================
     // CREATE EMPTY PROFILE
+    // ======================
 
     if(!profile){
 
@@ -83,7 +86,10 @@ async(req,res)=>{
 
 
 
+
+    // ======================
     // UPDATE PROFILE
+    // ======================
 
     if(profile){
 
@@ -114,7 +120,9 @@ async(req,res)=>{
 
 
 
+
       await profile.save();
+
 
 
 
@@ -126,7 +134,11 @@ async(req,res)=>{
 
 
 
+
+
+    // ======================
     // CREATE PROFILE
+    // ======================
 
     profile =
 
@@ -134,31 +146,38 @@ async(req,res)=>{
 
       user:req.user.id,
 
-      fullName:req.body.fullName,
+      fullName:
+      req.body.fullName,
 
-      email:req.body.email,
+      email:
+      req.body.email,
 
-      country:req.body.country,
+      country:
+      req.body.country,
 
-      experience:req.body.experience,
+      experience:
+      req.body.experience,
 
-      broker:req.body.broker,
+      broker:
+      req.body.broker,
 
-      accountType:req.body.accountType,
+      accountType:
+      req.body.accountType,
 
-      bio:req.body.bio,
+      bio:
+      req.body.bio,
 
-      leverage:req.body.leverage,
+      leverage:
+      req.body.leverage,
 
     });
 
 
 
 
+
     res.status(201).json(
-
       profile
-
     );
 
   }catch(error){
@@ -201,33 +220,19 @@ async(req,res)=>{
 
 
 
-    const avatarPath =
 
-    `uploads/${req.file.filename}`;
+    // ======================
+    // FILE CHECK
+    // ======================
 
+    if(!req.file){
 
+      return res.status(400).json({
 
+        success:false,
 
-    // UPDATE
-
-    if(profile){
-
-      profile.avatar =
-      avatarPath;
-
-      await profile.save();
-
-    }else{
-
-      // CREATE
-
-      profile =
-
-      await Profile.create({
-
-        user:req.user.id,
-
-        avatar:avatarPath,
+        message:
+        "No image uploaded",
 
       });
 
@@ -236,9 +241,83 @@ async(req,res)=>{
 
 
 
+
+
+    // ======================
+    // LIVE IMAGE URL
+    // ======================
+
+    const avatarPath =
+
+    `${process.env.BASE_URL}/uploads/${req.file.filename}`;
+
+
+
+
+
+    console.log(
+      "AVATAR:",
+      avatarPath
+    );
+
+
+
+
+
+    // ======================
+    // UPDATE PROFILE
+    // ======================
+
+    if(profile){
+
+      profile.avatar =
+      avatarPath;
+
+
+
+
+
+      await profile.save();
+
+    }else{
+
+
+
+
+      // ======================
+      // CREATE PROFILE
+      // ======================
+
+      profile =
+
+      await Profile.create({
+
+        user:req.user.id,
+
+        avatar:
+        avatarPath,
+
+      });
+
+    }
+
+
+
+
+
+
+    // ======================
+    // RESPONSE
+    // ======================
+
     res.json({
 
-      avatar:avatarPath,
+      success:true,
+
+      avatar:
+      avatarPath,
+
+      profile,
 
     });
 
@@ -251,6 +330,8 @@ async(req,res)=>{
 
     res.status(500).json({
 
+      success:false,
+
       message:error.message,
 
     });
@@ -262,6 +343,10 @@ async(req,res)=>{
 
 
 
+// ======================
+// EXPORT
+// ======================
+
 module.exports = {
 
   getProfile,
@@ -271,3 +356,4 @@ module.exports = {
   uploadAvatar,
 
 };
+
