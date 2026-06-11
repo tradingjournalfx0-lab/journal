@@ -68,7 +68,7 @@ export default function Sidebar() {
 
     <div className="fixed left-0 top-0 w-65 h-screen bg-[#0B1120] border-r border-white/10 p-6">
 
-      <h1 className="text-4xl font-bold text-purple-500">
+      <h1 className="text-4md font-bold text-purple-500">
 
         Tradin Journal FX
 
