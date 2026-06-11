@@ -8,7 +8,9 @@ const Subscription =
 require("../models/Subscription");
 
 
+console.log(req.body);
 
+console.log(req.user);
 
 // ======================
 // RAZORPAY
