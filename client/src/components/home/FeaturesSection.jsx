@@ -19,7 +19,10 @@ export default function FeaturesSection() {
 
       icon: "📊",
 
-      img: dashboardImg
+      img:dashboardImg,
+
+      link: "/dashboard",
+
     },
 
     {
@@ -30,7 +33,9 @@ export default function FeaturesSection() {
 
       icon: "📈",
 
-      img: tradesImg
+      img: tradesImg,
+
+      link: "/trades",
     },
 
     {
@@ -41,7 +46,9 @@ export default function FeaturesSection() {
 
       icon: "📉",
 
-      img: analyticsImg
+      img: analyticsImg,
+
+      link: "/analytics",
     },
 
     {
@@ -52,7 +59,9 @@ export default function FeaturesSection() {
 
       icon: "📔",
 
-      img: journalImg
+      img: journalImg,
+
+      link: "/journal",
     }
 
   ];
@@ -332,7 +341,10 @@ export default function FeaturesSection() {
                 shadow-[0_0_40px_rgba(168,85,247,0.35)]
                 ">
 
-                  Explore Feature
+                  <a href={item.link} target="_blank" rel="noopener noreferrer">
+                    Explore Feature
+                  </a>
+                    
 
                 </button>
 
