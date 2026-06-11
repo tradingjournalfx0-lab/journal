@@ -21,7 +21,7 @@ const BASE_URL =
 const api = axios.create({
 
   baseURL:
-  `${BASE_URL}`,
+  `${BASE_URL}/api`,
 
   headers: {
 
