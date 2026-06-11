@@ -1,5 +1,7 @@
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
+
 
 export default function PaymentButton({
 
@@ -127,9 +129,9 @@ export default function PaymentButton({
       // =========================
 
       const profileResponse =
-      await axios.get(
+      await api.get(
 
-        "/api/profile",
+        "/profile",
 
         {
 
@@ -161,9 +163,9 @@ export default function PaymentButton({
       // =========================
 
       const response =
-      await axios.post(
+      await api.post(
 
-        "/api/payment/create-order",
+        "/payment/create-order",
 
         {
 
@@ -306,9 +308,9 @@ export default function PaymentButton({
           try{
 
             const saveResponse =
-            await axios.post(
+            await api.post(
 
-              "/api/payment/success",
+              "/payment/success",
 
               {
 

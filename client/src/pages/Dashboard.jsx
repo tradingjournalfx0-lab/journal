@@ -88,7 +88,7 @@ export default function Dashboard() {
       const response =
       await api.get(
 
-        "/api/profile",
+        "/profile",
 
         {
 

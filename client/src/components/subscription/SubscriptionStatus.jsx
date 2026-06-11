@@ -1,7 +1,11 @@
 
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
+
+
+
 
 export default function SubscriptionStatus() {
 
@@ -59,9 +63,9 @@ export default function SubscriptionStatus() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/subscription",
+        "/subscription",
 
         {
 

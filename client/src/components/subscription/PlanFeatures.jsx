@@ -1,6 +1,8 @@
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
+
 
 import PricingCard from "./PricingCard";
 
@@ -43,9 +45,9 @@ export default function PlanFeatures() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/subscription",
+        "/subscription",
 
         {
 

@@ -12,7 +12,8 @@ import {
 
 } from "react-router-dom";
 
-import axios from "axios";
+    // import axios from "axios";
+import api from "../../services/api";
 
 
 
@@ -57,7 +58,7 @@ export default function SubscriptionRoute({
 
 
       const response =
-      await axios.get(
+      await api.get(
 
         "/subscription",
 
