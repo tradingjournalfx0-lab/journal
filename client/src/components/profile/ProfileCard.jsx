@@ -1,9 +1,7 @@
+
 import { useEffect,useState } from "react";
 
-// import axios from "axios";
 import api from "../../services/api";
-// import AvatarUpload from "./AvatarUpload";
-// import BrokerInfo from "./BrokerInfo";
 
 export default function ProfileCard({
 
@@ -35,6 +33,7 @@ export default function ProfileCard({
 
 
 
+
   // =========================
   // FETCH PROFILE
   // =========================
@@ -44,46 +43,17 @@ export default function ProfileCard({
 
     try{
 
-      // TOKEN
-
-      const token =
-      localStorage.getItem(
-
-        "token"
-
-      );
-
-
-
-
-      // API
-
       const response =
       await api.get(
-
-        "/profile",
-
-        {
-
-          headers:{
-
-            Authorization:
-
-            `Bearer ${token}`
-
-          }
-
-        }
-
+        "/profile"
       );
+
 
 
 
 
       setProfile(
-
         response.data
-
       );
 
     }catch(error){
@@ -103,6 +73,7 @@ export default function ProfileCard({
 
 
 
+
   // =========================
   // FETCH TRADES
   // =========================
@@ -112,38 +83,11 @@ export default function ProfileCard({
 
     try{
 
-      // TOKEN
-
-      const token =
-      localStorage.getItem(
-
-        "token"
-
-      );
-
-
-
-
-      // API
-
       const response =
       await api.get(
-
-        "/trades",
-
-        {
-
-          headers:{
-
-            Authorization:
-
-            `Bearer ${token}`
-
-          }
-
-        }
-
+        "/trades"
       );
+
 
 
 
@@ -154,8 +98,10 @@ export default function ProfileCard({
 
 
 
+
       const totalTrades =
       trades.length;
+
 
 
 
@@ -165,9 +111,12 @@ export default function ProfileCard({
 
         (trade)=>
 
-        Number(trade.profit) > 0
+        Number(
+          trade.profit
+        ) > 0
 
       ).length;
+
 
 
 
@@ -177,7 +126,9 @@ export default function ProfileCard({
 
         (acc,trade)=>
 
-          acc + Number(
+          acc +
+
+          Number(
             trade.profit || 0
           ),
 
@@ -188,15 +139,25 @@ export default function ProfileCard({
 
 
 
+
       const winRate =
+
       totalTrades > 0
 
-      ? (
-          (wins / totalTrades)
-          * 100
-        ).toFixed(1)
+      ?
 
-      : 0;
+      (
+
+        (wins / totalTrades)
+
+        * 100
+
+      ).toFixed(1)
+
+      :
+
+      0;
+
 
 
 
@@ -228,8 +189,9 @@ export default function ProfileCard({
 
 
 
+
   // =========================
-  // AUTO REFRESH
+  // LOAD
   // =========================
 
   useEffect(()=>{
@@ -239,6 +201,7 @@ export default function ProfileCard({
     fetchTrades();
 
   },[refresh]);
+
 
 
 
@@ -264,6 +227,7 @@ export default function ProfileCard({
 
 
 
+
   return (
 
     <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
@@ -279,20 +243,27 @@ export default function ProfileCard({
         {/* AVATAR */}
 
         <img
-           src={
 
-                profile?.avatar
+          src={
 
-                ? `/${profile.avatar}`
+            profile?.avatar
 
-                : "/avatar.png"
+            ?
 
-              
+            profile.avatar
+
+            :
+
+            "/avatar.png"
 
           }
+
           alt="avatar"
+
           className="w-32 h-32 rounded-full object-cover border-4 border-purple-500"
+
         />
+
 
 
 
@@ -301,9 +272,16 @@ export default function ProfileCard({
 
         <h2 className="text-3xl font-bold mt-6">
 
-          {profile.fullName || "Trader"}
+          {
+
+            profile.fullName ||
+
+            "Trader"
+
+          }
 
         </h2>
+
 
 
 
@@ -312,9 +290,20 @@ export default function ProfileCard({
 
         <p className="text-purple-400 mt-2">
 
-          {profile.accountType || "Professional"} Trader
+          {
+
+            profile.accountType ||
+
+            "Professional"
+
+          }
+
+          {" "}
+
+          Trader
 
         </p>
+
 
 
 
@@ -323,9 +312,16 @@ export default function ProfileCard({
 
         <p className="text-gray-500 mt-2">
 
-          {profile.country || "No Country"}
+          {
+
+            profile.country ||
+
+            "No Country"
+
+          }
 
         </p>
+
 
 
 
@@ -334,13 +330,16 @@ export default function ProfileCard({
 
         <p className="text-gray-400 mt-4 max-w-md">
 
-          {profile.bio ||
+          {
+
+            profile.bio ||
 
             "Passionate forex and crypto trader focused on risk management and consistency."
 
           }
 
         </p>
+
 
 
 
@@ -352,7 +351,7 @@ export default function ProfileCard({
 
 
 
-          {/* TRADES */}
+          {/* TOTAL TRADES */}
 
           <div className="bg-black/20 rounded-2xl p-5">
 
@@ -362,6 +361,10 @@ export default function ProfileCard({
 
             </h3>
 
+
+
+
+
             <p className="text-gray-400 text-sm mt-1">
 
               Trades
@@ -369,6 +372,7 @@ export default function ProfileCard({
             </p>
 
           </div>
+
 
 
 
@@ -383,6 +387,10 @@ export default function ProfileCard({
 
             </h3>
 
+
+
+
+
             <p className="text-gray-400 text-sm mt-1">
 
               Win Rate
@@ -394,24 +402,38 @@ export default function ProfileCard({
 
 
 
+
           {/* PROFIT */}
 
           <div className="bg-black/20 rounded-2xl p-5">
 
             <h3
+
               className={`text-2xl font-bold
 
-                ${stats.totalProfit >= 0
+              ${
 
-                  ? "text-purple-400"
+                stats.totalProfit >= 0
 
-                  : "text-red-400"
+                ?
 
-                }`}>
+                "text-purple-400"
+
+                :
+
+                "text-red-400"
+
+              }`}
+
+            >
 
               ${stats.totalProfit}
 
             </h3>
+
+
+
+
 
             <p className="text-gray-400 text-sm mt-1">
 
@@ -430,3 +452,4 @@ export default function ProfileCard({
   );
 
 }
+

@@ -1,6 +1,5 @@
-import { useEffect,useState } from "react";
 
-// import axios from "axios";
+import { useEffect,useState } from "react";
 
 import api from "../../services/api";
 
@@ -22,6 +21,7 @@ export default function AvatarUpload() {
 
 
 
+
   // =========================
   // FETCH PROFILE
   // =========================
@@ -31,41 +31,18 @@ export default function AvatarUpload() {
 
     try{
 
-      // TOKEN
-
-      const token =
-      localStorage.getItem(
-
-        "token"
-
-      );
-
-
-
-
-      // API
-
       const response =
       await api.get(
-
-        "/profile",
-
-        {
-
-          headers:{
-
-            Authorization:
-
-            `Bearer ${token}`
-
-          }
-
-        }
-
+        "/profile"
       );
 
 
 
+
+
+      // =========================
+      // SET AVATAR
+      // =========================
 
       if(
 
@@ -75,7 +52,7 @@ export default function AvatarUpload() {
 
         setAvatar(
 
-          `/${response.data.avatar}`
+          response.data.avatar
 
         );
 
@@ -98,11 +75,17 @@ export default function AvatarUpload() {
 
 
 
+
+  // =========================
+  // LOAD
+  // =========================
+
   useEffect(()=>{
 
     fetchProfile();
 
   },[]);
+
 
 
 
@@ -120,13 +103,16 @@ export default function AvatarUpload() {
 
 
 
+
     if(!file) return;
+
 
 
 
 
     const formData =
     new FormData();
+
 
 
 
@@ -142,26 +128,14 @@ export default function AvatarUpload() {
 
 
 
+
     setLoading(true);
 
 
 
 
+
     try{
-
-      // TOKEN
-
-      const token =
-      localStorage.getItem(
-
-        "token"
-
-      );
-
-
-
-
-      // API
 
       const response =
       await api.post(
@@ -173,10 +147,6 @@ export default function AvatarUpload() {
         {
 
           headers:{
-
-            Authorization:
-
-            `Bearer ${token}`,
 
             "Content-Type":
 
@@ -191,11 +161,19 @@ export default function AvatarUpload() {
 
 
 
+
+
+      // =========================
+      // UPDATE IMAGE
+      // =========================
+
       setAvatar(
 
-        `/${response.data.avatar}`
+        response.data.avatar
 
       );
+
+
 
 
 
@@ -219,6 +197,7 @@ export default function AvatarUpload() {
 
 
 
+
       alert(
 
         error.response?.data?.message ||
@@ -234,6 +213,7 @@ export default function AvatarUpload() {
     }
 
   };
+
 
 
 
@@ -255,6 +235,10 @@ export default function AvatarUpload() {
 
         </h2>
 
+
+
+
+
         <p className="text-gray-400 mt-2">
 
           Upload your profile picture.
@@ -262,6 +246,7 @@ export default function AvatarUpload() {
         </p>
 
       </div>
+
 
 
 
@@ -276,12 +261,19 @@ export default function AvatarUpload() {
         {/* INPUT */}
 
         <input
+
           type="file"
+
           id="avatar"
+
           accept="image/*"
+
           onChange={handleFileChange}
+
           className="hidden"
+
         />
+
 
 
 
@@ -292,7 +284,9 @@ export default function AvatarUpload() {
 
           htmlFor="avatar"
 
-          className="cursor-pointer">
+          className="cursor-pointer"
+
+        >
 
 
 
@@ -300,10 +294,15 @@ export default function AvatarUpload() {
           {/* IMAGE */}
 
           <img
+
             src={avatar}
+
             alt="avatar"
+
             className="w-28 h-28 rounded-full object-cover border-4 border-purple-500 mx-auto"
+
           />
+
 
 
 
@@ -316,11 +315,16 @@ export default function AvatarUpload() {
 
           </h3>
 
+
+
+
+
           <p className="text-gray-400 mt-2">
 
             PNG, JPG supported
 
           </p>
+
 
 
 
@@ -331,13 +335,21 @@ export default function AvatarUpload() {
 
             type="button"
 
-            className="mt-6 px-6 py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 transition-all">
+            className="mt-6 px-6 py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 transition-all"
 
-            {loading
+          >
 
-              ? "Uploading..."
+            {
 
-              : "Choose File"
+              loading
+
+              ?
+
+              "Uploading..."
+
+              :
+
+              "Choose File"
 
             }
 
@@ -352,3 +364,4 @@ export default function AvatarUpload() {
   );
 
 }
+
