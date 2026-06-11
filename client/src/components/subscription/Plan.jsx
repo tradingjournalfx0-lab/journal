@@ -153,9 +153,9 @@ export default function Plan() {
 
       title:"1 Month",
 
-      price:19,
+      price:1,
 
-      amount:19,
+      amount:1,
 
       duration:"1 Month",
 
