@@ -31,9 +31,29 @@ export default function AvatarUpload() {
 
     try{
 
+      console.log(
+        "FETCHING PROFILE..."
+      );
+
+
+
+
+
       const response =
       await api.get(
         "/profile"
+      );
+
+
+
+
+
+      console.log(
+
+        "PROFILE RESPONSE:",
+
+        response.data
+
       );
 
 
@@ -52,7 +72,7 @@ export default function AvatarUpload() {
 
         setAvatar(
 
-          response.data.avatar
+          `${response.data.avatar}?t=${Date.now()}`
 
         );
 
@@ -61,6 +81,8 @@ export default function AvatarUpload() {
     }catch(error){
 
       console.log(
+
+        "PROFILE ERROR:",
 
         error.response?.data ||
 
@@ -104,7 +126,24 @@ export default function AvatarUpload() {
 
 
 
-    if(!file) return;
+    console.log(
+      "FILE:",
+      file
+    );
+
+
+
+
+
+    if(!file){
+
+      console.log(
+        "NO FILE SELECTED"
+      );
+
+      return;
+
+    }
 
 
 
@@ -137,6 +176,14 @@ export default function AvatarUpload() {
 
     try{
 
+      console.log(
+        "UPLOAD STARTED..."
+      );
+
+
+
+
+
       const response =
       await api.post(
 
@@ -163,13 +210,26 @@ export default function AvatarUpload() {
 
 
 
+      console.log(
+
+        "UPLOAD RESPONSE:",
+
+        response.data
+
+      );
+
+
+
+
+
+
       // =========================
       // UPDATE IMAGE
       // =========================
 
       setAvatar(
 
-        response.data.avatar
+        `${response.data.avatar}?t=${Date.now()}`
 
       );
 
@@ -187,6 +247,8 @@ export default function AvatarUpload() {
     }catch(error){
 
       console.log(
+
+        "UPLOAD ERROR:",
 
         error.response?.data ||
 
@@ -298,6 +360,17 @@ export default function AvatarUpload() {
             src={avatar}
 
             alt="avatar"
+
+            onError={(e)=>{
+
+              console.log(
+                "IMAGE LOAD FAILED"
+              );
+
+              e.target.src =
+              "/avatar.png";
+
+            }}
 
             className="w-28 h-28 rounded-full object-cover border-4 border-purple-500 mx-auto"
 
