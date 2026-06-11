@@ -23,26 +23,14 @@ export default function PaymentButton({
       const script =
       document.createElement("script");
 
-
-
-
       script.src =
       "https://checkout.razorpay.com/v1/checkout.js";
-
-
-
 
       script.onload =
       () => resolve(true);
 
-
-
-
       script.onerror =
       () => resolve(false);
-
-
-
 
       document.body.appendChild(
         script
@@ -66,6 +54,8 @@ export default function PaymentButton({
 
     try {
 
+      console.log("PAYMENT STARTED");
+
 
 
 
@@ -77,6 +67,14 @@ export default function PaymentButton({
       const token =
       localStorage.getItem(
         "token"
+      );
+
+
+
+
+      console.log(
+        "TOKEN:",
+        token
       );
 
 
@@ -106,6 +104,14 @@ export default function PaymentButton({
 
 
 
+      console.log(
+        "SDK LOADED:",
+        loaded
+      );
+
+
+
+
       if (!loaded) {
 
         alert(
@@ -121,25 +127,20 @@ export default function PaymentButton({
 
 
       // =========================
-      // GET PROFILE
+      // PROFILE
       // =========================
 
       const profileResponse =
       await api.get(
+        "/profile"
+      );
 
-        "/profile",
 
-        {
 
-          headers: {
 
-            Authorization:
-            `Bearer ${token}`,
-
-          },
-
-        }
-
+      console.log(
+        "PROFILE:",
+        profileResponse.data
       );
 
 
@@ -167,19 +168,16 @@ export default function PaymentButton({
           amount:
           Number(amount),
 
-        },
-
-        {
-
-          headers: {
-
-            Authorization:
-            `Bearer ${token}`,
-
-          },
-
         }
 
+      );
+
+
+
+
+      console.log(
+        "ORDER RESPONSE:",
+        response.data
       );
 
 
@@ -188,7 +186,7 @@ export default function PaymentButton({
 
 
       // =========================
-      // PLAN LOGIC
+      // PLAN
       // =========================
 
       let plan =
@@ -197,53 +195,8 @@ export default function PaymentButton({
 
 
 
-      // 6 MONTHS
-
-      if (
-        Number(amount) === 79
-      ) {
-
-        plan =
-        "6 Months";
-
-      }
-
-
-
-
-      // 1 YEAR
-
-      else if (
-        Number(amount) === 149
-      ) {
-
-        plan =
-        "1 Year";
-
-      }
-
-
-
-
-      // LIFETIME
-
-      else if (
-        Number(amount) === 299
-      ) {
-
-        plan =
-        "Lifetime";
-
-      }
-
-
-
-
-
-
-
       // =========================
-      // RAZORPAY OPTIONS
+      // OPTIONS
       // =========================
 
       const options = {
@@ -252,38 +205,20 @@ export default function PaymentButton({
         import.meta.env
         .VITE_RAZORPAY_KEY,
 
-
-
-
         amount:
         response.data.amount,
-
-
-
 
         currency:
         response.data.currency,
 
-
-
-
         order_id:
         response.data.id,
-
-
-
 
         name:
         "Trading Journal",
 
-
-
-
         description:
         `${plan} Subscription`,
-
-
-
 
         image:
         "/logo.png",
@@ -293,11 +228,23 @@ export default function PaymentButton({
 
 
         // =========================
-        // PAYMENT SUCCESS
+        // SUCCESS
         // =========================
 
         handler:
         async function (payment) {
+
+          console.log(
+            "RAZORPAY SUCCESS"
+          );
+
+          console.log(
+            payment
+          );
+
+
+
+
 
           try {
 
@@ -325,17 +272,6 @@ export default function PaymentButton({
 
                 plan,
 
-              },
-
-              {
-
-                headers: {
-
-                  Authorization:
-                  `Bearer ${token}`,
-
-                },
-
               }
 
             );
@@ -345,7 +281,7 @@ export default function PaymentButton({
 
             console.log(
 
-              "SUBSCRIPTION:",
+              "SAVE RESPONSE:",
 
               saveResponse.data
 
@@ -355,13 +291,11 @@ export default function PaymentButton({
 
 
             alert(
-              "Payment Successful ✅"
+              "Subscription Activated ✅"
             );
 
 
 
-
-            // REFRESH
 
             window.location.reload();
 
@@ -397,26 +331,19 @@ export default function PaymentButton({
 
 
 
-
-
         // =========================
-        // PREFILL
+        // PAYMENT FAILED
         // =========================
 
-        prefill: {
+        modal: {
 
-          name:
-          profile?.fullName ||
+          ondismiss: function () {
 
-          "",
+            console.log(
+              "PAYMENT CLOSED"
+            );
 
-
-
-
-          email:
-          profile?.email ||
-
-          "",
+          },
 
         },
 
@@ -424,16 +351,23 @@ export default function PaymentButton({
 
 
 
+        prefill: {
+
+          name:
+          profile?.fullName || "",
+
+          email:
+          profile?.email || "",
+
+        },
 
 
-        // =========================
-        // THEME
-        // =========================
+
+
 
         theme: {
 
-          color:
-          "#7c3aed",
+          color:"#7c3aed",
 
         },
 
@@ -444,14 +378,34 @@ export default function PaymentButton({
 
 
 
-
       // =========================
-      // OPEN PAYMENT
+      // OPEN
       // =========================
 
       const razorpay =
       new window.Razorpay(
         options
+      );
+
+
+
+
+      razorpay.on(
+
+        "payment.failed",
+
+        function (response) {
+
+          console.log(
+
+            "PAYMENT FAILED:",
+
+            response
+
+          );
+
+        }
+
       );
 
 
