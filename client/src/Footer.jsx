@@ -2,6 +2,25 @@ import { Link } from "react-router-dom";
 
 import logo from "./assets/icon.png";
 
+
+
+
+import PrivacyPolicy
+from "./pages/PrivacyPolicy";
+
+import Terms
+from "./pages/Terms";
+
+import RefundPolicy
+from "./pages/RefundPolicy";
+
+import Contact
+from "./pages/Contact";
+
+import About
+from "./pages/About";
+
+
 export default function Footer() {
 
   return (
@@ -220,6 +239,7 @@ export default function Footer() {
             text-gray-400
             ">
 
+
               <p className="hover:text-purple-400 transition-all">
 
                 📊 Dashboard
@@ -249,6 +269,8 @@ export default function Footer() {
                 📔 Journal
 
               </p>
+
+              
 
             </div>
 
@@ -369,56 +391,56 @@ export default function Footer() {
           ">
 
             <a
-              href="#"
+              href="/privacy-policy"
               className="
               hover:scale-110
               transition-all
               "
             >
 
-              🌐
+              🔒 Privacy
 
             </a>
 
 
 
             <a
-              href="#"
+              href="/terms"
               className="
               hover:scale-110
               transition-all
               "
             >
 
-              📘
+              📜 Terms
 
             </a>
 
 
 
             <a
-              href="#"
+              href="/contact"
               className="
               hover:scale-110
               transition-all
               "
             >
 
-              🐦
+              Contact
 
             </a>
 
 
 
             <a
-              href="#"
+              href="/about"
               className="
               hover:scale-110
               transition-all
               "
             >
 
-              📸
+            About
 
             </a>
 

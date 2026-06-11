@@ -46,6 +46,22 @@ import Footer from "../Footer"
 
 
 
+import PrivacyPolicy
+from "../pages/PrivacyPolicy";
+
+import Terms
+from "../pages/Terms";
+
+import RefundPolicy
+from "../pages/RefundPolicy";
+
+import Contact
+from "../pages/Contact";
+
+import About
+from "../pages/About";
+
+
 
 
 // =========================
@@ -70,6 +86,48 @@ export default function AppRoutes(){
 
       <Routes>
 
+        {/* =========================
+            PUBLIC LEGAL PAGES
+        ========================== */}
+              <Route
+
+               path="/privacy-policy"
+
+               element={<PrivacyPolicy />}
+
+              />
+
+              <Route
+
+               path="/terms"
+
+                element={<Terms />}
+
+              />
+
+              <Route
+
+               path="/refund-policy"
+
+               element={<RefundPolicy />}
+
+              />
+
+              <Route
+
+               path="/contact"
+
+                element={<Contact />}
+
+              />
+
+              <Route
+
+                path="/about"
+
+                element={<About />}
+
+              />
 
 
 
