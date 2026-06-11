@@ -1,3 +1,4 @@
+
 const express =
 require("express");
 
@@ -9,6 +10,9 @@ require("multer");
 
 const path =
 require("path");
+
+const fs =
+require("fs");
 
 const protect =
 require("../middleware/authMiddleware");
@@ -31,7 +35,52 @@ const {
 
 
 // ======================
-// MULTER CONFIG
+// UPLOAD PATH
+// ======================
+
+const uploadPath =
+path.join(
+
+  __dirname,
+
+  "../uploads"
+
+);
+
+
+
+
+// ======================
+// CREATE UPLOADS FOLDER
+// ======================
+
+if(
+
+  !fs.existsSync(
+    uploadPath
+  )
+
+){
+
+  fs.mkdirSync(
+
+    uploadPath,
+
+    {
+
+      recursive:true,
+
+    }
+
+  );
+
+}
+
+
+
+
+// ======================
+// MULTER STORAGE
 // ======================
 
 const storage =
@@ -43,7 +92,7 @@ multer.diskStorage({
 
       null,
 
-      "uploads/"
+      uploadPath
 
     );
 
@@ -75,10 +124,75 @@ multer.diskStorage({
 
 
 
+// ======================
+// FILE FILTER
+// ======================
+
+const fileFilter =
+(req,file,cb)=>{
+
+  const allowedTypes = [
+
+    "image/png",
+
+    "image/jpeg",
+
+    "image/jpg",
+
+    "image/webp",
+
+  ];
+
+
+
+
+
+  if(
+
+    allowedTypes.includes(
+      file.mimetype
+    )
+
+  ){
+
+    cb(null,true);
+
+  }else{
+
+    cb(
+
+      new Error(
+        "Only image files allowed"
+      ),
+
+      false
+
+    );
+
+  }
+
+};
+
+
+
+
+// ======================
+// MULTER
+// ======================
+
 const upload =
 multer({
 
   storage,
+
+  fileFilter,
+
+  limits:{
+
+    fileSize:
+    5 * 1024 * 1024,
+
+  },
 
 });
 
@@ -144,3 +258,4 @@ router.post(
 
 module.exports =
 router;
+
