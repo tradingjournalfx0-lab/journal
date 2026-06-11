@@ -20,6 +20,18 @@ import TradeTable from
 import AddTradeModal from
 "../components/trades/AddTradeModal";
 
+
+
+
+// EXPORT FUNCTIONS
+import exportCSV from "../utils/exportCSV";
+
+import exportPDF from "../utils/exportPDF";
+
+import exportExcel from "../utils/exportExcel";
+
+// EXPORT FUNCTIONS
+
 export default function Trades() {
 
 
@@ -181,23 +193,103 @@ export default function Trades() {
           </div>
 
 
+          {/* Export Buttons */}
 
 
-          {/* ADD BUTTON */}
+          {/* BUTTONS */}
 
-          <button
+          <div className="flex gap-4">
 
-            onClick={()=>
 
-              setShowModal(true)
 
-            }
 
-            className="bg-purple-600 hover:bg-purple-700 px-6 py-4 rounded-2xl font-semibold transition-all">
+            {/* EXPORT CSV */}
 
-            Add Trade
+            <button
 
-          </button>
+              onClick={()=>
+
+                exportCSV(trades)
+
+              }
+
+              className="bg-green-600 hover:bg-green-700 px-5 py-3 rounded-2xl font-semibold transition-all"
+
+            >
+
+              Export CSV
+
+            </button>
+
+
+
+
+
+            {/* EXPORT PDF */}
+
+            <button
+
+              onClick={()=>
+
+                exportPDF(trades)
+
+              }
+
+              className="bg-red-600 hover:bg-red-700 px-5 py-3 rounded-2xl font-semibold transition-all"
+
+            >
+
+              Export PDF
+
+            </button>
+
+
+
+
+
+            {/* EXPORT EXCEL */}
+
+            <button
+
+              onClick={()=>
+
+                exportExcel(trades)
+
+              }
+
+              className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl font-semibold transition-all"
+
+            >
+
+              Export Excel
+
+            </button>
+
+
+
+
+
+            {/* ADD TRADE */}
+
+            <button
+
+              onClick={()=>
+
+                setShowModal(true)
+
+              }
+
+              className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-2xl font-semibold transition-all"
+
+            >
+
+              Add Trade
+
+            </button>
+
+          </div>
+
+          {/* Export Buttons */}
 
         </div>
 
