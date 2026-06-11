@@ -4,7 +4,7 @@ export default function PaymentButton({
 
   title = "Subscribe Now",
 
-  amount = 19,
+  amount = 1,
 
 }) {
 
