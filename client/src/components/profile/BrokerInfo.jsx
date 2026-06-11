@@ -1,6 +1,7 @@
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
 
 export default function BrokerInfo() {
 
@@ -44,9 +45,9 @@ export default function BrokerInfo() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/profile",
+        "/profile",
 
         {
 

@@ -1,6 +1,8 @@
-
 const Razorpay =
 require("razorpay");
+
+const crypto =
+require("crypto");
 
 const Subscription =
 require("../models/Subscription");
@@ -15,11 +17,8 @@ require("../models/Subscription");
 const razorpay =
 new Razorpay({
 
-        key_id:
-        process.env.RAZORPAY_KEY_ID,
-
-
-
+  key_id:
+  process.env.RAZORPAY_KEY_ID,
 
   key_secret:
   process.env.RAZORPAY_KEY_SECRET,
@@ -34,9 +33,9 @@ new Razorpay({
 // ======================
 
 const createOrder =
-async(req,res)=>{
+async (req, res) => {
 
-  try{
+  try {
 
     const amount =
     Number(req.body.amount);
@@ -44,19 +43,22 @@ async(req,res)=>{
 
 
 
-    // INVALID AMOUNT
 
-    if(
+    // ======================
+    // INVALID AMOUNT
+    // ======================
+
+    if (
 
       !amount ||
 
       amount <= 0
 
-    ){
+    ) {
 
       return res.status(400).json({
 
-        success:false,
+        success: false,
 
         message:
         "Invalid Amount",
@@ -68,7 +70,10 @@ async(req,res)=>{
 
 
 
+
+    // ======================
     // CREATE ORDER
+    // ======================
 
     const order =
 
@@ -77,7 +82,7 @@ async(req,res)=>{
       amount:
       amount * 100,
 
-      currency:"INR",
+      currency: "INR",
 
       receipt:
       `receipt_${Date.now()}`,
@@ -87,9 +92,10 @@ async(req,res)=>{
 
 
 
+
     res.json(order);
 
-  }catch(error){
+  } catch (error) {
 
     console.log(
 
@@ -102,11 +108,13 @@ async(req,res)=>{
 
 
 
+
     res.status(500).json({
 
-      success:false,
+      success: false,
 
-      message:error.message,
+      message:
+      error.message,
 
     });
 
@@ -122,25 +130,29 @@ async(req,res)=>{
 // ======================
 
 const paymentSuccess =
-async(req,res)=>{
+async (req, res) => {
 
-  try{
+  try {
+
+
+
+
 
     // ======================
     // USER CHECK
     // ======================
 
-    if(
+    if (
 
       !req.user ||
 
       !req.user.id
 
-    ){
+    ) {
 
       return res.status(401).json({
 
-        success:false,
+        success: false,
 
         message:
         "Unauthorized User",
@@ -153,6 +165,8 @@ async(req,res)=>{
 
 
 
+
+
     // ======================
     // DATA
     // ======================
@@ -160,11 +174,81 @@ async(req,res)=>{
     const {
 
       amount,
+
       paymentId,
+
       orderId,
+
       plan,
 
+      razorpay_signature,
+
     } = req.body;
+
+
+
+
+
+
+
+    // ======================
+    // VERIFY PAYMENT
+    // ======================
+
+    const body =
+    orderId + "|" + paymentId;
+
+
+
+
+
+    const expectedSignature =
+
+      crypto
+
+        .createHmac(
+
+          "sha256",
+
+          process.env
+          .RAZORPAY_KEY_SECRET
+
+        )
+
+        .update(body.toString())
+
+        .digest("hex");
+
+
+
+
+
+
+
+    // ======================
+    // INVALID SIGNATURE
+    // ======================
+
+    if (
+
+      expectedSignature !==
+
+      razorpay_signature
+
+    ) {
+
+      return res.status(400).json({
+
+        success: false,
+
+        message:
+        "Payment Verification Failed",
+
+      });
+
+    }
+
+
 
 
 
@@ -179,9 +263,14 @@ async(req,res)=>{
 
 
 
+
     // 1 MONTH
 
-    if(plan === "1 Month"){
+    if (
+
+      plan === "1 Month"
+
+    ) {
 
       expiry = new Date();
 
@@ -196,9 +285,14 @@ async(req,res)=>{
 
 
 
+
     // 6 MONTHS
 
-    else if(plan === "6 Months"){
+    else if (
+
+      plan === "6 Months"
+
+    ) {
 
       expiry = new Date();
 
@@ -213,9 +307,14 @@ async(req,res)=>{
 
 
 
+
     // 1 YEAR
 
-    else if(plan === "1 Year"){
+    else if (
+
+      plan === "1 Year"
+
+    ) {
 
       expiry = new Date();
 
@@ -230,9 +329,14 @@ async(req,res)=>{
 
 
 
+
     // LIFETIME
 
-    else if(plan === "Lifetime"){
+    else if (
+
+      plan === "Lifetime"
+
+    ) {
 
       expiry = null;
 
@@ -242,27 +346,34 @@ async(req,res)=>{
 
 
 
+
+
     // ======================
-    // EXPIRE OLD ACTIVE PLAN
+    // EXPIRE OLD PLAN
     // ======================
 
     await Subscription.updateMany(
 
       {
 
-        user:req.user.id,
+        user:
+        req.user.id,
 
-        status:"Active",
+        status:
+        "Active",
 
       },
 
       {
 
-        status:"Expired",
+        status:
+        "Expired",
 
       }
 
     );
+
+
 
 
 
@@ -276,16 +387,19 @@ async(req,res)=>{
 
     await Subscription.create({
 
-      user:req.user.id,
+      user:
+      req.user.id,
 
       plan:
       plan || "Free",
 
-      status:"Active",
+      status:
+      "Active",
 
       expiry,
 
-      trades:"Unlimited",
+      trades:
+      "Unlimited",
 
       amount:
       Number(amount) || 0,
@@ -297,6 +411,8 @@ async(req,res)=>{
       orderId || "",
 
     });
+
+
 
 
 
@@ -314,22 +430,24 @@ async(req,res)=>{
 
 
 
+
+
     // ======================
     // RESPONSE
     // ======================
 
     res.json({
 
-      success:true,
+      success: true,
 
       message:
-      "Subscription Activated",
+      "Subscription Activated ✅",
 
       subscription,
 
     });
 
-  }catch(error){
+  } catch (error) {
 
     console.log(
 
@@ -342,11 +460,13 @@ async(req,res)=>{
 
 
 
+
     res.status(500).json({
 
-      success:false,
+      success: false,
 
-      message:error.message,
+      message:
+      error.message,
 
     });
 
@@ -368,4 +488,3 @@ module.exports = {
   paymentSuccess,
 
 };
-

@@ -1,6 +1,9 @@
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
+// import AvatarUpload from "./AvatarUpload";
+// import BrokerInfo from "./BrokerInfo";
 
 export default function ProfileCard({
 
@@ -56,9 +59,9 @@ export default function ProfileCard({
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/profile",
+        "/profile",
 
         {
 
@@ -124,9 +127,9 @@ export default function ProfileCard({
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/trades",
+        "/trades",
 
         {
 

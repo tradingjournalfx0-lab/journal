@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+
+import api from "../../services/api";
 
 export default function AddTradeModal({
 
@@ -96,9 +98,9 @@ export default function AddTradeModal({
 
       // API
 
-      await axios.post(
+      await api.post(
 
-        "/api/trades",
+        "/trades",
 
         {
 

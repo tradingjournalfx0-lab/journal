@@ -1,6 +1,7 @@
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
 
 import JournalCard from "./JournalCard";
 
@@ -46,9 +47,9 @@ export default function JournalList() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/journals",
+        "/journals",
 
         {
 

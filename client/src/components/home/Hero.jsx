@@ -12,7 +12,8 @@ import {
 
 } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
 
 export default function Hero({ isLoggedIn }) {
 
@@ -64,7 +65,7 @@ export default function Hero({ isLoggedIn }) {
 
 
       const response =
-      await axios.get(
+      await api.get(
 
         "/trades",
 

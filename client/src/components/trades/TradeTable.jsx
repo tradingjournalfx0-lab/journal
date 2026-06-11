@@ -1,6 +1,8 @@
 import { useState,useEffect } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
+
 
 import {
 
@@ -71,9 +73,9 @@ export default function TradeTable() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/trades",
+        "/trades",
 
         {
 
@@ -269,9 +271,9 @@ export default function TradeTable() {
 
       // API
 
-      await axios.delete(
+      await api.delete(
 
-        `/api/trades/${id}`,
+        `/trades/${id}`,
 
         {
 
@@ -376,9 +378,9 @@ export default function TradeTable() {
       if(editId){
 
         const response =
-        await axios.put(
+        await api.put(
 
-          `/api/trades/${editId}`,
+          `/trades/${editId}`,
 
           {
 
@@ -453,9 +455,9 @@ export default function TradeTable() {
       else{
 
         const response =
-        await axios.post(
+        await api.post(
 
-          "/api/trades",
+          "/trades",
 
           {
 

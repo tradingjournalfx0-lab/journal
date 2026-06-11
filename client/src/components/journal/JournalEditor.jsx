@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
 
 export default function JournalEditor({
 
@@ -81,7 +82,7 @@ export default function JournalEditor({
 
       // API
 
-      await axios.post(
+      await api.post(
 
         "/journals",
 

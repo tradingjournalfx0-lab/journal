@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
 
 export default function AddJournalModal({
 
@@ -65,7 +66,7 @@ export default function AddJournalModal({
 
     try{
 
-      await axios.post(
+      await api.post(
 
         "/journals",
 

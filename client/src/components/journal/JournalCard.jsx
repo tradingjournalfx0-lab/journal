@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
 
 export default function JournalCard({
 
@@ -108,9 +109,9 @@ export default function JournalCard({
 
       // DELETE API
 
-      await axios.delete(
+      await api.delete(
 
-        `/api/journals/${journal._id}`,
+        `/journals/${journal._id}`,
 
         {
 
@@ -219,9 +220,9 @@ export default function JournalCard({
       // UPDATE API
 
       const response =
-      await axios.put(
+      await api.put(
 
-        `/api/journals/${journal._id}`,
+        `/journals/${journal._id}`,
 
         {
 

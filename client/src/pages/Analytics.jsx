@@ -6,7 +6,9 @@ import {
 
 } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../services/api";
+
 
 import Sidebar from "../components/layout/Sidebar";
 
@@ -72,9 +74,9 @@ export default function Analytics() {
 
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/profile",
+        "/profile",
 
         {
 
@@ -134,9 +136,9 @@ export default function Analytics() {
 
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/analytics",
+        "/analytics",
 
         {
 

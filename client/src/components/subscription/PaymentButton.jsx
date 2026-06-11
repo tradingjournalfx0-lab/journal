@@ -1,7 +1,4 @@
-
-// import axios from "axios";
 import api from "../../services/api";
-
 
 export default function PaymentButton({
 
@@ -19,12 +16,15 @@ export default function PaymentButton({
   // =========================
 
   const loadRazorpay =
-  ()=>{
+  () => {
 
-    return new Promise((resolve)=>{
+    return new Promise((resolve) => {
 
       const script =
       document.createElement("script");
+
+
+
 
       script.src =
       "https://checkout.razorpay.com/v1/checkout.js";
@@ -33,21 +33,19 @@ export default function PaymentButton({
 
 
       script.onload =
-      ()=> resolve(true);
+      () => resolve(true);
 
 
 
 
       script.onerror =
-      ()=> resolve(false);
+      () => resolve(false);
 
 
 
 
       document.body.appendChild(
-
         script
-
       );
 
     });
@@ -64,9 +62,13 @@ export default function PaymentButton({
   // =========================
 
   const handlePayment =
-  async()=>{
+  async () => {
 
-    try{
+    try {
+
+
+
+
 
       // =========================
       // TOKEN
@@ -74,20 +76,16 @@ export default function PaymentButton({
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
 
 
 
 
-      if(!token){
+      if (!token) {
 
         alert(
-
           "Please login first"
-
         );
 
         return;
@@ -99,7 +97,7 @@ export default function PaymentButton({
 
 
       // =========================
-      // LOAD RAZORPAY SDK
+      // LOAD SDK
       // =========================
 
       const loaded =
@@ -108,12 +106,10 @@ export default function PaymentButton({
 
 
 
-      if(!loaded){
+      if (!loaded) {
 
         alert(
-
           "Razorpay SDK Failed"
-
         );
 
         return;
@@ -135,13 +131,12 @@ export default function PaymentButton({
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
+            `Bearer ${token}`,
 
-            `Bearer ${token}`
-
-          }
+          },
 
         }
 
@@ -169,19 +164,19 @@ export default function PaymentButton({
 
         {
 
-          amount:Number(amount),
+          amount:
+          Number(amount),
 
         },
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
+            `Bearer ${token}`,
 
-            `Bearer ${token}`
-
-          }
+          },
 
         }
 
@@ -192,25 +187,24 @@ export default function PaymentButton({
 
 
 
-
       // =========================
       // PLAN LOGIC
       // =========================
 
-      let plan = "1 Month";
+      let plan =
+      "1 Month";
 
 
 
 
       // 6 MONTHS
 
-      if(
-
+      if (
         Number(amount) === 79
+      ) {
 
-      ){
-
-        plan = "6 Months";
+        plan =
+        "6 Months";
 
       }
 
@@ -219,13 +213,12 @@ export default function PaymentButton({
 
       // 1 YEAR
 
-      else if(
-
+      else if (
         Number(amount) === 149
+      ) {
 
-      ){
-
-        plan = "1 Year";
+        plan =
+        "1 Year";
 
       }
 
@@ -234,13 +227,12 @@ export default function PaymentButton({
 
       // LIFETIME
 
-      else if(
-
+      else if (
         Number(amount) === 299
+      ) {
 
-      ){
-
-        plan = "Lifetime";
+        plan =
+        "Lifetime";
 
       }
 
@@ -257,7 +249,8 @@ export default function PaymentButton({
       const options = {
 
         key:
-        import.meta.env.VITE_RAZORPAY_KEY,
+        import.meta.env
+        .VITE_RAZORPAY_KEY,
 
 
 
@@ -303,9 +296,10 @@ export default function PaymentButton({
         // PAYMENT SUCCESS
         // =========================
 
-        handler:async function(payment){
+        handler:
+        async function (payment) {
 
-          try{
+          try {
 
             const saveResponse =
             await api.post(
@@ -314,16 +308,20 @@ export default function PaymentButton({
 
               {
 
-                amount:Number(amount),
+                amount:
+                Number(amount),
 
                 paymentId:
-                payment.razorpay_payment_id,
+                payment
+                .razorpay_payment_id,
 
                 orderId:
-                payment.razorpay_order_id,
+                payment
+                .razorpay_order_id,
 
-                signature:
-                payment.razorpay_signature,
+                razorpay_signature:
+                payment
+                .razorpay_signature,
 
                 plan,
 
@@ -331,13 +329,12 @@ export default function PaymentButton({
 
               {
 
-                headers:{
+                headers: {
 
                   Authorization:
+                  `Bearer ${token}`,
 
-                  `Bearer ${token}`
-
-                }
+                },
 
               }
 
@@ -358,19 +355,17 @@ export default function PaymentButton({
 
 
             alert(
-
               "Payment Successful ✅"
-
             );
 
 
 
 
-            // REFRESH PAGE
+            // REFRESH
 
             window.location.reload();
 
-          }catch(error){
+          } catch (error) {
 
             console.log(
 
@@ -387,7 +382,8 @@ export default function PaymentButton({
 
             alert(
 
-              error.response?.data?.message ||
+              error.response?.data
+              ?.message ||
 
               "Subscription Save Failed"
 
@@ -407,7 +403,7 @@ export default function PaymentButton({
         // PREFILL
         // =========================
 
-        prefill:{
+        prefill: {
 
           name:
           profile?.fullName ||
@@ -434,9 +430,10 @@ export default function PaymentButton({
         // THEME
         // =========================
 
-        theme:{
+        theme: {
 
-          color:"#7c3aed",
+          color:
+          "#7c3aed",
 
         },
 
@@ -454,9 +451,7 @@ export default function PaymentButton({
 
       const razorpay =
       new window.Razorpay(
-
         options
-
       );
 
 
@@ -464,7 +459,7 @@ export default function PaymentButton({
 
       razorpay.open();
 
-    }catch(error){
+    } catch (error) {
 
       console.log(
 
@@ -481,7 +476,8 @@ export default function PaymentButton({
 
       alert(
 
-        error.response?.data?.message ||
+        error.response?.data
+        ?.message ||
 
         "Payment Failed ❌"
 
@@ -503,7 +499,9 @@ export default function PaymentButton({
 
       onClick={handlePayment}
 
-      className="w-full bg-purple-600 hover:bg-purple-700 transition-all duration-300 py-4 rounded-2xl font-semibold text-lg">
+      className="w-full bg-purple-600 hover:bg-purple-700 transition-all duration-300 py-4 rounded-2xl font-semibold text-lg"
+
+    >
 
       {title}
 
@@ -512,4 +510,3 @@ export default function PaymentButton({
   );
 
 }
-

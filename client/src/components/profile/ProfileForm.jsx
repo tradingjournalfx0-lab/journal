@@ -1,6 +1,7 @@
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../../services/api";
 
 export default function ProfileForm() {
 
@@ -54,9 +55,9 @@ export default function ProfileForm() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/profile",
+        "/profile",
 
         {
 
@@ -180,9 +181,9 @@ export default function ProfileForm() {
 
       // API
 
-      await axios.post(
+      await api.post(
 
-        "/api/profile",
+        "/profile",
 
         formData,
 

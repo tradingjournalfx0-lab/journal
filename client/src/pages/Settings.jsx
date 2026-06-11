@@ -1,6 +1,7 @@
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+import api from "../services/api";
 
 import Sidebar from "../components/layout/Sidebar";
 
@@ -40,9 +41,9 @@ export default function Settings() {
     try{
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/settings"
+        "/settings"
 
       );
 
@@ -105,9 +106,9 @@ export default function Settings() {
 
     try{
 
-      await axios.post(
+      await api.post(
 
-        "/api/settings",
+        "/settings",
 
         updatedSettings
 

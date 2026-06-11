@@ -1,6 +1,8 @@
 import { useEffect,useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
+
+import api from "../../services/api";
 
 export default function AvatarUpload() {
 
@@ -44,9 +46,9 @@ export default function AvatarUpload() {
       // API
 
       const response =
-      await axios.get(
+      await api.get(
 
-        "/api/profile",
+        "/profile",
 
         {
 
@@ -162,9 +164,9 @@ export default function AvatarUpload() {
       // API
 
       const response =
-      await axios.post(
+      await api.post(
 
-        "/api/profile/avatar",
+        "/profile/avatar",
 
         formData,
 
