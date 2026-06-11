@@ -286,7 +286,7 @@ export default function HomeNavbar() {
 
 
           <a
-            href="#about"
+            href="/about"
             className="
             hover:text-purple-400
             transition-all
