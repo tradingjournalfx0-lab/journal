@@ -1,3 +1,4 @@
+
 const Razorpay =
 require("razorpay");
 
@@ -8,9 +9,7 @@ const Subscription =
 require("../models/Subscription");
 
 
-console.log(req.body);
 
-console.log(req.user);
 
 // ======================
 // RAZORPAY
@@ -45,11 +44,6 @@ async (req, res) => {
 
 
 
-
-    // ======================
-    // INVALID AMOUNT
-    // ======================
-
     if (
 
       !amount ||
@@ -60,7 +54,7 @@ async (req, res) => {
 
       return res.status(400).json({
 
-        success: false,
+        success:false,
 
         message:
         "Invalid Amount",
@@ -72,11 +66,6 @@ async (req, res) => {
 
 
 
-
-    // ======================
-    // CREATE ORDER
-    // ======================
-
     const order =
 
     await razorpay.orders.create({
@@ -84,7 +73,7 @@ async (req, res) => {
       amount:
       amount * 100,
 
-      currency: "INR",
+      currency:"INR",
 
       receipt:
       `receipt_${Date.now()}`,
@@ -94,29 +83,31 @@ async (req, res) => {
 
 
 
+    console.log(
+      "ORDER CREATED:",
+      order
+    );
+
+
+
 
     res.json(order);
 
   } catch (error) {
 
     console.log(
-
       "CREATE ORDER ERROR:",
-
       error
-
     );
-
 
 
 
 
     res.status(500).json({
 
-      success: false,
+      success:false,
 
-      message:
-      error.message,
+      message:error.message,
 
     });
 
@@ -136,6 +127,20 @@ async (req, res) => {
 
   try {
 
+    console.log(
+      "PAYMENT SUCCESS API HIT"
+    );
+
+    console.log(
+      "BODY:",
+      req.body
+    );
+
+    console.log(
+      "USER:",
+      req.user
+    );
+
 
 
 
@@ -154,7 +159,7 @@ async (req, res) => {
 
       return res.status(401).json({
 
-        success: false,
+        success:false,
 
         message:
         "Unauthorized User",
@@ -162,8 +167,6 @@ async (req, res) => {
       });
 
     }
-
-
 
 
 
@@ -188,6 +191,23 @@ async (req, res) => {
     } = req.body;
 
 
+
+
+
+    console.log(
+      "PAYMENT ID:",
+      paymentId
+    );
+
+    console.log(
+      "ORDER ID:",
+      orderId
+    );
+
+    console.log(
+      "SIGNATURE:",
+      razorpay_signature
+    );
 
 
 
@@ -225,6 +245,13 @@ async (req, res) => {
 
 
 
+    console.log(
+      "EXPECTED:",
+      expectedSignature
+    );
+
+
+
 
 
     // ======================
@@ -241,7 +268,7 @@ async (req, res) => {
 
       return res.status(400).json({
 
-        success: false,
+        success:false,
 
         message:
         "Payment Verification Failed",
@@ -249,8 +276,6 @@ async (req, res) => {
       });
 
     }
-
-
 
 
 
@@ -265,8 +290,6 @@ async (req, res) => {
 
 
 
-
-    // 1 MONTH
 
     if (
 
@@ -284,12 +307,6 @@ async (req, res) => {
 
     }
 
-
-
-
-
-    // 6 MONTHS
-
     else if (
 
       plan === "6 Months"
@@ -305,12 +322,6 @@ async (req, res) => {
       );
 
     }
-
-
-
-
-
-    // 1 YEAR
 
     else if (
 
@@ -328,12 +339,6 @@ async (req, res) => {
 
     }
 
-
-
-
-
-    // LIFETIME
-
     else if (
 
       plan === "Lifetime"
@@ -348,8 +353,6 @@ async (req, res) => {
 
 
 
-
-
     // ======================
     // EXPIRE OLD PLAN
     // ======================
@@ -358,24 +361,19 @@ async (req, res) => {
 
       {
 
-        user:
-        req.user.id,
+        user:req.user.id,
 
-        status:
-        "Active",
+        status:"Active",
 
       },
 
       {
 
-        status:
-        "Expired",
+        status:"Expired",
 
       }
 
     );
-
-
 
 
 
@@ -389,19 +387,16 @@ async (req, res) => {
 
     await Subscription.create({
 
-      user:
-      req.user.id,
+      user:req.user.id,
 
       plan:
       plan || "Free",
 
-      status:
-      "Active",
+      status:"Active",
 
       expiry,
 
-      trades:
-      "Unlimited",
+      trades:"Unlimited",
 
       amount:
       Number(amount) || 0,
@@ -418,29 +413,18 @@ async (req, res) => {
 
 
 
-
-
     console.log(
-
       "SUBSCRIPTION SAVED ✅",
-
       subscription
-
     );
 
 
 
 
 
-
-
-    // ======================
-    // RESPONSE
-    // ======================
-
     res.json({
 
-      success: true,
+      success:true,
 
       message:
       "Subscription Activated ✅",
@@ -452,23 +436,18 @@ async (req, res) => {
   } catch (error) {
 
     console.log(
-
       "PAYMENT ERROR:",
-
       error
-
     );
-
 
 
 
 
     res.status(500).json({
 
-      success: false,
+      success:false,
 
-      message:
-      error.message,
+      message:error.message,
 
     });
 
@@ -490,3 +469,4 @@ module.exports = {
   paymentSuccess,
 
 };
+

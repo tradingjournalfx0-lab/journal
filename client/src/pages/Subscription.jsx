@@ -1,8 +1,7 @@
+
 import { useEffect,useState } from "react";
 
-// import axios from "axios";
 import api from "../services/api";
-
 
 import Sidebar from "../components/layout/Sidebar";
 
@@ -29,6 +28,7 @@ export default function Subscription() {
 
 
 
+
   // =========================
   // FETCH SUBSCRIPTION
   // =========================
@@ -38,46 +38,31 @@ export default function Subscription() {
 
     try{
 
-      // TOKEN
-
-      const token =
-      localStorage.getItem(
-
-        "token"
-
+      console.log(
+        "FETCHING SUBSCRIPTION..."
       );
 
 
 
 
-      // API
-
       const response =
       await api.get(
+        "/subscription"
+      );
 
-        "/subscription",
 
-        {
 
-          headers:{
 
-            Authorization:
-
-            `Bearer ${token}`
-
-          }
-
-        }
-
+      console.log(
+        "SUBSCRIPTION RESPONSE:",
+        response.data
       );
 
 
 
 
       if(
-
         response.data?.plan
-
       ){
 
         setCurrentPlan(
@@ -92,6 +77,8 @@ export default function Subscription() {
 
       console.log(
 
+        "SUBSCRIPTION ERROR:",
+
         error.response?.data ||
 
         error.message
@@ -101,6 +88,7 @@ export default function Subscription() {
     }
 
   };
+
 
 
 
@@ -116,7 +104,9 @@ export default function Subscription() {
 
 
 
+    // =========================
     // LIVE REFRESH
+    // =========================
 
     const interval =
 
@@ -320,12 +310,37 @@ export default function Subscription() {
 
         </div>
 
-      {/* Biling History */}
+
+
+
+
+        {/* BILLING HISTORY */}
+
         <div className="mt-8">
 
           <BillingHistory />
 
         </div>
+
+
+
+
+
+        {/* CURRENT PLAN */}
+
+        <div className="mt-6">
+
+          <p className="text-lg text-green-400">
+
+            Current Plan:
+            {currentPlan}
+
+          </p>
+
+        </div>
+
+
+
 
 
         {/* PLANS */}
@@ -384,3 +399,4 @@ export default function Subscription() {
   );
 
 }
+
