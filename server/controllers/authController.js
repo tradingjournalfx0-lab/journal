@@ -5,6 +5,9 @@ require("../models/User");
 const bcrypt =
 require("bcryptjs");
 
+const nodemailer =
+require("nodemailer");
+
 const generateToken =
 require("../utils/generateToken");
 
@@ -27,6 +30,8 @@ async(req,res)=>{
       password,
 
     } = req.body;
+
+
 
 
 
@@ -53,6 +58,9 @@ async(req,res)=>{
 
 
 
+
+
+
     // CHECK USER
 
     const userExists =
@@ -61,6 +69,8 @@ async(req,res)=>{
       email,
 
     });
+
+
 
 
 
@@ -77,10 +87,15 @@ async(req,res)=>{
 
 
 
+
+
+
     // HASH PASSWORD
 
     const salt =
     await bcrypt.genSalt(10);
+
+
 
 
 
@@ -95,6 +110,9 @@ async(req,res)=>{
 
 
 
+
+
+
     // CREATE USER
 
     const user =
@@ -106,6 +124,9 @@ async(req,res)=>{
       hashedPassword,
 
     });
+
+
+
 
 
 
@@ -130,6 +151,8 @@ async(req,res)=>{
   }catch(error){
 
     console.log(error);
+
+
 
 
 
@@ -164,6 +187,8 @@ async(req,res)=>{
 
 
 
+
+
     // CHECK USER
 
     const user =
@@ -172,6 +197,8 @@ async(req,res)=>{
       email,
 
     });
+
+
 
 
 
@@ -222,6 +249,213 @@ async(req,res)=>{
 
 
 
+
+
+    res.status(500).json({
+
+      message:error.message,
+
+    });
+
+  }
+
+};
+
+
+
+
+// =========================
+// FORGOT PASSWORD
+// =========================
+
+const forgotPassword =
+async(req,res)=>{
+
+  try{
+
+    const { email } =
+    req.body;
+
+
+
+
+
+    // VALIDATION
+
+    if(!email){
+
+      return res.status(400).json({
+
+        message:
+        "Email required",
+
+      });
+
+    }
+
+
+
+
+
+
+    // FIND USER
+
+    const user =
+    await User.findOne({
+
+      email,
+
+    });
+
+
+
+
+
+    if(!user){
+
+      return res.status(404).json({
+
+        message:
+        "User not found",
+
+      });
+
+    }
+
+
+
+
+
+
+    // NODEMAILER
+
+    const transporter =
+
+    nodemailer.createTransport({
+
+      service:"gmail",
+
+      auth:{
+
+        user:
+        process.env.EMAIL_USER,
+
+        pass:
+        process.env.EMAIL_PASS,
+
+      },
+
+    });
+
+
+
+
+
+
+    // RESET LINK
+
+    const resetLink =
+
+    `${process.env.FRONTEND_URL}/reset-password?email=${email}`;
+
+
+
+
+
+
+    // SEND MAIL
+
+    await transporter.sendMail({
+
+      from:
+      process.env.EMAIL_USER,
+
+      to:
+      email,
+
+      subject:
+      "Reset Password",
+
+      html:`
+
+        <div style="font-family:sans-serif;padding:20px;">
+
+          <h2>
+
+            Trading Journal FX
+
+          </h2>
+
+          <p>
+
+            Click below button to reset your password.
+
+          </p>
+
+          <a
+
+            href="${resetLink}"
+
+            style="
+
+              display:inline-block;
+
+              padding:12px 20px;
+
+              background:#7c3aed;
+
+              color:#fff;
+
+              text-decoration:none;
+
+              border-radius:8px;
+
+              margin-top:10px;
+
+            "
+
+          >
+
+            Reset Password
+
+          </a>
+
+        </div>
+
+      `,
+
+    });
+
+
+
+
+
+
+    // RESPONSE
+
+    res.json({
+
+      success:true,
+
+      message:
+      "Reset link sent ✅",
+
+    });
+
+  }catch(error){
+
+    console.log(
+
+      "FORGOT PASSWORD ERROR:",
+
+      error
+
+    );
+
+
+
+
+
     res.status(500).json({
 
       message:error.message,
@@ -253,9 +487,9 @@ async(req,res)=>{
 
 
 
-    // =========================
+
+
     // VALIDATION
-    // =========================
 
     if(
 
@@ -276,9 +510,10 @@ async(req,res)=>{
 
 
 
-    // =========================
+
+
+
     // FIND USER
-    // =========================
 
     const user =
     await User.findOne({
@@ -286,6 +521,8 @@ async(req,res)=>{
       email,
 
     });
+
+
 
 
 
@@ -302,12 +539,15 @@ async(req,res)=>{
 
 
 
-    // =========================
-    // HASH NEW PASSWORD
-    // =========================
+
+
+
+    // HASH PASSWORD
 
     const salt =
     await bcrypt.genSalt(10);
+
+
 
 
 
@@ -322,12 +562,15 @@ async(req,res)=>{
 
 
 
-    // =========================
-    // SAVE NEW PASSWORD
-    // =========================
+
+
+
+    // SAVE PASSWORD
 
     user.password =
     hashedPassword;
+
+
 
 
 
@@ -335,11 +578,14 @@ async(req,res)=>{
 
 
 
-    // =========================
+
+
+
     // RESPONSE
-    // =========================
 
     res.status(200).json({
+
+      success:true,
 
       message:
       "Password reset successful ✅",
@@ -349,6 +595,8 @@ async(req,res)=>{
   }catch(error){
 
     console.log(error);
+
+
 
 
 
@@ -374,6 +622,8 @@ module.exports = {
   registerUser,
 
   loginUser,
+
+  forgotPassword,
 
   resetPassword,
 

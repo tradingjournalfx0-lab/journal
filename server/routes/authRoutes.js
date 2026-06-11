@@ -11,7 +11,9 @@ require("nodemailer");
 const {
 
   registerUser,
+
   loginUser,
+
   resetPassword,
 
 } = require(
@@ -19,6 +21,7 @@ const {
   "../controllers/authController"
 
 );
+
 
 
 
@@ -36,6 +39,7 @@ router.post(
 
 
 
+
 // =========================
 // LOGIN
 // =========================
@@ -47,6 +51,7 @@ router.post(
   loginUser
 
 );
+
 
 
 
@@ -64,6 +69,7 @@ router.post(
 
 
 
+
 // =========================
 // FORGOT PASSWORD
 // =========================
@@ -72,16 +78,18 @@ router.post(
 
   "/forgot-password",
 
-  async (req,res)=>{
+  async(req,res)=>{
 
     try{
 
       // =========================
-      // GET EMAIL
+      // EMAIL
       // =========================
 
       const { email } =
       req.body;
+
+
 
 
 
@@ -93,11 +101,17 @@ router.post(
 
         return res.status(400).json({
 
-          message:"Email required",
+          success:false,
+
+          message:
+          "Email required",
 
         });
 
       }
+
+
+
 
 
 
@@ -121,13 +135,23 @@ router.post(
 
         },
 
-        tls:{
-
-          rejectUnauthorized:false,
-
-        },
-
       });
+
+
+
+
+
+
+      // =========================
+      // RESET LINK
+      // =========================
+
+      const resetLink =
+
+      `https://www.tradingjournalfx.in/reset-password?email=${email}`;
+
+
+
 
 
 
@@ -140,24 +164,33 @@ router.post(
         from:
         process.env.EMAIL_USER,
 
-        to:email,
+        to:
+        email,
 
         subject:
-        "Trading Journal Password Reset",
+        "Trading Journal FX Password Reset",
 
         html:`
 
           <div style="font-family:sans-serif;padding:20px;">
 
-            <h2>Password Reset</h2>
+            <h2>
+
+              Trading Journal FX
+
+            </h2>
 
             <p>
+
               Click the button below
               to reset your password.
+
             </p>
 
             <a
-              href="http://localhost:5173/reset-password"
+
+              href="${resetLink}"
+
               style="
                 display:inline-block;
                 padding:12px 24px;
@@ -167,15 +200,28 @@ router.post(
                 border-radius:10px;
                 margin-top:15px;
               "
+
             >
+
               Reset Password
+
             </a>
+
+            <p style="margin-top:20px;color:gray;">
+
+              If you did not request this,
+              you can ignore this email.
+
+            </p>
 
           </div>
 
         `,
 
       };
+
+
+
 
 
 
@@ -191,14 +237,30 @@ router.post(
 
 
 
+
+
+
+      console.log(
+
+        "RESET EMAIL SENT ✅"
+
+      );
+
+
+
+
+
+
       // =========================
-      // SUCCESS
+      // RESPONSE
       // =========================
 
       return res.status(200).json({
 
+        success:true,
+
         message:
-        "Reset link sent to Gmail ✅",
+        "Reset link sent successfully ✅",
 
       });
 
@@ -206,20 +268,25 @@ router.post(
 
       console.log(
 
-        "EMAIL ERROR:",
+        "FORGOT PASSWORD ERROR:",
 
-        error.message
+        error
 
       );
 
 
 
+
+
       return res.status(500).json({
 
-        message:
-        error.message ||
+        success:false,
 
-        "Email sending failed ❌",
+        message:
+
+          error.message ||
+
+          "Email sending failed ❌",
 
       });
 
@@ -228,6 +295,13 @@ router.post(
   }
 
 );
+
+
+
+
+// =========================
+// EXPORT
+// =========================
 
 module.exports =
 router;
