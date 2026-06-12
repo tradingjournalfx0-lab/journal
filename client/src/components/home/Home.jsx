@@ -6,6 +6,9 @@ import {
 
 } from "react-router-dom";
 
+// seo
+import HomeSeo from "../../Seopage/HomeSeo";
+
 import {
 
   useEffect,
@@ -159,9 +162,8 @@ export default function Home() {
     overflow-hidden
     ">
 
-
-
-
+        {/* SEO */}
+        <HomeSeo />
       {/* =========================
           NAVBAR
       ========================= */}

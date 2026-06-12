@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset
+xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- HOME -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/
+    </loc>
+
+    <priority>
+      1.0
+    </priority>
+
+  </url>
+
+
+
+  <!-- ABOUT -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/about
+    </loc>
+
+  </url>
+
+
+
+  <!-- CONTACT -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/contact
+    </loc>
+
+  </url>
+
+
+
+  <!-- PRICING -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/pricing
+    </loc>
+
+  </url>
+
+
+
+  <!-- COURSES -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/courses
+    </loc>
+
+  </url>
+
+
+
+  <!-- LOGIN -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/login
+    </loc>
+
+  </url>
+
+
+
+  <!-- REGISTER -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/register
+    </loc>
+
+  </url>
+
+
+
+  <!-- PRIVACY POLICY -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/privacy-policy
+    </loc>
+
+  </url>
+
+
+
+  <!-- TERMS -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/terms
+    </loc>
+
+  </url>
+
+
+
+  <!-- REFUND POLICY -->
+
+  <url>
+
+    <loc>
+      https://yourdomain.com/refund-policy
+    </loc>
+
+  </url>
+
+</urlset>

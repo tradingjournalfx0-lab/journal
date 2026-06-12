@@ -21,13 +21,20 @@ import {
   SubscriptionProvider,
 } from "./context/SubscriptionContext";
 
+
+// seo
+import { HelmetProvider }
+from "react-helmet-async";
+
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
 
   <React.StrictMode>
 
-    <AuthProvider>
+    <HelmetProvider>
+
+      <AuthProvider>
 
       <TradeProvider>
 
@@ -44,6 +51,8 @@ ReactDOM.createRoot(
       </TradeProvider>
 
     </AuthProvider>
+
+  </HelmetProvider>
 
   </React.StrictMode>
 
