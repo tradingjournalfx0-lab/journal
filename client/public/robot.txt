@@ -1,3 +1,7 @@
 User-agent: *
 
 Allow: /
+
+Disallow: /dashboard
+
+Sitemap: https://tradingjournalfx.in/sitemap.xml
