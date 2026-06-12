@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 // seo
-import HomeSeo from "../../Seopage/HomeSeo";
+import HomeSeo from "../../seopage/HomeSeo";
 
 import {
 
