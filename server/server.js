@@ -53,6 +53,8 @@ app.use(
       "https://tradingjournalfx.in",
 
       "https://www.tradingjournalfx.in",
+      "https://www.indianallcourse.com",
+      "https://indianallcourse.com",
 
     ],
 
