@@ -9,11 +9,15 @@ const path = require("path");
 const connectDB = require("./config/db");
 
 
+
+
 // ======================
 // ENV CONFIG
 // ======================
 
 dotenv.config();
+
+
 
 
 // ======================
@@ -23,11 +27,15 @@ dotenv.config();
 connectDB();
 
 
+
+
 // ======================
 // APP
 // ======================
 
 const app = express();
+
+
 
 
 // ======================
@@ -45,10 +53,8 @@ app.use(
       "https://tradingjournalfx.in",
 
       "https://www.tradingjournalfx.in",
-
-      "https://indianallcourse.com",
-
       "https://www.indianallcourse.com",
+      "https://indianallcourse.com",
 
     ],
 
@@ -59,6 +65,8 @@ app.use(
 );
 
 
+
+
 // ======================
 // BODY PARSER
 // ======================
@@ -66,6 +74,8 @@ app.use(
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
+
+
 
 
 // ======================
@@ -85,6 +95,8 @@ app.use(
 );
 
 
+
+
 // ======================
 // ROOT ROUTE
 // ======================
@@ -94,6 +106,8 @@ app.get("/", (req, res) => {
   res.send("🚀 Trading Journal Backend Running");
 
 });
+
+
 
 
 // ======================
@@ -113,6 +127,8 @@ app.get("/api", (req, res) => {
 });
 
 
+
+
 // ======================
 // AUTH ROUTES
 // ======================
@@ -128,6 +144,8 @@ app.use(
   authRoutes
 
 );
+
+
 
 
 // ======================
@@ -147,6 +165,8 @@ app.use(
 );
 
 
+
+
 // ======================
 // JOURNAL ROUTES
 // ======================
@@ -162,6 +182,8 @@ app.use(
   journalRoutes
 
 );
+
+
 
 
 // ======================
@@ -181,6 +203,8 @@ app.use(
 );
 
 
+
+
 // ======================
 // PAYMENT ROUTES
 // ======================
@@ -196,6 +220,8 @@ app.use(
   paymentRoutes
 
 );
+
+
 
 
 // ======================
@@ -215,6 +241,8 @@ app.use(
 );
 
 
+
+
 // ======================
 // ANALYTICS ROUTES
 // ======================
@@ -232,29 +260,25 @@ app.use(
 );
 
 
+
+
 // ======================
-// FRONTEND BUILD
+// 404 ROUTE
 // ======================
 
-app.use(
+app.use((req, res) => {
 
-  express.static(
+  res.status(404).json({
 
-    path.join(__dirname, "../client/dist")
+    success: false,
 
-  )
+    message: "Route Not Found",
 
-);
-
-app.get("*", (req, res) => {
-
-  res.sendFile(
-
-    path.join(__dirname, "../client/dist/index.html")
-
-  );
+  });
 
 });
+
+
 
 
 // ======================
