@@ -1,13 +1,19 @@
+import {
+  Link,
+} from "react-router-dom";
+
 import dashboardImg from "../../assets/dashboard.png";
 import tradesImg from "../../assets/trades.png";
 import analyticsImg from "../../assets/analytics.png";
 import journalImg from "../../assets/journal.png";
 
+
+
 export default function FeaturesSection() {
 
-  // =========================
+  // =====================================================
   // FEATURES
-  // =========================
+  // =====================================================
 
   const features = [
 
@@ -19,11 +25,13 @@ export default function FeaturesSection() {
 
       icon: "📊",
 
-      img:dashboardImg,
+      img: dashboardImg,
 
       link: "/dashboard",
-
     },
+
+
+
 
     {
       title: "Trades",
@@ -38,6 +46,9 @@ export default function FeaturesSection() {
       link: "/trades",
     },
 
+
+
+
     {
       title: "Analytics",
 
@@ -51,6 +62,9 @@ export default function FeaturesSection() {
       link: "/analytics",
     },
 
+
+
+
     {
       title: "Journal",
 
@@ -62,359 +76,614 @@ export default function FeaturesSection() {
       img: journalImg,
 
       link: "/journal",
-    }
+    },
 
   ];
 
 
 
+
+  // =====================================================
+  // UI
+  // =====================================================
+
   return (
 
-    <div className="
-    max-w-7xl
-    mx-auto
-    px-4 sm:px-6 lg:px-8
-    
-    ">
+    <section
+      className="
+      w-full
 
-      {/* =========================
-          TOP
-      ========================= */}
+      bg-white
+      dark:bg-[#050816]
 
-      <div className="text-center">
+      text-black
+      dark:text-white
 
-        <div className="
-        inline-flex
-        items-center
-        gap-3
-        bg-purple-500/10
-        border border-purple-500/20
-        px-5 py-3
-        rounded-2xl
-        ">
+      transition-all
+      duration-300
 
-          <span className="
-          w-3 h-3
-          rounded-full
-          bg-green-400
-          " />
+      overflow-hidden
+      "
+    >
 
-          <span className="text-purple-300">
+      <div
+        className="
+        max-w-7xl
 
-            Powerful Trading Features
+        mx-auto
 
-          </span>
+        px-4
+        sm:px-6
+        lg:px-8
+
+        py-20
+        sm:py-24
+        lg:py-28
+        "
+      >
+
+
+
+
+        {/* =====================================================
+            TOP
+        ===================================================== */}
+
+        <div
+          className="
+          text-center
+          "
+        >
+
+          {/* BADGE */}
+
+          <div
+            className="
+            inline-flex
+
+            items-center
+
+            gap-3
+
+            bg-purple-500/10
+
+            border
+            border-purple-500/20
+
+            px-5
+            py-3
+
+            rounded-2xl
+            "
+          >
+
+            <span
+              className="
+              w-3
+              h-3
+
+              rounded-full
+
+              bg-green-400
+
+              animate-pulse
+              "
+            />
+
+
+
+            <span
+              className="
+              text-purple-600
+              dark:text-purple-300
+
+              text-sm
+              sm:text-base
+
+              font-medium
+              "
+            >
+
+              Powerful Trading Features
+
+            </span>
+
+          </div>
+
+
+
+
+
+
+
+          {/* TITLE */}
+
+          <h1
+            className="
+            text-4xl
+            sm:text-5xl
+            lg:text-6xl
+            xl:text-7xl
+
+            font-black
+
+            mt-8
+
+            leading-tight
+
+            break-words
+            "
+          >
+
+            Everything You Need For
+
+            <span
+              className="
+              bg-gradient-to-r
+              from-purple-500
+              to-blue-500
+
+              bg-clip-text
+              text-transparent
+              "
+            >
+
+              {" "}Trading{" "}
+
+            </span>
+
+            Success
+
+          </h1>
+
+
+
+
+
+
+
+          {/* DESCRIPTION */}
+
+          <p
+            className="
+            text-gray-600
+            dark:text-gray-400
+
+            text-base
+            sm:text-lg
+            lg:text-xl
+
+            leading-8
+            sm:leading-9
+
+            mt-8
+
+            max-w-3xl
+
+            mx-auto
+            "
+          >
+
+            Track trades, analyze performance,
+            manage journals and improve your
+            trading psychology with powerful tools.
+
+          </p>
 
         </div>
 
 
 
-        <h1 className="
-        text-4xl
-        sm:text-5xl
-        lg:text-6xl
-        font-black
-        mt-8
-        leading-tight
-        ">
-
-          Everything You Need For
-
-          <span className="
-          bg-gradient-to-r
-          from-purple-500
-          to-blue-500
-          bg-clip-text
-          text-transparent
-          ">
-
-            {" "}Trading{" "}
-
-          </span>
-
-          Success
-
-        </h1>
 
 
 
-        <p className="
-        text-gray-400
-        text-lg sm:text-xl
-        leading-9
-        mt-8
-        max-w-3xl
-        mx-auto
-        ">
 
-          Track trades, analyze performance,
-          manage journals and improve your
-          trading psychology with powerful tools.
+        {/* =====================================================
+            FEATURES
+        ===================================================== */}
 
-        </p>
+        <div
+          className="
+          mt-20
+          sm:mt-24
+          lg:mt-28
+          "
+        >
 
-      </div>
+          {
 
+            features.map((item, index) => (
 
+              <div
 
-      {/* =========================
-          FEATURES
-      ========================= */}
+                key={index}
 
-      <div className="mt-24">
+                className={`
+                grid
 
-        {
+                grid-cols-1
 
-          features.map((item, index) => (
+                ${
+                  index % 2 === 0
 
-            <div
+                  ? "lg:grid-cols-[0.9fr_1.1fr]"
 
-              key={index}
+                  : "lg:grid-cols-[1.1fr_0.9fr]"
+                }
 
-              className={`
-              grid
-              grid-cols-1
-              ${
-                index % 2 === 0
-                ? "lg:grid-cols-[0.85fr_1.15fr]"
-                : "lg:grid-cols-[1.15fr_0.85fr]"
-              }
-              gap-12 lg:gap-16
-              items-center
-              mb-32
-              `}
+                gap-10
+                lg:gap-16
 
-            >
+                items-center
 
-              {/* =========================
-                  IMAGE LEFT
-              ========================= */}
-
-              {
-
-                index % 2 !== 0 && (
-
-                  <div className="relative">
-
-                    {/* GLOW */}
-
-                    <div className="
-                    absolute
-                    inset-0
-                    bg-purple-500/20
-                    blur-[120px]
-                    " />
+                mb-24
+                lg:mb-32
+                `}
+              >
 
 
 
-                   {/* IMAGE CARD */}
 
-                     <div className="
-                      relative
-                       bg-white/5
-                    border border-white/10
-                        backdrop-blur-xl
-                        rounded-[35px]
-                       overflow-hidden
-                      flex
-                     items-center
-                    justify-center
-                    h-[420px]
-                   p-4
-                    ">
+                {/* =====================================================
+                    IMAGE LEFT
+                ===================================================== */}
 
-             <img
-                 src={item.img}
-                alt=""
-                className="
-                max-w-full
-                max-h-full
-                object-cover
-                 rounded-[25px]
-                    "
+                {
+
+                  index % 2 !== 0 && (
+
+                    <FeatureImage
+                      item={item}
                     />
 
-                </div>
+                  )
+
+                }
+
+
+
+
+
+
+
+                {/* =====================================================
+                    TEXT
+                ===================================================== */}
+
+                <div
+                  className="
+                  order-2
+                  lg:order-none
+
+                  min-w-0
+                  "
+                >
+
+                  {/* TAG */}
+
+                  <div
+                    className="
+                    inline-flex
+
+                    items-center
+
+                    gap-3
+
+                    bg-purple-500/10
+
+                    border
+                    border-purple-500/20
+
+                    px-5
+                    py-3
+
+                    rounded-2xl
+
+                    mb-8
+                    "
+                  >
+
+                    <span
+                      className="
+                      w-3
+                      h-3
+
+                      rounded-full
+
+                      bg-green-400
+                      "
+                    />
+
+
+
+                    <span
+                      className="
+                      text-purple-600
+                      dark:text-purple-300
+
+                      text-sm
+                      sm:text-base
+
+                      font-medium
+                      "
+                    >
+
+                      Premium Feature
+
+                    </span>
 
                   </div>
 
-                )
-
-              }
 
 
 
-              {/* =========================
-                  TEXT
-              ========================= */}
 
-              <div>
 
-                {/* TAG */}
 
-                <div className="
-                inline-flex
-                items-center
-                gap-3
-                bg-purple-500/10
-                border border-purple-500/20
-                px-5 py-3
-                rounded-2xl
-                mb-8
-                ">
+                  {/* TITLE */}
 
-                  <span className="
-                  w-3 h-3
-                  rounded-full
-                  bg-green-400
-                  " />
+                  <h2
+                    className="
+                    text-3xl
+                    sm:text-4xl
+                    lg:text-5xl
+                    xl:text-6xl
 
-                  <span className="text-purple-300">
+                    font-black
 
-                    Premium Feature
+                    leading-tight
 
-                  </span>
+                    break-words
+                    "
+                  >
+
+                    {item.icon}
+
+                    {" "}
+
+                    <span
+                      className="
+                      bg-gradient-to-r
+                      from-purple-500
+                      to-blue-500
+
+                      bg-clip-text
+                      text-transparent
+                      "
+                    >
+
+                      {item.title}
+
+                    </span>
+
+                  </h2>
+
+
+
+
+
+
+
+                  {/* DESCRIPTION */}
+
+                  <p
+                    className="
+                    text-gray-600
+                    dark:text-gray-400
+
+                    text-base
+                    sm:text-lg
+                    lg:text-xl
+
+                    leading-8
+                    sm:leading-9
+
+                    mt-8
+
+                    max-w-2xl
+                    "
+                  >
+
+                    {item.desc}
+
+                  </p>
+
+
+
+
+
+
+
+                  {/* BUTTON */}
+
+                  <Link
+
+                    to={item.link}
+
+                    className="
+                    inline-flex
+
+                    items-center
+                    justify-center
+
+                    mt-10
+
+                    px-7
+                    sm:px-8
+
+                    py-4
+                    sm:py-5
+
+                    rounded-2xl
+
+                    bg-gradient-to-r
+                    from-purple-500
+                    to-blue-500
+
+                    hover:opacity-90
+
+                    transition-all
+                    duration-300
+
+                    hover:scale-[1.02]
+
+                    active:scale-95
+
+                    font-semibold
+
+                    text-base
+                    sm:text-lg
+
+                    text-white
+
+                    shadow-[0_0_40px_rgba(168,85,247,0.35)]
+                    "
+                  >
+
+                    Explore Feature
+
+                  </Link>
 
                 </div>
 
 
 
-                {/* TITLE */}
-
-                <h1 className="
-                text-4xl
-                sm:text-5xl
-                lg:text-6xl
-                font-black
-                leading-tight
-                ">
-
-                  {item.icon}
-
-                  {" "}
-
-                  <span className="
-                  bg-gradient-to-r
-                  from-purple-500
-                  to-blue-500
-                  bg-clip-text
-                  text-transparent
-                  ">
-
-                    {item.title}
-
-                  </span>
-
-                </h1>
 
 
 
-                {/* DESCRIPTION */}
 
-                <p className="
-                text-gray-400
-                text-lg sm:text-xl
-                leading-9
-                mt-8
-                max-w-lg
-                ">
+                {/* =====================================================
+                    IMAGE RIGHT
+                ===================================================== */}
 
-                  {item.desc}
+                {
 
-                </p>
+                  index % 2 === 0 && (
 
+                    <FeatureImage
+                      item={item}
+                    />
 
+                  )
 
-                {/* BUTTON */}
-
-                <button className="
-                mt-10
-                px-8 py-5
-                rounded-2xl
-                bg-gradient-to-r
-                from-purple-500
-                to-blue-500
-                hover:opacity-90
-                transition-all
-                font-semibold
-                text-lg
-                shadow-[0_0_40px_rgba(168,85,247,0.35)]
-                ">
-
-                  <a href={item.link} target="_blank" rel="noopener noreferrer">
-                    Explore Feature
-                  </a>
-                    
-
-                </button>
+                }
 
               </div>
 
+            ))
 
+          }
 
-              {/* =========================
-                  IMAGE RIGHT
-              ========================= */}
+        </div>
 
-              {
+      </div>
 
-                index % 2 === 0 && (
+    </section>
 
-                  <div className="relative">
+  );
 
-                    {/* GLOW */}
-
-                    <div className="
-                    absolute
-                    inset-0
-                    bg-purple-500/20
-                    blur-[120px]
-                    " />
+}
 
 
 
-                  {/* IMAGE CARD */}
-
-                    <div className="
-                    relative
-                    bg-white/5
-                    border border-white/10
-                    backdrop-blur-xl
-                    rounded-[35px]
-                    overflow-hidden
-                    flex
-                    items-center
-                    justify-center
-                    h-[420px]
-                    p-4
-                    ">
-
-                    <img
-                      src={item.img}
-                      alt=""
-                      className="
-                      max-w-full
-                      max-h-full
-                      object-contain
-                      rounded-[25px]
-                  
-                      "
-                    />
-                  
-                  </div>
 
 
-                  </div>
 
-                )
+// =====================================================
+// FEATURE IMAGE COMPONENT
+// =====================================================
 
-              }
+function FeatureImage({ item }) {
 
-            </div>
+  return (
 
-          ))
+    <div
+      className="
+      relative
 
-        }
+      order-1
+      lg:order-none
+
+      min-w-0
+      "
+    >
+
+      {/* GLOW */}
+
+      <div
+        className="
+        absolute
+        inset-0
+
+        bg-purple-500/20
+
+        blur-[100px]
+
+        rounded-full
+        "
+      />
+
+
+
+
+      {/* IMAGE CARD */}
+
+      <div
+        className="
+        relative
+
+        bg-black/5
+        dark:bg-white/5
+
+        border
+        border-black/10
+        dark:border-white/10
+
+        backdrop-blur-xl
+
+        rounded-[28px]
+        sm:rounded-[35px]
+
+        overflow-hidden
+
+        flex
+        items-center
+        justify-center
+
+        h-[260px]
+        sm:h-[340px]
+        lg:h-[420px]
+
+        p-3
+        sm:p-4
+
+        transition-all
+        duration-300
+        "
+      >
+
+        <img
+
+          src={item.img}
+
+          alt={item.title}
+
+          className="
+          w-full
+          h-full
+
+          object-cover
+
+          rounded-[18px]
+          sm:rounded-[25px]
+
+          transition-all
+          duration-500
+
+          hover:scale-[1.02]
+          "
+
+        />
 
       </div>
 
