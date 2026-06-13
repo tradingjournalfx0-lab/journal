@@ -1,75 +1,82 @@
-
 import {
-
   useEffect,
   useState,
-
 } from "react";
 
-// import axios from "axios";
 import api from "../services/api";
 
 
-import Sidebar from "../components/layout/Sidebar";
 
-import Navbar from "../components/layout/Navbar";
+import Sidebar from
+"../components/layout/Sidebar";
 
-import WinRateChart from "../components/analytics/WinRateChart";
+import Navbar from
+"../components/layout/Navbar";
 
-import MonthlyProfit from "../components/analytics/MonthlyProfit";
+import WinRateChart from
+"../components/analytics/WinRateChart";
 
-import DrawdownChart from "../components/analytics/DrawdownChart";
+import MonthlyProfit from
+"../components/analytics/MonthlyProfit";
 
-import HeatMap from "../components/analytics/HeatMap";
+import DrawdownChart from
+"../components/analytics/DrawdownChart";
 
-import SessionStats from "../components/analytics/SessionStats";
+import HeatMap from
+"../components/analytics/HeatMap";
 
-import PsychologyStats from "../components/analytics/PsychologyStats";
+import SessionStats from
+"../components/analytics/SessionStats";
 
-import RiskRewardChart from "../components/analytics/RiskRewardChart";
+import PsychologyStats from
+"../components/analytics/PsychologyStats";
+
+import RiskRewardChart from
+"../components/analytics/RiskRewardChart";
+
+
 
 export default function Analytics() {
 
-
-
-
-  // =========================
+  // =====================================================
   // STATES
-  // =========================
+  // =====================================================
 
-  const [analytics,setAnalytics] =
+  const [analytics, setAnalytics] =
   useState(null);
 
-  const [loading,setLoading] =
+  const [loading, setLoading] =
   useState(true);
 
-  const [profile,setProfile] =
+  const [profile, setProfile] =
   useState(null);
 
-  const [lastUpdate,setLastUpdate] =
+  const [lastUpdate, setLastUpdate] =
   useState("");
 
-  const [refreshKey,setRefreshKey] =
+  const [refreshKey, setRefreshKey] =
   useState(0);
 
 
 
 
-  // =========================
+  // =====================================================
   // FETCH PROFILE
-  // =========================
+  // =====================================================
 
   const fetchProfile =
-  async()=>{
+  async () => {
 
-    try{
+    try {
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
+
+
+
+      if (!token) return;
 
 
 
@@ -80,10 +87,9 @@ export default function Analytics() {
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
-
             `Bearer ${token}`
 
           }
@@ -95,12 +101,12 @@ export default function Analytics() {
 
 
       setProfile(
-
         response.data
-
       );
 
-    }catch(error){
+    }
+
+    catch (error) {
 
       console.log(
 
@@ -117,21 +123,29 @@ export default function Analytics() {
 
 
 
-  // =========================
+  // =====================================================
   // FETCH ANALYTICS
-  // =========================
+  // =====================================================
 
   const fetchAnalytics =
-  async()=>{
+  async () => {
 
-    try{
+    try {
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
+
+
+
+      if (!token) {
+
+        setLoading(false);
+
+        return;
+
+      }
 
 
 
@@ -142,10 +156,9 @@ export default function Analytics() {
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
-
             `Bearer ${token}`
 
           }
@@ -156,13 +169,36 @@ export default function Analytics() {
 
 
 
-      setAnalytics(
-
+      console.log(
+        "ANALYTICS:",
         response.data
-
       );
 
 
+
+      // =================================================
+      // HANDLE RESPONSE TYPES
+      // =================================================
+
+      const analyticsData =
+
+      response.data?.data ||
+
+      response.data?.analytics ||
+
+      response.data;
+
+
+
+      setAnalytics(
+        analyticsData
+      );
+
+
+
+      // =================================================
+      // REFRESH KEY
+      // =================================================
 
       setRefreshKey(
 
@@ -172,13 +208,20 @@ export default function Analytics() {
 
 
 
+      // =================================================
+      // LAST UPDATE
+      // =================================================
+
       setLastUpdate(
 
-        new Date().toLocaleTimeString()
+        new Date()
+        .toLocaleTimeString()
 
       );
 
-    }catch(error){
+    }
+
+    catch (error) {
 
       console.log(
 
@@ -188,7 +231,9 @@ export default function Analytics() {
 
       );
 
-    }finally{
+    }
+
+    finally {
 
       setLoading(false);
 
@@ -199,11 +244,11 @@ export default function Analytics() {
 
 
 
-  // =========================
+  // =====================================================
   // AUTO LOAD
-  // =========================
+  // =====================================================
 
-  useEffect(()=>{
+  useEffect(() => {
 
     fetchProfile();
 
@@ -212,55 +257,101 @@ export default function Analytics() {
 
 
 
+    // =================================================
     // LIVE REFRESH
+    // =================================================
 
     const interval =
 
-    setInterval(
+    setInterval(() => {
 
-      fetchAnalytics,
+      fetchAnalytics();
 
-      3000
-
-    );
+    }, 5000);
 
 
 
 
-    return ()=>{
+    return () => {
 
       clearInterval(
-
         interval
-
       );
 
     };
 
-  },[]);
+  }, []);
 
 
 
 
-  // =========================
+  // =====================================================
   // LOADING
-  // =========================
+  // =====================================================
 
-  if(loading){
+  if (loading) {
 
-    return(
+    return (
 
-      <div className="
-      h-screen
-      flex
-      items-center
-      justify-center
-      bg-[#050816]
-      text-white
-      text-2xl
-      ">
+      <div
+        className="
+        min-h-screen
+        bg-[#050816]
 
-        Loading Analytics...
+        flex
+        items-center
+        justify-center
+
+        text-white
+
+        px-4
+        "
+      >
+
+        <div
+          className="
+          flex
+          flex-col
+          items-center
+          gap-5
+          "
+        >
+
+          {/* LOADER */}
+
+          <div
+            className="
+            w-16
+            h-16
+
+            border-4
+            border-purple-500/20
+            border-t-purple-500
+
+            rounded-full
+
+            animate-spin
+            "
+          />
+
+
+
+          {/* TEXT */}
+
+          <h2
+            className="
+            text-xl
+            sm:text-2xl
+
+            font-semibold
+            "
+          >
+
+            Loading Analytics...
+
+          </h2>
+
+        </div>
 
       </div>
 
@@ -271,25 +362,98 @@ export default function Analytics() {
 
 
 
-  // =========================
-  // NO DATA
-  // =========================
+  // =====================================================
+  // ERROR
+  // =====================================================
 
-  if(!analytics){
+  if (!analytics) {
 
-    return(
+    return (
 
-      <div className="
-      h-screen
-      flex
-      items-center
-      justify-center
-      bg-[#050816]
-      text-red-400
-      text-2xl
-      ">
+      <div
+        className="
+        min-h-screen
+        bg-[#050816]
 
-        Failed To Load Analytics
+        flex
+        items-center
+        justify-center
+
+        px-4
+        "
+      >
+
+        <div
+          className="
+          bg-red-500/10
+
+          border
+          border-red-500/20
+
+          rounded-3xl
+
+          p-10
+
+          text-center
+
+          max-w-lg
+          "
+        >
+
+          {/* ICON */}
+
+          <div
+            className="
+            text-6xl
+            "
+          >
+
+            ⚠️
+
+          </div>
+
+
+
+          {/* TITLE */}
+
+          <h2
+            className="
+            text-2xl
+            sm:text-3xl
+
+            font-bold
+
+            text-red-400
+
+            mt-5
+            "
+          >
+
+            Failed To Load Analytics
+
+          </h2>
+
+
+
+          {/* TEXT */}
+
+          <p
+            className="
+            text-gray-400
+
+            mt-4
+
+            leading-7
+            "
+          >
+
+            Please check your
+            backend connection
+            and analytics API.
+
+          </p>
+
+        </div>
 
       </div>
 
@@ -300,291 +464,683 @@ export default function Analytics() {
 
 
 
-  // =========================
+  // =====================================================
   // UI
-  // =========================
+  // =====================================================
 
   return (
 
-    <div className="
-    flex
-    min-h-screen
-    bg-[#050816]
-    text-white
-    ">
+    <div
+      className="
+      flex
+
+      min-h-screen
+
+      bg-[#050816]
+      text-white
+
+      w-full
+      max-w-full
+
+      overflow-hidden
+      "
+    >
 
 
 
 
-      {/* SIDEBAR */}
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
       <Sidebar />
 
 
 
 
+      {/* =====================================================
+          MAIN WRAPPER
+      ===================================================== */}
 
-      {/* MAIN */}
+      <div
+        className="
+        flex-1
 
-      <div className="
-      flex-1
-      lg:ml-64
-      p-4 sm:p-6 lg:p-8
-      ">
-
-
-
-
-        {/* NAVBAR */}
-
-        <Navbar />
-
-
-
-
-
-        {/* HEADER */}
-
-        <div className="
-        mt-8
         flex
         flex-col
-        lg:flex-row
-        lg:items-center
-        lg:justify-between
-        gap-4
-        ">
 
-          <div>
+        w-full
+        min-w-0
 
-            <h1 className="
-            text-4xl
-            sm:text-5xl
-            font-bold
-            ">
-
-              Analytics
-
-            </h1>
-
-
-
-            <p className="
-            text-gray-400
-            mt-2
-            text-lg
-            ">
-
-              Analyze your trading performance,
-
-              {
-
-                profile?.fullName ||
-
-                profile?.name ||
-
-                "Trader"
-
-              } 📊
-
-            </p>
-
-          </div>
+        lg:ml-72
+        "
+      >
 
 
 
 
+        {/* =====================================================
+            NAVBAR
+        ===================================================== */}
 
-          {/* LIVE */}
+        <div
+          className="
+          sticky
+          top-0
+          z-40
 
-          <div className="
-          bg-green-500/10
-          border border-green-500/20
-          px-5 py-3
-          rounded-2xl
-          text-green-400
-          flex
-          items-center
-          gap-3
-          w-fit
-          ">
+          px-4
+          sm:px-6
+          lg:px-8
 
-            <span className="
-            w-3 h-3
-            bg-green-400
-            rounded-full
-            animate-pulse
-            " />
+          pt-4
 
-            Live Updated
+          bg-[#050816]/80
 
-            <span className="
-            text-gray-400
-            text-sm
-            ">
+          backdrop-blur-xl
+          "
+        >
 
-              {lastUpdate}
-
-            </span>
-
-          </div>
+          <Navbar />
 
         </div>
 
 
 
 
+        {/* =====================================================
+            MAIN CONTENT
+        ===================================================== */}
 
-        {/* EMPTY */}
+        <main
+          className="
+          flex-1
 
-        {
+          w-full
+          min-w-0
 
-          analytics.totalTrades === 0 ? (
+          px-4
+          sm:px-6
+          lg:px-8
 
-            <div className="
-            mt-10
-            bg-white/5
-            border border-white/10
-            rounded-3xl
-            p-10
-            text-center
-            ">
+          py-6
+          sm:py-8
 
-              <h2 className="
-              text-3xl
-              font-bold
-              ">
-
-                No Analytics Yet
-
-              </h2>
+          overflow-visible
+          "
+        >
 
 
 
-              <p className="
-              text-gray-400
-              mt-4
-              ">
 
-                Add trades to unlock
-                advanced analytics.
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
+
+          <div
+            className="
+            flex
+            flex-col
+
+            xl:flex-row
+            xl:items-center
+            xl:justify-between
+
+            gap-6
+            "
+          >
+
+            {/* LEFT */}
+
+            <div
+              className="
+              min-w-0
+              "
+            >
+
+              <h1
+                className="
+                text-3xl
+                sm:text-4xl
+                lg:text-5xl
+
+                font-black
+
+                break-words
+                "
+              >
+
+                Analytics
+
+              </h1>
+
+
+
+              <p
+                className="
+                text-gray-400
+
+                mt-3
+
+                text-sm
+                sm:text-base
+                lg:text-lg
+
+                leading-7
+                break-words
+                "
+              >
+
+                Analyze your trading
+                performance,
+
+                <span
+                  className="
+                  text-purple-400
+                  font-semibold
+                  ml-2
+                  "
+                >
+
+                  {
+
+                    profile?.fullName ||
+
+                    profile?.name ||
+
+                    "Trader"
+
+                  }
+
+                </span>
+
+                {" "}📊
 
               </p>
 
             </div>
 
-          ) : (
-
-            <div className="
-            grid
-            grid-cols-1
-            xl:grid-cols-2
-            gap-6
-            mt-8
-            ">
 
 
 
+            {/* =================================================
+                LIVE STATUS
+            ================================================= */}
 
-              {/* WIN RATE */}
+            <div
+              className="
+              flex
+              flex-wrap
 
-              <WinRateChart
+              items-center
 
-                key={`win-${refreshKey}`}
+              gap-3
+              "
+            >
 
-                analytics={analytics}
+              {/* LIVE */}
 
-              />
+              <div
+                className="
+                bg-green-500/10
 
+                border
+                border-green-500/20
 
+                px-5
+                py-3
 
+                rounded-2xl
 
+                text-green-400
 
-              {/* MONTHLY */}
+                flex
+                items-center
 
-              <MonthlyProfit
+                gap-3
 
-                key={`monthly-${refreshKey}`}
+                w-fit
 
-                analytics={analytics}
+                text-sm
+                sm:text-base
+                "
+              >
 
-              />
+                <span
+                  className="
+                  w-3
+                  h-3
 
+                  bg-green-400
 
+                  rounded-full
 
+                  animate-pulse
+                  "
+                />
 
+                Live Updated
 
-              {/* DRAWDOWN */}
+                <span
+                  className="
+                  text-gray-400
 
-              <DrawdownChart
+                  text-xs
+                  sm:text-sm
+                  "
+                >
 
-                key={`draw-${refreshKey}`}
+                  {lastUpdate}
 
-                analytics={analytics}
+                </span>
 
-              />
-
-
-
-
-
-              {/* HEATMAP */}
-
-              <HeatMap
-
-                key={`heat-${refreshKey}`}
-
-                analytics={analytics}
-
-              />
-
-
-
-
-
-              {/* SESSION */}
-
-              <SessionStats
-
-                key={`session-${refreshKey}`}
-
-                analytics={analytics}
-
-              />
+              </div>
 
 
 
 
+              {/* AI */}
 
-              {/* PSYCHOLOGY */}
+              <div
+                className="
+                bg-purple-500/10
 
-              <PsychologyStats
+                border
+                border-purple-500/20
 
-                key={`psy-${refreshKey}`}
+                px-5
+                py-3
 
-                analytics={analytics}
+                rounded-2xl
 
-              />
+                text-purple-300
 
+                text-sm
+                sm:text-base
+                "
+              >
 
+                AI Analytics Enabled
 
-
-
-              {/* RISK */}
-
-              <RiskRewardChart
-
-                key={`risk-${refreshKey}`}
-
-                analytics={analytics}
-
-              />
+              </div>
 
             </div>
 
-          )
+          </div>
 
-        }
+
+
+
+          {/* =====================================================
+              EMPTY STATE
+          ===================================================== */}
+
+          {
+
+            analytics.totalTrades === 0 ? (
+
+              <div
+                className="
+                mt-10
+
+                bg-white/5
+
+                border
+                border-white/10
+
+                rounded-3xl
+
+                p-6
+                sm:p-10
+
+                text-center
+
+                backdrop-blur-xl
+                "
+              >
+
+                {/* ICON */}
+
+                <div
+                  className="
+                  w-24
+                  h-24
+
+                  mx-auto
+
+                  rounded-full
+
+                  bg-purple-500/10
+
+                  border
+                  border-purple-500/20
+
+                  flex
+                  items-center
+                  justify-center
+
+                  text-5xl
+                  "
+                >
+
+                  📈
+
+                </div>
+
+
+
+                {/* TITLE */}
+
+                <h2
+                  className="
+                  text-2xl
+                  sm:text-3xl
+
+                  font-bold
+
+                  mt-6
+                  "
+                >
+
+                  No Analytics Yet
+
+                </h2>
+
+
+
+                {/* TEXT */}
+
+                <p
+                  className="
+                  text-gray-400
+
+                  mt-4
+
+                  max-w-xl
+
+                  mx-auto
+
+                  leading-8
+
+                  text-sm
+                  sm:text-base
+                  "
+                >
+
+                  Add trades to unlock
+                  advanced analytics,
+                  performance insights,
+                  drawdown analysis,
+                  psychology tracking,
+                  and AI reports.
+
+                </p>
+
+              </div>
+
+            ) : (
+
+              <div
+                className="
+                grid
+
+                grid-cols-1
+                xl:grid-cols-2
+
+                gap-4
+                sm:gap-6
+
+                mt-8
+                "
+              >
+
+
+
+
+                {/* WIN RATE */}
+
+                <div
+                  className="
+                  min-w-0
+
+                  bg-white/5
+
+                  border
+                  border-white/10
+
+                  rounded-3xl
+
+                  p-2
+
+                  backdrop-blur-xl
+
+                  overflow-hidden
+                  "
+                >
+
+                  <WinRateChart
+
+                    key={`win-${refreshKey}`}
+
+                    analytics={analytics}
+
+                  />
+
+                </div>
+
+
+
+
+                {/* MONTHLY */}
+
+                <div
+                  className="
+                  min-w-0
+
+                  bg-white/5
+
+                  border
+                  border-white/10
+
+                  rounded-3xl
+
+                  p-2
+
+                  backdrop-blur-xl
+
+                  overflow-hidden
+                  "
+                >
+
+                  <MonthlyProfit
+
+                    key={`monthly-${refreshKey}`}
+
+                    analytics={analytics}
+
+                  />
+
+                </div>
+
+
+
+
+                {/* DRAWDOWN */}
+
+                <div
+                  className="
+                  min-w-0
+
+                  bg-white/5
+
+                  border
+                  border-white/10
+
+                  rounded-3xl
+
+                  p-2
+
+                  backdrop-blur-xl
+
+                  overflow-hidden
+                  "
+                >
+
+                  <DrawdownChart
+
+                    key={`draw-${refreshKey}`}
+
+                    analytics={analytics}
+
+                  />
+
+                </div>
+
+
+
+
+                {/* HEATMAP */}
+
+                <div
+                  className="
+                  min-w-0
+
+                  bg-white/5
+
+                  border
+                  border-white/10
+
+                  rounded-3xl
+
+                  p-2
+
+                  backdrop-blur-xl
+
+                  overflow-hidden
+                  "
+                >
+
+                  <HeatMap
+
+                    key={`heat-${refreshKey}`}
+
+                    analytics={analytics}
+
+                  />
+
+                </div>
+
+
+
+
+                {/* SESSION */}
+
+                <div
+                  className="
+                  min-w-0
+
+                  bg-white/5
+
+                  border
+                  border-white/10
+
+                  rounded-3xl
+
+                  p-2
+
+                  backdrop-blur-xl
+
+                  overflow-hidden
+                  "
+                >
+
+                  <SessionStats
+
+                    key={`session-${refreshKey}`}
+
+                    analytics={analytics}
+
+                  />
+
+                </div>
+
+
+
+
+                {/* PSYCHOLOGY */}
+
+                <div
+                  className="
+                  min-w-0
+
+                  bg-white/5
+
+                  border
+                  border-white/10
+
+                  rounded-3xl
+
+                  p-2
+
+                  backdrop-blur-xl
+
+                  overflow-hidden
+                  "
+                >
+
+                  <PsychologyStats
+
+                    key={`psy-${refreshKey}`}
+
+                    analytics={analytics}
+
+                  />
+
+                </div>
+
+
+
+
+                {/* RISK */}
+
+                <div
+                  className="
+                  min-w-0
+
+                  xl:col-span-2
+
+                  bg-white/5
+
+                  border
+                  border-white/10
+
+                  rounded-3xl
+
+                  p-2
+
+                  backdrop-blur-xl
+
+                  overflow-hidden
+                  "
+                >
+
+                  <RiskRewardChart
+
+                    key={`risk-${refreshKey}`}
+
+                    analytics={analytics}
+
+                  />
+
+                </div>
+
+              </div>
+
+            )
+
+          }
+
+        </main>
 
       </div>
 
@@ -593,4 +1149,3 @@ export default function Analytics() {
   );
 
 }
-
