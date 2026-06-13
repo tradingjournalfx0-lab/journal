@@ -282,7 +282,7 @@ export default function HomeNavbar() {
       w-full
       max-w-full
 
-      overflow-hidden
+      overflow-visible
       "
     >
 
@@ -310,6 +310,8 @@ export default function HomeNavbar() {
         lg:px-8
 
         py-4
+
+        relative
         "
       >
 
@@ -439,88 +441,51 @@ export default function HomeNavbar() {
         >
 
           <Link
-
             to="/"
-
             className="
             text-gray-300
-
             hover:text-purple-400
-
             transition-all
             duration-300
             "
-
           >
-
             Home
-
           </Link>
 
-
-
-
           <Link
-
             to="/feature"
-
             className="
             text-gray-300
-
             hover:text-purple-400
-
             transition-all
             duration-300
             "
-
           >
-
             Features
-
           </Link>
-
-
-
 
           <Link
-
             to="/plan"
-
             className="
             text-gray-300
-
             hover:text-purple-400
-
             transition-all
             duration-300
             "
-
           >
-
             Pricing
-
           </Link>
-
-
-
 
           <a
-
             href="#about"
-
             className="
             text-gray-300
-
             hover:text-purple-400
-
             transition-all
             duration-300
             "
-
           >
-
             About
-
           </a>
 
         </div>
@@ -591,7 +556,9 @@ export default function HomeNavbar() {
 
                 <div
                   ref={dropdownRef}
-                  className="relative"
+                  className="
+                  relative
+                  "
                 >
 
                   <div
@@ -755,6 +722,8 @@ export default function HomeNavbar() {
                         absolute
                         right-0
 
+                        top-full
+
                         mt-3
 
                         w-56
@@ -772,9 +741,11 @@ export default function HomeNavbar() {
 
                         shadow-2xl
 
-                        z-50
+                        z-[9999]
                         "
                       >
+
+                        {/* PROFILE */}
 
                         <button
 
@@ -809,6 +780,8 @@ export default function HomeNavbar() {
 
 
 
+                        {/* SETTINGS */}
+
                         <button
 
                           onClick={()=>{
@@ -841,6 +814,8 @@ export default function HomeNavbar() {
 
 
 
+
+                        {/* LOGOUT */}
 
                         <button
 
@@ -1052,109 +1027,55 @@ export default function HomeNavbar() {
           >
 
             <Link
-
               to="/"
-
               onClick={()=>setMobileMenu(false)}
-
               className="
               block
-
               text-gray-300
-
               hover:text-purple-400
-
               transition-all
               "
-
             >
-
               Home
-
             </Link>
 
-
-
-
             <Link
-
               to="/feature"
-
               onClick={()=>setMobileMenu(false)}
-
               className="
               block
-
               text-gray-300
-
               hover:text-purple-400
-
               transition-all
               "
-
             >
-
               Features
-
             </Link>
-
-
-
 
             <Link
-
               to="/plan"
-
               onClick={()=>setMobileMenu(false)}
-
               className="
               block
-
               text-gray-300
-
               hover:text-purple-400
-
               transition-all
               "
-
             >
-
               Pricing
-
             </Link>
-
-
-
 
             <a
-
               href="#about"
-
               className="
               block
-
               text-gray-300
-
               hover:text-purple-400
-
               transition-all
               "
-
             >
-
               About
-
             </a>
-
-
-
-
-
-
-
-            {/* =====================================================
-                MOBILE PROFILE
-            ===================================================== */}
 
             {
 
@@ -1218,7 +1139,6 @@ export default function HomeNavbar() {
                     <h4
                       className="
                       font-semibold
-
                       truncate
                       "
                     >
@@ -1261,16 +1181,6 @@ export default function HomeNavbar() {
               )
 
             }
-
-
-
-
-
-
-
-            {/* =====================================================
-                MOBILE BUTTONS
-            ===================================================== */}
 
             <div
               className="

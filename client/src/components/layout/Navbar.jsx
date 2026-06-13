@@ -102,18 +102,6 @@ export default function Navbar() {
 
 
 
-      console.log(
-        "PROFILE:",
-        response.data
-      );
-
-
-
-
-      // =================================================
-      // SAVE PROFILE
-      // =================================================
-
       setProfile(
         response.data
       );
@@ -256,7 +244,7 @@ export default function Navbar() {
         w-full
         max-w-full
 
-        overflow-hidden
+        overflow-visible
 
         bg-white/5
 
@@ -282,6 +270,8 @@ export default function Navbar() {
           justify-between
 
           gap-4
+
+          relative
           "
         >
 
@@ -669,7 +659,9 @@ export default function Navbar() {
                   <div
                     className="
                     absolute
+
                     right-0
+                    top-full
 
                     mt-3
 
@@ -688,7 +680,7 @@ export default function Navbar() {
 
                     shadow-2xl
 
-                    z-50
+                    z-[9999]
                     "
                   >
 
@@ -828,11 +820,6 @@ export default function Navbar() {
 
               mt-4
 
-              animate-in
-              slide-in-from-top
-
-              duration-300
-
               border-t
               border-white/10
 
@@ -842,8 +829,6 @@ export default function Navbar() {
               flex-col
 
               gap-3
-
-              overflow-hidden
               "
             >
 
