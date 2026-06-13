@@ -339,15 +339,15 @@ export default function AppRoutes(){
 
           element={
 
-            // <ProtectedRoute>
+             <ProtectedRoute>
 
-              // <SubscriptionRoute>
+               <SubscriptionRoute>
 
                 <Profile />
 
-              // </SubscriptionRoute>
+               </SubscriptionRoute>
 
-            // </ProtectedRoute>
+            </ProtectedRoute>
 
           }
 

@@ -160,7 +160,7 @@ export default function PlanFeatures() {
 
         features={[
 
-          "20 trades/month",
+          "0 trades/month",
 
           "Basic analytics",
 

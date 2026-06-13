@@ -26,6 +26,9 @@ import Footer
 from "../../Footer";
 import Hero from "./Hero";
 import Market from "./Market";
+
+import PlanH from "./PlanH";
+
  
 
 export default function Home() {
@@ -177,6 +180,9 @@ export default function Home() {
       <Hero  />
       
      <Market/>
+      <PlanH />
+
+     
 
 
 

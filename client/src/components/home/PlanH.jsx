@@ -8,11 +8,11 @@ import api from "../../services/api";
 
 // import Navbar from "../components/layout/Navbar";
 
-import PricingCard from "./PricingCard";
+import PricingCard from "../subscription/PricingCard";
 
-import SubscriptionStatus from "./SubscriptionStatus";
 
-import HomeNavbar from "../home/HomeNavbar";
+
+
 
 // import BillingHistory from "../components/subscription/BillingHistory";
 
@@ -267,7 +267,7 @@ export default function Plan() {
 
   return (
 
-    <div className=" min-h-screen bg-[#050816] text-white">
+    <div className=" min-h-screen bg-[#050816] text-white p-">
 
 
 
@@ -289,7 +289,7 @@ export default function Plan() {
         {/* NAVBAR */}
 
         {/* <Navbar /> */}
-             <HomeNavbar/>
+             
 
 
 
@@ -317,12 +317,12 @@ export default function Plan() {
 
 
         {/* STATUS */}
-
+{/* 
         <div className="mt-8">
 
           <SubscriptionStatus />
 
-        </div>
+        </div> */}
 
       {/* Biling History */}
         {/* <div className="mt-8">

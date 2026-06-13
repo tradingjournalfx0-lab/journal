@@ -422,7 +422,7 @@ export default function Hero() {
           absolute
           inset-0
           overflow-hidden
-          opacity-40
+          opacity-20
           "
         >
 
@@ -483,14 +483,14 @@ export default function Hero() {
           lg:px-8
           pt-28
           md:pt-32
-          pb-16
-          md:pb-20
+          pb-10
+          md:pb-15
           grid
           grid-cols-1
           xl:grid-cols-2
-          gap-10
-          md:gap-16
-          xl:gap-20
+          gap-5
+          md:gap-10
+          xl:gap-15
           items-center
           "
         >
@@ -513,11 +513,11 @@ export default function Hero() {
               border
               border-purple-500/20
               backdrop-blur-xl
-              px-4
+              px-1
               sm:px-5
               py-3
               rounded-2xl
-              mb-8
+              mb-1
               "
             >
 
@@ -605,7 +605,7 @@ export default function Hero() {
               md:text-xl
               leading-8
               md:leading-10
-              mt-8
+              mt-4
               max-w-2xl
               "
             >
@@ -635,7 +635,7 @@ export default function Hero() {
               sm:gap-5
               w-full
               sm:w-auto
-              mt-10
+              mt-5
               "
             >
 
@@ -987,7 +987,7 @@ export default function Hero() {
                 p-5
                 sm:p-6
                 md:p-8
-                mt-8
+                mt-5
                 "
               >
 

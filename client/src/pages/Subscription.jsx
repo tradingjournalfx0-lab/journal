@@ -192,9 +192,9 @@ export default function Subscription() {
 
       title: "1 Month",
 
-      price: 19,
+      price: 199,
 
-      amount: 19,
+      amount: 199,
 
       duration: "1 Month",
 
@@ -221,9 +221,9 @@ export default function Subscription() {
 
       title: "6 Months",
 
-      price: 79,
+      price: 799,
 
-      amount: 79,
+      amount: 799,
 
       duration: "6 Months",
 
@@ -252,9 +252,9 @@ export default function Subscription() {
 
       title: "1 Year",
 
-      price: 149,
+      price: 1499,
 
-      amount: 149,
+      amount: 1499,
 
       duration: "1 Year",
 
@@ -281,9 +281,9 @@ export default function Subscription() {
 
       title: "Lifetime",
 
-      price: 299,
+      price: 9999,
 
-      amount: 299,
+      amount: 9999,
 
       duration: "Lifetime",
 
