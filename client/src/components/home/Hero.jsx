@@ -104,10 +104,6 @@ export default function Hero() {
 
     try {
 
-      // =========================================
-      // TOKEN
-      // =========================================
-
       const token =
       localStorage.getItem(
         "token"
@@ -168,7 +164,7 @@ export default function Hero() {
 
 
       // =========================================
-      // HANDLE MULTIPLE RESPONSE TYPES
+      // HANDLE ALL API FORMATS
       // =========================================
 
       const trades =
@@ -341,6 +337,7 @@ export default function Hero() {
         relative
         min-h-screen
         overflow-hidden
+        overflow-x-hidden
         bg-black
         text-white
         "
@@ -366,7 +363,8 @@ export default function Hero() {
           w-full
           h-full
           object-cover
-          opacity-40
+          opacity-30
+          md:opacity-40
           "
 
         >
@@ -480,13 +478,19 @@ export default function Hero() {
           z-30
           max-w-7xl
           mx-auto
-          px-6
-          pt-32
-          pb-20
+          px-4
+          sm:px-6
+          lg:px-8
+          pt-28
+          md:pt-32
+          pb-16
+          md:pb-20
           grid
           grid-cols-1
           xl:grid-cols-2
-          gap-20
+          gap-10
+          md:gap-16
+          xl:gap-20
           items-center
           "
         >
@@ -509,7 +513,8 @@ export default function Hero() {
               border
               border-purple-500/20
               backdrop-blur-xl
-              px-5
+              px-4
+              sm:px-5
               py-3
               rounded-2xl
               mb-8
@@ -530,6 +535,8 @@ export default function Hero() {
 
               <span className="
               text-purple-300
+              text-sm
+              sm:text-base
               ">
 
                 Smart Trading Journal Platform
@@ -545,11 +552,14 @@ export default function Hero() {
 
 
 
-            {/* TITLE */}
+            {/* =====================================================
+                TITLE
+            ===================================================== */}
 
             <h1
               className="
-              text-5xl
+              text-4xl
+              sm:text-5xl
               md:text-6xl
               xl:text-7xl
               font-black
@@ -583,14 +593,18 @@ export default function Hero() {
 
 
 
-            {/* DESCRIPTION */}
+            {/* =====================================================
+                DESCRIPTION
+            ===================================================== */}
 
             <p
               className="
               text-gray-300
-              text-lg
+              text-base
+              sm:text-lg
               md:text-xl
-              leading-10
+              leading-8
+              md:leading-10
               mt-8
               max-w-2xl
               "
@@ -607,13 +621,20 @@ export default function Hero() {
 
 
 
-            {/* BUTTONS */}
+            {/* =====================================================
+                BUTTONS
+            ===================================================== */}
 
             <div
               className="
               flex
+              flex-col
+              sm:flex-row
               flex-wrap
-              gap-5
+              gap-4
+              sm:gap-5
+              w-full
+              sm:w-auto
               mt-10
               "
             >
@@ -627,6 +648,9 @@ export default function Hero() {
                     to="/dashboard"
 
                     className="
+                    w-full
+                    sm:w-auto
+                    text-center
                     px-8
                     py-5
                     rounded-2xl
@@ -657,6 +681,9 @@ export default function Hero() {
                       to="/register"
 
                       className="
+                      w-full
+                      sm:w-auto
+                      text-center
                       px-8
                       py-5
                       rounded-2xl
@@ -686,6 +713,9 @@ export default function Hero() {
                       to="/subscription"
 
                       className="
+                      w-full
+                      sm:w-auto
+                      text-center
                       px-8
                       py-5
                       rounded-2xl
@@ -714,6 +744,97 @@ export default function Hero() {
 
             </div>
 
+
+
+
+            {/* =====================================================
+                FLOATING STATS
+            ===================================================== */}
+
+            <div
+              className="
+              grid
+              grid-cols-1
+              sm:grid-cols-2
+              gap-4
+              md:gap-6
+              mt-14
+              "
+            >
+
+              <div
+                className="
+                bg-white/5
+                border
+                border-white/10
+                backdrop-blur-xl
+                px-6
+                py-5
+                rounded-3xl
+                animate-bounce
+                "
+              >
+
+                <p className="text-gray-400">
+                  Traders
+                </p>
+
+                <h2 className="
+                text-2xl
+                sm:text-3xl
+                font-bold
+                ">
+
+                  <CountUp
+                    end={12000}
+                    duration={3}
+                  />
+
+                  +
+
+                </h2>
+
+              </div>
+
+
+
+
+              <div
+                className="
+                bg-white/5
+                border
+                border-white/10
+                backdrop-blur-xl
+                px-6
+                py-5
+                rounded-3xl
+                animate-pulse
+                "
+              >
+
+                <p className="text-gray-400">
+                  Accuracy
+                </p>
+
+                <h2 className="
+                text-2xl
+                sm:text-3xl
+                font-bold
+                ">
+
+                  <CountUp
+                    end={94}
+                    duration={3}
+                  />
+
+                  %
+
+                </h2>
+
+              </div>
+
+            </div>
+
           </div>
 
 
@@ -732,6 +853,7 @@ export default function Hero() {
 
             className="
             relative
+            w-full
             "
           >
 
@@ -747,7 +869,9 @@ export default function Hero() {
 
 
 
-            {/* DASHBOARD CARD */}
+            {/* =====================================================
+                DASHBOARD CARD
+            ===================================================== */}
 
             <div
               className="
@@ -756,19 +880,25 @@ export default function Hero() {
               border
               border-white/10
               backdrop-blur-2xl
-              rounded-[40px]
-              p-8
+              rounded-[30px]
+              md:rounded-[40px]
+              p-5
+              sm:p-6
+              md:p-8
               shadow-2xl
               "
             >
 
-              {/* HEADER */}
+              {/* =====================================================
+                  HEADER
+              ===================================================== */}
 
               <div
                 className="
                 flex
                 items-center
                 justify-between
+                gap-4
                 "
               >
 
@@ -776,7 +906,9 @@ export default function Hero() {
 
                   <h2
                     className="
-                    text-4xl
+                    text-2xl
+                    sm:text-3xl
+                    md:text-4xl
                     font-bold
                     "
                   >
@@ -791,6 +923,8 @@ export default function Hero() {
                     className="
                     text-gray-400
                     mt-2
+                    text-sm
+                    sm:text-base
                     "
                   >
 
@@ -815,9 +949,13 @@ export default function Hero() {
                   className="
                   bg-green-500/20
                   text-green-400
-                  px-5
-                  py-3
+                  px-4
+                  sm:px-5
+                  py-2
+                  sm:py-3
                   rounded-2xl
+                  text-sm
+                  sm:text-base
                   "
                 >
 
@@ -838,13 +976,17 @@ export default function Hero() {
 
 
 
-              {/* TOTAL PROFIT */}
+              {/* =====================================================
+                  TOTAL PROFIT
+              ===================================================== */}
 
               <div
                 className="
                 bg-black/20
                 rounded-3xl
-                p-8
+                p-5
+                sm:p-6
+                md:p-8
                 mt-8
                 "
               >
@@ -861,7 +1003,9 @@ export default function Hero() {
 
                 <h2
                   className={`
-                  text-6xl
+                  text-4xl
+                  sm:text-5xl
+                  md:text-6xl
                   font-black
                   mt-3
 
@@ -900,35 +1044,49 @@ export default function Hero() {
 
 
 
-              {/* STATS */}
+              {/* =====================================================
+                  STATS
+              ===================================================== */}
 
               <div
                 className="
                 grid
                 grid-cols-2
-                gap-5
+                gap-4
+                sm:gap-5
                 mt-6
                 "
               >
 
-                {/* WIN RATE */}
+                {/* =====================================================
+                    WIN RATE
+                ===================================================== */}
 
                 <div
                   className="
                   bg-black/20
                   rounded-3xl
-                  p-6
+                  p-4
+                  sm:p-6
                   "
                 >
 
-                  <p className="text-gray-400">
+                  <p className="
+                  text-gray-400
+                  text-sm
+                  sm:text-base
+                  ">
+
                     Win Rate
+
                   </p>
 
 
 
                   <h2 className="
-                  text-5xl
+                  text-3xl
+                  sm:text-4xl
+                  md:text-5xl
                   font-bold
                   mt-3
                   ">
@@ -951,24 +1109,35 @@ export default function Hero() {
 
 
 
-                {/* TRADES */}
+                {/* =====================================================
+                    TRADES
+                ===================================================== */}
 
                 <div
                   className="
                   bg-black/20
                   rounded-3xl
-                  p-6
+                  p-4
+                  sm:p-6
                   "
                 >
 
-                  <p className="text-gray-400">
+                  <p className="
+                  text-gray-400
+                  text-sm
+                  sm:text-base
+                  ">
+
                     Trades
+
                   </p>
 
 
 
                   <h2 className="
-                  text-5xl
+                  text-3xl
+                  sm:text-4xl
+                  md:text-5xl
                   font-bold
                   mt-3
                   ">
