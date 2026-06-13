@@ -1,13 +1,10 @@
-
 import {
-
   useEffect,
   useState,
-
 } from "react";
 
-// import axios from "axios";
 import api from "../services/api";
+
 
 
 import Navbar from
@@ -31,57 +28,58 @@ import RecentTrades from
 import SessionOverview from
 "../components/dashboard/SessionOverview";
 
+
+
 export default function Dashboard() {
 
-
-
-
-  // ======================
+  // =====================================================
   // STATES
-  // ======================
+  // =====================================================
 
-  const [trades,setTrades] =
+  const [trades, setTrades] =
   useState([]);
 
-  const [loading,setLoading] =
+  const [loading, setLoading] =
   useState(true);
 
-  const [profile,setProfile] =
+  const [profile, setProfile] =
   useState(null);
 
-  const [stats,setStats] =
+  const [stats, setStats] =
   useState({
 
-    totalProfit:0,
+    totalProfit: 0,
 
-    totalTrades:0,
+    totalTrades: 0,
 
-    wins:0,
+    wins: 0,
 
-    losses:0,
+    losses: 0,
 
-    winRate:0,
+    winRate: 0,
 
   });
 
 
 
 
-  // ======================
+  // =====================================================
   // FETCH PROFILE
-  // ======================
+  // =====================================================
 
   const fetchProfile =
-  async()=>{
+  async () => {
 
-    try{
+    try {
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
+
+
+
+      if (!token) return;
 
 
 
@@ -92,10 +90,9 @@ export default function Dashboard() {
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
-
             `Bearer ${token}`
 
           }
@@ -107,12 +104,12 @@ export default function Dashboard() {
 
 
       setProfile(
-
         response.data
-
       );
 
-    }catch(error){
+    }
+
+    catch (error) {
 
       console.log(
 
@@ -129,21 +126,29 @@ export default function Dashboard() {
 
 
 
-  // ======================
+  // =====================================================
   // FETCH TRADES
-  // ======================
+  // =====================================================
 
   const fetchTrades =
-  async()=>{
+  async () => {
 
-    try{
+    try {
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
+
+
+
+      if (!token) {
+
+        setLoading(false);
+
+        return;
+
+      }
 
 
 
@@ -154,10 +159,9 @@ export default function Dashboard() {
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
-
             `Bearer ${token}`
 
           }
@@ -168,21 +172,41 @@ export default function Dashboard() {
 
 
 
+      // =================================================
+      // HANDLE RESPONSE TYPES
+      // =================================================
+
+      const tradesData =
+
+      Array.isArray(response.data)
+
+      ? response.data
+
+      : Array.isArray(response.data.data)
+
+      ? response.data.data
+
+      : Array.isArray(response.data.trades)
+
+      ? response.data.trades
+
+      : [];
+
+
+
       setTrades(
-
-        response.data
-
+        tradesData
       );
 
 
 
       calculateStats(
-
-        response.data
-
+        tradesData
       );
 
-    }catch(error){
+    }
+
+    catch (error) {
 
       console.log(
 
@@ -192,7 +216,9 @@ export default function Dashboard() {
 
       );
 
-    }finally{
+    }
+
+    finally {
 
       setLoading(false);
 
@@ -203,11 +229,11 @@ export default function Dashboard() {
 
 
 
-  // ======================
+  // =====================================================
   // LOAD DATA
-  // ======================
+  // =====================================================
 
-  useEffect(()=>{
+  useEffect(() => {
 
     fetchProfile();
 
@@ -215,39 +241,41 @@ export default function Dashboard() {
 
 
 
+
+    // =================================================
     // LIVE AUTO REFRESH
+    // =================================================
 
     const interval =
 
-    setInterval(()=>{
+    setInterval(() => {
 
       fetchTrades();
 
-    },5000);
+    }, 5000);
 
 
 
-    return ()=>{
+
+    return () => {
 
       clearInterval(
-
         interval
-
       );
 
     };
 
-  },[]);
+  }, []);
 
 
 
 
-  // ======================
+  // =====================================================
   // CALCULATE STATS
-  // ======================
+  // =====================================================
 
   const calculateStats =
-  (data)=>{
+  (data) => {
 
     let totalProfit = 0;
 
@@ -258,26 +286,28 @@ export default function Dashboard() {
 
 
 
-    data.forEach((trade)=>{
+    data.forEach((trade) => {
 
       totalProfit +=
       Number(
-
         trade.profit || 0
-
       );
 
 
 
-      if(
+      if (
 
-        Number(trade.profit) > 0
+        Number(
+          trade.profit
+        ) > 0
 
-      ){
+      ) {
 
         wins++;
 
-      }else{
+      }
+
+      else {
 
         losses++;
 
@@ -295,13 +325,15 @@ export default function Dashboard() {
 
 
     const winRate =
+
     totalTrades > 0
 
     ? (
 
-        (wins / totalTrades)
-
-        * 100
+        (
+          wins /
+          totalTrades
+        ) * 100
 
       ).toFixed(1)
 
@@ -329,25 +361,75 @@ export default function Dashboard() {
 
 
 
-  // ======================
+  // =====================================================
   // LOADING SCREEN
-  // ======================
+  // =====================================================
 
-  if(loading){
+  if (loading) {
 
-    return(
+    return (
 
-      <div className="
-      h-screen
-      flex
-      items-center
-      justify-center
-      bg-[#050816]
-      text-white
-      text-2xl
-      ">
+      <div
+        className="
+        min-h-screen
 
-        Loading Dashboard...
+        flex
+        items-center
+        justify-center
+
+        bg-[#050816]
+
+        text-white
+
+        px-4
+        text-center
+        "
+      >
+
+        <div
+          className="
+          flex
+          flex-col
+          items-center
+          gap-5
+          "
+        >
+
+          {/* LOADER */}
+
+          <div
+            className="
+            w-16
+            h-16
+
+            rounded-full
+
+            border-4
+            border-purple-500/30
+            border-t-purple-500
+
+            animate-spin
+            "
+          />
+
+
+
+          {/* TEXT */}
+
+          <h2
+            className="
+            text-lg
+            sm:text-2xl
+
+            font-semibold
+            "
+          >
+
+            Loading Dashboard...
+
+          </h2>
+
+        </div>
 
       </div>
 
@@ -358,211 +440,576 @@ export default function Dashboard() {
 
 
 
-  // ======================
+  // =====================================================
   // UI
-  // ======================
+  // =====================================================
 
   return (
 
-    <div className="
-    flex
-    min-h-screen
-    bg-[#050816]
-    text-white
-    ">
+    <div
+      className="
+      flex
+
+      min-h-screen
+
+      bg-[#050816]
+      text-white
+
+      w-full
+      max-w-full
+
+      overflow-hidden
+      "
+    >
 
 
 
 
-      {/* SIDEBAR */}
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
       <Sidebar />
 
 
 
 
+      {/* =====================================================
+          MAIN WRAPPER
+      ===================================================== */}
 
-      {/* MAIN */}
+      <div
+        className="
+        flex-1
 
-      <div className="
-      flex-1
-      lg:ml-64
-      p-4 sm:p-6 lg:p-8
-      ">
+        flex
+        flex-col
 
+        w-full
+        min-w-0
 
-
-
-        {/* NAVBAR */}
-
-        <Navbar />
-
-
-
-
-
-        {/* PAGE HEADER */}
-
-        <div className="mt-8">
-
-          <h1 className="
-          text-4xl sm:text-5xl
-          font-bold
-          ">
-
-            Dashboard
-
-          </h1>
+        lg:ml-72
+        "
+      >
 
 
 
-          <p className="
-          text-gray-400
-          mt-2
-          text-lg
-          ">
 
-            Welcome back{" "}
+        {/* =====================================================
+            NAVBAR
+        ===================================================== */}
 
-            {
+        <div
+          className="
+          sticky
+          top-0
+          z-40
 
-              profile?.fullName ||
+          px-4
+          sm:px-6
+          lg:px-8
 
-              profile?.name ||
+          pt-4
 
-              "Trader"
+          bg-[#050816]/80
 
-            } 👋
+          backdrop-blur-xl
+          "
+        >
 
-          </p>
+          <Navbar />
 
         </div>
 
 
 
 
+        {/* =====================================================
+            PAGE CONTENT
+        ===================================================== */}
 
-        {/* STATS */}
+        <main
+          className="
+          flex-1
 
-        <StatsCards
+          w-full
+          min-w-0
 
-          stats={stats}
+          px-4
+          sm:px-6
+          lg:px-8
 
-        />
+          py-6
+          sm:py-8
 
-
-
-
-
-        {/* CHARTS */}
-
-        <div className="
-        grid
-        grid-cols-1 xl:grid-cols-2
-        gap-6
-        mt-8
-        ">
-
-          {/* EQUITY CURVE */}
-
-          <EquityChart
-
-            trades={trades}
-
-          />
+          overflow-visible
+          "
+        >
 
 
 
 
-          {/* PERFORMANCE */}
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
 
-          <PerformanceChart
+          <div
+            className="
+            flex
+            flex-col
+            lg:flex-row
 
-            stats={stats}
+            lg:items-center
+            lg:justify-between
 
-          />
+            gap-5
+            "
+          >
 
-        </div>
+            {/* LEFT */}
 
+            <div
+              className="
+              min-w-0
+              "
+            >
 
+              <h1
+                className="
+                text-3xl
+                sm:text-4xl
+                lg:text-5xl
 
+                font-black
 
+                break-words
+                "
+              >
 
-        {/* RECENT + SESSION */}
+                Dashboard
 
-        <div className="
-        grid
-        grid-cols-1 xl:grid-cols-2
-        gap-6
-        mt-8
-        ">
-
-          {/* RECENT TRADES */}
-
-          <RecentTrades
-
-            trades={trades}
-
-          />
-
-
-
-
-          {/* SESSION OVERVIEW */}
-
-          <SessionOverview
-
-            trades={trades}
-
-          />
-
-        </div>
+              </h1>
 
 
 
+              <p
+                className="
+                text-gray-400
 
+                mt-3
 
-        {/* EMPTY STATE */}
+                text-sm
+                sm:text-base
+                lg:text-lg
 
-        {
+                break-words
+                leading-7
+                "
+              >
 
-          trades.length === 0 && (
+                Welcome back{" "}
 
-            <div className="
-            mt-10
-            bg-white/5
-            border border-white/10
-            rounded-3xl
-            p-10
-            text-center
-            ">
+                <span
+                  className="
+                  text-purple-400
+                  font-semibold
+                  "
+                >
 
-              <h2 className="
-              text-3xl
-              font-bold
-              ">
+                  {
 
-                No Trades Yet
+                    profile?.fullName ||
 
-              </h2>
+                    profile?.name ||
 
+                    "Trader"
 
+                  }
 
-              <p className="
-              text-gray-400
-              mt-4
-              ">
+                </span>
 
-                Start adding trades
-                to see live analytics.
+                {" "}👋
 
               </p>
 
             </div>
 
-          )
 
-        }
+
+
+            {/* RIGHT */}
+
+            <div
+              className="
+              flex
+              flex-wrap
+
+              items-center
+
+              gap-3
+              "
+            >
+
+              {/* LIVE */}
+
+              <div
+                className="
+                bg-green-500/10
+
+                border
+                border-green-500/20
+
+                px-4
+                py-2
+
+                rounded-2xl
+
+                text-green-400
+
+                text-sm
+                font-medium
+
+                whitespace-nowrap
+                "
+              >
+
+                ● Live Market
+
+              </div>
+
+
+
+
+              {/* AI */}
+
+              <div
+                className="
+                bg-purple-500/10
+
+                border
+                border-purple-500/20
+
+                px-4
+                py-2
+
+                rounded-2xl
+
+                text-purple-300
+
+                text-sm
+                font-medium
+
+                whitespace-nowrap
+                "
+              >
+
+                AI Analytics Enabled
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+
+          {/* =====================================================
+              STATS
+          ===================================================== */}
+
+          <div
+            className="
+            mt-6
+            sm:mt-8
+            "
+          >
+
+            <StatsCards
+              stats={stats}
+            />
+
+          </div>
+
+
+
+
+          {/* =====================================================
+              CHARTS
+          ===================================================== */}
+
+          <div
+            className="
+            grid
+
+            grid-cols-1
+            xl:grid-cols-2
+
+            gap-4
+            sm:gap-6
+
+            mt-6
+            sm:mt-8
+            "
+          >
+
+            {/* EQUITY */}
+
+            <div
+              className="
+              min-w-0
+
+              bg-white/5
+
+              border
+              border-white/10
+
+              rounded-3xl
+
+              p-2
+
+              backdrop-blur-xl
+
+              overflow-hidden
+              "
+            >
+
+              <EquityChart
+                trades={trades}
+              />
+
+            </div>
+
+
+
+
+            {/* PERFORMANCE */}
+
+            <div
+              className="
+              min-w-0
+
+              bg-white/5
+
+              border
+              border-white/10
+
+              rounded-3xl
+
+              p-2
+
+              backdrop-blur-xl
+
+              overflow-hidden
+              "
+            >
+
+              <PerformanceChart
+                stats={stats}
+              />
+
+            </div>
+
+          </div>
+
+
+
+
+          {/* =====================================================
+              RECENT + SESSION
+          ===================================================== */}
+
+          <div
+            className="
+            grid
+
+            grid-cols-1
+            xl:grid-cols-2
+
+            gap-4
+            sm:gap-6
+
+            mt-6
+            sm:mt-8
+            "
+          >
+
+            {/* RECENT */}
+
+            <div
+              className="
+              min-w-0
+
+              bg-white/5
+
+              border
+              border-white/10
+
+              rounded-3xl
+
+              p-2
+
+              backdrop-blur-xl
+
+              overflow-hidden
+              "
+            >
+
+              <RecentTrades
+                trades={trades}
+              />
+
+            </div>
+
+
+
+
+            {/* SESSION */}
+
+            <div
+              className="
+              min-w-0
+
+              bg-white/5
+
+              border
+              border-white/10
+
+              rounded-3xl
+
+              p-2
+
+              backdrop-blur-xl
+
+              overflow-hidden
+              "
+            >
+
+              <SessionOverview
+                trades={trades}
+              />
+
+            </div>
+
+          </div>
+
+
+
+
+          {/* =====================================================
+              EMPTY STATE
+          ===================================================== */}
+
+          {
+
+            trades.length === 0 && (
+
+              <div
+                className="
+                mt-8
+                sm:mt-10
+
+                bg-white/5
+
+                border
+                border-white/10
+
+                rounded-2xl
+                sm:rounded-3xl
+
+                p-6
+                sm:p-10
+
+                text-center
+
+                backdrop-blur-xl
+                "
+              >
+
+                {/* ICON */}
+
+                <div
+                  className="
+                  w-20
+                  h-20
+
+                  mx-auto
+
+                  rounded-full
+
+                  bg-purple-500/10
+
+                  border
+                  border-purple-500/20
+
+                  flex
+                  items-center
+                  justify-center
+
+                  text-4xl
+                  "
+                >
+
+                  📈
+
+                </div>
+
+
+
+
+                {/* TITLE */}
+
+                <h2
+                  className="
+                  text-2xl
+                  sm:text-3xl
+
+                  font-bold
+
+                  mt-6
+                  "
+                >
+
+                  No Trades Yet
+
+                </h2>
+
+
+
+
+                {/* TEXT */}
+
+                <p
+                  className="
+                  text-gray-400
+
+                  mt-4
+
+                  text-sm
+                  sm:text-base
+
+                  max-w-xl
+
+                  mx-auto
+
+                  leading-8
+                  "
+                >
+
+                  Start adding trades
+                  to unlock powerful analytics,
+                  AI insights,
+                  and performance tracking.
+
+                </p>
+
+              </div>
+
+            )
+
+          }
+
+        </main>
 
       </div>
 
@@ -571,4 +1018,3 @@ export default function Dashboard() {
   );
 
 }
-
