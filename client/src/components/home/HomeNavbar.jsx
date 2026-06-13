@@ -178,12 +178,22 @@ export default function HomeNavbar() {
       justify-between
       px-4 sm:px-6 lg:px-8
       py-5
+         fixed
+         top-0
+         left-0
+          right-0
+          w-full
+          z-50
+          backdrop-blur-2xl
+          bg-white/5
+          border-b
+          border-white/10
       ">
 
 
 
 
-
+       
 
         {/* =========================
             LOGO
@@ -937,7 +947,10 @@ export default function HomeNavbar() {
 
       }
 
+     
+
     </div>
+     
 
   );
 
