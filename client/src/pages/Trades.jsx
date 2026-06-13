@@ -44,8 +44,27 @@ export default function Trades() {
   const [trades, setTrades] =
   useState([]);
 
+  const [filteredTrades, setFilteredTrades] =
+  useState([]);
+
   const [loading, setLoading] =
   useState(true);
+
+
+
+
+  // =====================================================
+  // FILTER STATES
+  // =====================================================
+
+  const [searchTerm, setSearchTerm] =
+  useState("");
+
+  const [strategy, setStrategy] =
+  useState("");
+
+  const [session, setSession] =
+  useState("");
 
 
 
@@ -132,6 +151,12 @@ export default function Trades() {
 
 
       setTrades(
+        tradesData
+      );
+
+
+
+      setFilteredTrades(
         tradesData
       );
 
@@ -476,7 +501,7 @@ export default function Trades() {
 
                 onClick={() =>
 
-                  exportCSV(trades)
+                  exportCSV(filteredTrades)
 
                 }
 
@@ -521,7 +546,7 @@ export default function Trades() {
 
                 onClick={() =>
 
-                  exportPDF(trades)
+                  exportPDF(filteredTrades)
 
                 }
 
@@ -566,7 +591,7 @@ export default function Trades() {
 
                 onClick={() =>
 
-                  exportExcel(trades)
+                  exportExcel(filteredTrades)
 
                 }
 
@@ -740,7 +765,7 @@ export default function Trades() {
                     "
                   >
 
-                    {trades.length}
+                    {filteredTrades.length}
 
                   </h3>
 
@@ -789,7 +814,7 @@ export default function Trades() {
 
                     {
 
-                      trades.reduce(
+                      filteredTrades.reduce(
 
                         (acc, trade) =>
 
@@ -832,7 +857,24 @@ export default function Trades() {
             "
           >
 
-            <TradeFilters />
+            <TradeFilters
+
+              trades={trades}
+
+              setFilteredTrades={
+                setFilteredTrades
+              }
+
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+
+              strategy={strategy}
+              setStrategy={setStrategy}
+
+              session={session}
+              setSession={setSession}
+
+            />
 
           </div>
 
@@ -855,7 +897,7 @@ export default function Trades() {
 
             <TradeTable
 
-              trades={trades}
+              trades={filteredTrades}
 
               refreshTrades={
                 fetchTrades
