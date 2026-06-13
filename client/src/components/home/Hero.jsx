@@ -18,7 +18,7 @@ import {
 
 
 
-export default function Hero({ isLoggedIn }) {
+export default function Hero() {
 
   // =====================================================
   // STATES
@@ -32,6 +32,11 @@ export default function Hero({ isLoggedIn }) {
     totalProfit: 0,
 
   });
+
+
+
+  const [liveMode, setLiveMode] =
+  useState(false);
 
 
 
@@ -99,6 +104,10 @@ export default function Hero({ isLoggedIn }) {
 
     try {
 
+      // =========================================
+      // TOKEN
+      // =========================================
+
       const token =
       localStorage.getItem(
         "token"
@@ -106,11 +115,30 @@ export default function Hero({ isLoggedIn }) {
 
 
 
+      console.log(
+        "TOKEN:",
+        token
+      );
+
+
+
+      // =========================================
+      // NO TOKEN
+      // =========================================
+
       if (!token) {
+
+        setLiveMode(false);
+
         return;
+
       }
 
 
+
+      // =========================================
+      // API CALL
+      // =========================================
 
       const response =
       await api.get(
@@ -132,32 +160,71 @@ export default function Hero({ isLoggedIn }) {
 
 
 
+      console.log(
+        "API RESPONSE:",
+        response.data
+      );
+
+
+
+      // =========================================
+      // HANDLE MULTIPLE RESPONSE TYPES
+      // =========================================
+
       const trades =
-      response.data || [];
+
+      Array.isArray(response.data)
+
+      ? response.data
+
+      : Array.isArray(response.data.data)
+
+      ? response.data.data
+
+      : Array.isArray(response.data.trades)
+
+      ? response.data.trades
+
+      : [];
 
 
 
+      console.log(
+        "FINAL TRADES:",
+        trades
+      );
+
+
+
+      // =========================================
       // TOTAL TRADES
+      // =========================================
 
       const totalTrades =
       trades.length;
 
 
 
+      // =========================================
       // WINS
+      // =========================================
 
       const wins =
       trades.filter(
 
         (trade) =>
 
-        Number(trade.profit) > 0
+        Number(
+          trade.profit
+        ) > 0
 
       ).length;
 
 
 
+      // =========================================
       // TOTAL PROFIT
+      // =========================================
 
       const totalProfit =
       trades.reduce(
@@ -175,21 +242,30 @@ export default function Hero({ isLoggedIn }) {
 
 
 
+      // =========================================
       // WIN RATE
+      // =========================================
 
       const winRate =
+
       totalTrades > 0
 
       ? (
+
           (
             wins /
             totalTrades
           ) * 100
+
         ).toFixed(1)
 
       : 0;
 
 
+
+      // =========================================
+      // UPDATE STATS
+      // =========================================
 
       setStats({
 
@@ -199,17 +275,33 @@ export default function Hero({ isLoggedIn }) {
 
       });
 
+
+
+      // =========================================
+      // LIVE MODE
+      // =========================================
+
+      setLiveMode(
+        totalTrades > 0
+      );
+
     }
 
     catch (error) {
 
       console.log(
 
+        "API ERROR:",
+
         error.response?.data ||
 
         error.message
 
       );
+
+
+
+      setLiveMode(false);
 
     }
 
@@ -224,13 +316,9 @@ export default function Hero({ isLoggedIn }) {
 
   useEffect(() => {
 
-    if (isLoggedIn) {
+    fetchTrades();
 
-      fetchTrades();
-
-    }
-
-  }, [isLoggedIn]);
+  }, []);
 
 
 
@@ -301,7 +389,7 @@ export default function Hero({ isLoggedIn }) {
           className="
           absolute
           inset-0
-          bg-black/50
+          bg-black/60
           "
         />
 
@@ -377,131 +465,7 @@ export default function Hero({ isLoggedIn }) {
           animate-bounce
           " />
 
-
-
-          <div className="
-          absolute
-          bottom-20
-          right-1/4
-          w-2
-          h-2
-          bg-cyan-400
-          rounded-full
-          animate-ping
-          " />
-
         </div>
-
-
-
-
-        {/* =====================================================
-            GLASS NAVBAR
-        ===================================================== */}
-
-        <nav
-          className="
-          fixed
-          top-0
-          left-0
-          w-full
-          z-50
-          backdrop-blur-2xl
-          bg-white/5
-          border-b
-          border-white/10
-          "
-        >
-{/* 
-          <div
-            className="
-            max-w-7xl
-            mx-auto
-            px-6
-            py-5
-            flex
-            items-center
-            justify-between
-            "
-          >
-
-            <h1
-              className="
-              text-2xl
-              font-black
-              bg-gradient-to-r
-              from-purple-400
-              to-fuchsia-500
-              bg-clip-text
-              text-transparent
-              "
-            >
-
-              Raftar Trader FX
-
-            </h1>
-
-
-
-
-            <div
-              className="
-              hidden
-              md:flex
-              items-center
-              gap-10
-              text-gray-300
-              "
-            >
-
-              <a href="#">
-                Features
-              </a>
-
-              <a href="#">
-                Pricing
-              </a>
-
-              <a href="#">
-                Dashboard
-              </a>
-
-            </div>
-
-
-
-
-            <Link
-
-              to="/register"
-
-              className="
-              px-6
-              py-3
-              rounded-xl
-              bg-gradient-to-r
-              from-purple-600
-              to-fuchsia-600
-              font-semibold
-              hover:scale-105
-              transition-all
-              duration-300
-              "
-
-            >
-
-              Get Started
-
-            </Link>
-
-          </div> */}
-
-        </nav>
-
-
-
-
-        
 
 
 
@@ -517,7 +481,7 @@ export default function Hero({ isLoggedIn }) {
           max-w-7xl
           mx-auto
           px-6
-          pt-48
+          pt-32
           pb-20
           grid
           grid-cols-1
@@ -564,7 +528,9 @@ export default function Hero({ isLoggedIn }) {
 
 
 
-              <span className="text-purple-300">
+              <span className="
+              text-purple-300
+              ">
 
                 Smart Trading Journal Platform
 
@@ -654,7 +620,7 @@ export default function Hero({ isLoggedIn }) {
 
               {
 
-                isLoggedIn ? (
+                liveMode ? (
 
                   <Link
 
@@ -748,87 +714,6 @@ export default function Hero({ isLoggedIn }) {
 
             </div>
 
-
-
-
-            {/* =====================================================
-                FLOATING STATS
-            ===================================================== */}
-
-            <div
-              className="
-              flex
-              flex-wrap
-              gap-6
-              mt-14
-              "
-            >
-
-              <div
-                className="
-                bg-white/5
-                border
-                border-white/10
-                backdrop-blur-xl
-                px-6
-                py-5
-                rounded-3xl
-                animate-bounce
-                "
-              >
-
-                <p className="text-gray-400">
-                  Traders
-                </p>
-
-                <h2 className="text-3xl font-bold">
-
-                  <CountUp
-                    end={12000}
-                    duration={3}
-                  />
-
-                  +
-
-                </h2>
-
-              </div>
-
-
-
-
-              <div
-                className="
-                bg-white/5
-                border
-                border-white/10
-                backdrop-blur-xl
-                px-6
-                py-5
-                rounded-3xl
-                animate-pulse
-                "
-              >
-
-                <p className="text-gray-400">
-                  Accuracy
-                </p>
-
-                <h2 className="text-3xl font-bold">
-
-                  <CountUp
-                    end={94}
-                    duration={3}
-                  />
-
-                  %
-
-                </h2>
-
-              </div>
-
-            </div>
-
           </div>
 
 
@@ -911,7 +796,7 @@ export default function Hero({ isLoggedIn }) {
 
                     {
 
-                      isLoggedIn
+                      liveMode
 
                       ? "Live Performance"
 
@@ -938,9 +823,9 @@ export default function Hero({ isLoggedIn }) {
 
                   {
 
-                    isLoggedIn
+                    liveMode
 
-                    ? "Active"
+                    ? "Live"
 
                     : "Demo"
 
@@ -953,7 +838,7 @@ export default function Hero({ isLoggedIn }) {
 
 
 
-              {/* PROFIT */}
+              {/* TOTAL PROFIT */}
 
               <div
                 className="
@@ -964,8 +849,12 @@ export default function Hero({ isLoggedIn }) {
                 "
               >
 
-                <p className="text-gray-400">
+                <p className="
+                text-gray-400
+                ">
+
                   Total Profit
+
                 </p>
 
 
@@ -978,7 +867,7 @@ export default function Hero({ isLoggedIn }) {
 
                   ${
 
-                    isLoggedIn
+                    liveMode
 
                     ? stats.totalProfit >= 0
 
@@ -997,7 +886,7 @@ export default function Hero({ isLoggedIn }) {
 
                   <CountUp
                     end={
-                      isLoggedIn
+                      liveMode
                       ? stats.totalProfit
                       : 7058
                     }
@@ -1046,7 +935,7 @@ export default function Hero({ isLoggedIn }) {
 
                     <CountUp
                       end={
-                        isLoggedIn
+                        liveMode
                         ? Number(stats.winRate)
                         : 74
                       }
@@ -1086,7 +975,7 @@ export default function Hero({ isLoggedIn }) {
 
                     <CountUp
                       end={
-                        isLoggedIn
+                        liveMode
                         ? stats.totalTrades
                         : 196
                       }
@@ -1104,39 +993,6 @@ export default function Hero({ isLoggedIn }) {
           </motion.div>
 
         </div>
-
-
-
-
-        {/* =====================================================
-            CUSTOM CSS
-        ===================================================== */}
-
-        <style>
-
-          {`
-
-          @keyframes ticker {
-
-            0% {
-
-              transform:
-              translateX(100%);
-
-            }
-
-            100% {
-
-              transform:
-              translateX(-100%);
-
-            }
-
-          }
-
-          `}
-
-        </style>
 
       </section>
 
