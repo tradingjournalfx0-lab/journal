@@ -1,76 +1,68 @@
-import { useState,useEffect } from "react";
+import {
+  useState,
+  useEffect,
+} from "react";
 
-// import axios from "axios";
 import api from "../../services/api";
 
-
 import {
-
   Pencil,
   Trash2,
   Plus,
-
+  X,
 } from "lucide-react";
+
+
 
 export default function TradeTable() {
 
-
-
-
-  // =========================
+  // =====================================================
   // STATES
-  // =========================
+  // =====================================================
 
-  const [trades,setTrades] =
+  const [trades, setTrades] =
   useState([]);
 
-  const [showModal,setShowModal] =
+  const [showModal, setShowModal] =
   useState(false);
 
-  const [editId,setEditId] =
+  const [editId, setEditId] =
   useState(null);
 
-  const [loading,setLoading] =
+  const [loading, setLoading] =
   useState(false);
 
-  const [formData,setFormData] =
+  const [formData, setFormData] =
   useState({
 
-    symbol:"",
-    session:"",
-    side:"BUY",
-    entry:"",
-    exit:"",
-    profit:"",
-    lotsize:"",
+    symbol: "",
+    session: "",
+    side: "BUY",
+    entry: "",
+    exit: "",
+    profit: "",
+    lotsize: "",
 
   });
 
 
 
 
-  // =========================
+  // =====================================================
   // FETCH TRADES
-  // =========================
+  // =====================================================
 
   const fetchTrades =
-  async()=>{
+  async () => {
 
-    try{
-
-      // TOKEN
+    try {
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
 
 
-
-
-      // API
 
       const response =
       await api.get(
@@ -79,10 +71,9 @@ export default function TradeTable() {
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
-
             `Bearer ${token}`
 
           }
@@ -93,14 +84,27 @@ export default function TradeTable() {
 
 
 
+      const tradesData =
+
+      Array.isArray(response.data)
+
+      ? response.data
+
+      : Array.isArray(response.data.data)
+
+      ? response.data.data
+
+      : [];
+
+
 
       setTrades(
-
-        response.data
-
+        tradesData
       );
 
-    }catch(error){
+    }
+
+    catch (error) {
 
       console.log(
 
@@ -117,24 +121,59 @@ export default function TradeTable() {
 
 
 
-  // =========================
+  // =====================================================
   // LOAD
-  // =========================
+  // =====================================================
 
-  useEffect(()=>{
+  useEffect(() => {
 
     fetchTrades();
 
-  },[]);
+  }, []);
 
 
 
 
-  // =========================
+  // =====================================================
+  // BODY LOCK
+  // =====================================================
+
+  useEffect(() => {
+
+    if (showModal) {
+
+      document.body.style.overflow =
+      "hidden";
+
+    }
+
+    else {
+
+      document.body.style.overflow =
+      "auto";
+
+    }
+
+
+
+    return () => {
+
+      document.body.style.overflow =
+      "auto";
+
+    };
+
+  }, [showModal]);
+
+
+
+
+  // =====================================================
   // HANDLE INPUT
-  // =========================
+  // =====================================================
 
-  const handleChange = (e)=>{
+  const handleChange =
+  (e) => {
 
     setFormData({
 
@@ -150,31 +189,39 @@ export default function TradeTable() {
 
 
 
-  // =========================
-  // OPEN ADD MODAL
-  // =========================
+  // =====================================================
+  // RESET FORM
+  // =====================================================
 
-  const handleAddTrade = ()=>{
-
-    setEditId(null);
-
-
-
+  const resetForm = () => {
 
     setFormData({
 
-      symbol:"",
-      session:"",
-      side:"BUY",
-      entry:"",
-      exit:"",
-      profit:"",
-      lotsize:"",
+      symbol: "",
+      session: "",
+      side: "BUY",
+      entry: "",
+      exit: "",
+      profit: "",
+      lotsize: "",
 
     });
 
+  };
 
 
+
+
+  // =====================================================
+  // ADD TRADE
+  // =====================================================
+
+  const handleAddTrade =
+  () => {
+
+    setEditId(null);
+
+    resetForm();
 
     setShowModal(true);
 
@@ -183,42 +230,43 @@ export default function TradeTable() {
 
 
 
-  // =========================
-  // OPEN EDIT MODAL
-  // =========================
+  // =====================================================
+  // EDIT TRADE
+  // =====================================================
 
-  const handleEdit = (trade)=>{
+  const handleEdit =
+  (trade) => {
 
-    setEditId(trade._id);
-
+    setEditId(
+      trade._id
+    );
 
 
 
     setFormData({
 
       symbol:
-      trade.symbol,
+      trade.symbol || "",
 
       session:
-      trade.session,
+      trade.session || "",
 
       side:
-      trade.side,
+      trade.side || "BUY",
 
       entry:
-      trade.entry,
+      trade.entry || "",
 
       exit:
-      trade.exit,
+      trade.exit || "",
 
       profit:
-      trade.profit,
+      trade.profit || "",
 
       lotsize:
-      trade.lotsize,
+      trade.lotsize || "",
 
     });
-
 
 
 
@@ -229,24 +277,21 @@ export default function TradeTable() {
 
 
 
-  // =========================
+  // =====================================================
   // DELETE TRADE
-  // =========================
+  // =====================================================
 
   const handleDelete =
-  async(id)=>{
+  async (id) => {
 
     const confirmDelete =
     window.confirm(
-
-      "Delete this trade?"
-
+      "Delete Trade?"
     );
 
 
 
-
-    if(!confirmDelete){
+    if (!confirmDelete) {
 
       return;
 
@@ -255,21 +300,14 @@ export default function TradeTable() {
 
 
 
-    try{
-
-      // TOKEN
+    try {
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
 
 
-
-
-      // API
 
       await api.delete(
 
@@ -277,10 +315,9 @@ export default function TradeTable() {
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
-
             `Bearer ${token}`
 
           }
@@ -291,48 +328,27 @@ export default function TradeTable() {
 
 
 
+      setTrades(
 
-      const filtered =
-      trades.filter(
+        trades.filter(
 
-        (trade)=>
+          (trade) =>
 
-        trade._id !== id
+          trade._id !== id
 
-      );
-
-
-
-
-      setTrades(filtered);
-
-
-
-
-      alert(
-
-        "Trade Deleted ✅"
+        )
 
       );
 
-    }catch(error){
+    }
+
+    catch (error) {
 
       console.log(
 
         error.response?.data ||
 
         error.message
-
-      );
-
-
-
-
-      alert(
-
-        error.response?.data?.message ||
-
-        "Delete Failed"
 
       );
 
@@ -343,12 +359,12 @@ export default function TradeTable() {
 
 
 
-  // =========================
+  // =====================================================
   // SAVE TRADE
-  // =========================
+  // =====================================================
 
   const handleSubmit =
-  async(e)=>{
+  async (e) => {
 
     e.preventDefault();
 
@@ -357,65 +373,58 @@ export default function TradeTable() {
 
 
 
-    try{
-
-      // TOKEN
+    try {
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
 
 
 
+      const payload = {
 
-      // =====================
-      // UPDATE TRADE
-      // =====================
+        symbol:
+        formData.symbol,
 
-      if(editId){
+        session:
+        formData.session,
 
-        const response =
+        side:
+        formData.side,
+
+        entry:
+        Number(formData.entry),
+
+        exit:
+        Number(formData.exit),
+
+        profit:
+        Number(formData.profit),
+
+        lotsize:
+        Number(formData.lotsize),
+
+      };
+
+
+
+
+      // UPDATE
+
+      if (editId) {
+
         await api.put(
 
           `/trades/${editId}`,
 
-          {
-
-            symbol:
-            formData.symbol,
-
-            session:
-            formData.session,
-
-            side:
-            formData.side,
-
-            entry:Number(
-              formData.entry
-            ),
-
-            exit:Number(
-              formData.exit
-            ),
-
-            profit:Number(
-              formData.profit
-            ),
-
-            lotsize:
-            formData.lotsize,
-
-          },
+          payload,
 
           {
 
-            headers:{
+            headers: {
 
               Authorization:
-
               `Bearer ${token}`
 
             }
@@ -424,75 +433,26 @@ export default function TradeTable() {
 
         );
 
-
-
-
-        const updatedTrades =
-        trades.map((trade)=>
-
-          trade._id === editId
-
-          ? response.data
-
-          : trade
-
-        );
-
-
-
-
-        setTrades(updatedTrades);
-
       }
 
 
 
 
-      // =====================
-      // ADD TRADE
-      // =====================
+      // CREATE
 
-      else{
+      else {
 
-        const response =
         await api.post(
 
           "/trades",
 
-          {
-
-            symbol:
-            formData.symbol,
-
-            session:
-            formData.session,
-
-            side:
-            formData.side,
-
-            entry:Number(
-              formData.entry
-            ),
-
-            exit:Number(
-              formData.exit
-            ),
-
-            profit:Number(
-              formData.profit
-            ),
-
-            lotsize:
-            formData.lotsize,
-
-          },
+          payload,
 
           {
 
-            headers:{
+            headers: {
 
               Authorization:
-
               `Bearer ${token}`
 
             }
@@ -501,33 +461,20 @@ export default function TradeTable() {
 
         );
 
-
-
-
-        setTrades([
-
-          response.data,
-          ...trades,
-
-        ]);
-
       }
 
 
 
 
-      alert(
-
-        "Trade Saved ✅"
-
-      );
-
-
-
+      await fetchTrades();
 
       setShowModal(false);
 
-    }catch(error){
+      resetForm();
+
+    }
+
+    catch (error) {
 
       console.log(
 
@@ -537,18 +484,9 @@ export default function TradeTable() {
 
       );
 
+    }
 
-
-
-      alert(
-
-        error.response?.data?.message ||
-
-        "Trade Save Failed"
-
-      );
-
-    }finally{
+    finally {
 
       setLoading(false);
 
@@ -559,28 +497,106 @@ export default function TradeTable() {
 
 
 
-  // =========================
+  // =====================================================
+  // INPUT STYLE
+  // =====================================================
+
+  const inputStyle = `
+
+  w-full
+
+  p-4
+
+  rounded-2xl
+
+  bg-black/20
+
+  border
+  border-white/10
+
+  outline-none
+
+  text-white
+
+  placeholder:text-gray-500
+
+  focus:border-purple-500
+
+  transition-all
+  duration-300
+
+  `;
+
+
+
+
+  // =====================================================
   // UI
-  // =========================
+  // =====================================================
 
   return (
 
-    <div className="mt-8">
+    <div
+      className="
+      mt-6
+
+      w-full
+
+      max-w-full
+      "
+    >
 
 
 
 
-      {/* TOP BUTTON */}
+      {/* =====================================================
+          TOP BAR
+      ===================================================== */}
 
-      <div className="flex justify-end mb-6">
+      <div
+        className="
+        flex
+        justify-end
+
+        mb-5
+        "
+      >
 
         <button
 
           onClick={handleAddTrade}
 
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-2xl transition-all">
+          className="
+          flex
+          items-center
+          gap-2
 
-          <Plus size={20} />
+          bg-gradient-to-r
+          from-purple-600
+          to-fuchsia-600
+
+          px-5
+          py-3
+
+          rounded-2xl
+
+          font-semibold
+
+          text-sm
+          sm:text-base
+
+          hover:scale-[1.02]
+
+          transition-all
+          duration-300
+
+          shadow-xl
+          shadow-purple-500/20
+          "
+
+        >
+
+          <Plus size={18} />
 
           Add Trade
 
@@ -591,63 +607,111 @@ export default function TradeTable() {
 
 
 
-      {/* TABLE */}
+      {/* =====================================================
+          TABLE WRAPPER
+      ===================================================== */}
 
-      <div className="bg-white/5 border border-white/10 rounded-3xl p-6 overflow-x-auto">
+      <div
+        className="
+        w-full
 
-        <table className="w-full">
+        overflow-x-auto
+        overflow-y-hidden
+
+        rounded-3xl
+
+        border
+        border-white/10
+
+        bg-white/5
+
+        backdrop-blur-xl
+
+        touch-pan-x
+
+        overscroll-x-contain
+
+        pb-2
+
+        [scrollbar-width:none]
+        [-ms-overflow-style:none]
+
+        [&::-webkit-scrollbar]:hidden
+        "
+      >
+
+        <table
+          className="
+          min-w-[900px]
+
+          w-full
+
+          text-left
+
+          border-collapse
+          "
+        >
+
+
+
+
+          {/* =====================================================
+              TABLE HEAD
+          ===================================================== */}
 
           <thead>
 
-            <tr className="border-b border-white/10 text-left">
+            <tr
+              className="
+              border-b
+              border-white/10
+              "
+            >
 
-              <th className="pb-4">
+              {
 
-                Symbol
+                [
 
-              </th>
+                  "SYMBOL",
+                  "SESSION",
+                  "SIDE",
+                  "ENTRY",
+                  "EXIT",
+                  "PROFIT",
+                  "LOT",
+                  "ACTION",
 
-              <th className="pb-4">
+                ].map((item) => (
 
-                Session
+                  <th
 
-              </th>
+                    key={item}
 
-              <th className="pb-4">
+                    className="
+                    px-4
+                    sm:px-6
 
-                Side
+                    py-5
 
-              </th>
+                    text-gray-400
 
-              <th className="pb-4">
+                    font-semibold
 
-                Entry
+                    text-xs
+                    sm:text-sm
 
-              </th>
+                    whitespace-nowrap
+                    "
 
-              <th className="pb-4">
+                  >
 
-                Exit
+                    {item}
 
-              </th>
+                  </th>
 
-              <th className="pb-4">
+                ))
 
-                Profit
-
-              </th>
-
-              <th className="pb-4">
-
-                Lot Size
-
-              </th>
-
-              <th className="pb-4">
-
-                Actions
-
-              </th>
+              }
 
             </tr>
 
@@ -656,163 +720,402 @@ export default function TradeTable() {
 
 
 
+
+          {/* =====================================================
+              TABLE BODY
+          ===================================================== */}
+
           <tbody>
 
-            {trades.map((trade)=>(
+            {
 
-              <tr
+              trades.length > 0 ? (
 
-                key={trade._id}
+                trades.map((trade) => (
 
-                className="border-b border-white/5">
+                  <tr
 
+                    key={trade._id}
 
+                    className="
+                    border-b
+                    border-white/5
 
+                    hover:bg-white/[0.03]
 
-                {/* SYMBOL */}
+                    transition-all
+                    duration-300
+                    "
 
-                <td className="py-6">
+                  >
 
-                  {trade.symbol}
+                    {/* SYMBOL */}
 
-                </td>
+                    <td
+                      className="
+                      px-4
+                      sm:px-6
 
+                      py-5
 
+                      font-semibold
 
+                      text-sm
+                      sm:text-base
 
-                {/* SESSION */}
+                      truncate
+                      "
+                    >
 
-                <td className="py-6 text-blue-400">
+                      {trade.symbol}
 
-                  {trade.session}
+                    </td>
 
-                </td>
 
 
 
+                    {/* SESSION */}
 
-                {/* SIDE */}
+                    <td
+                      className="
+                      px-4
+                      sm:px-6
 
-                <td className={`py-6 font-bold
+                      py-5
 
-                  ${trade.side === "BUY"
+                      text-blue-400
 
-                    ? "text-green-400"
+                      text-sm
+                      sm:text-base
 
-                    : "text-red-400"
+                      truncate
+                      "
+                    >
 
-                  }`}>
+                      {trade.session}
 
-                  {trade.side}
+                    </td>
 
-                </td>
 
 
 
+                    {/* SIDE */}
 
-                {/* ENTRY */}
+                    <td
 
-                <td className="py-6">
+                      className={`
 
-                  {trade.entry}
+                      px-4
+                      sm:px-6
 
-                </td>
+                      py-5
 
+                      font-bold
 
+                      text-sm
+                      sm:text-base
 
+                      truncate
 
-                {/* EXIT */}
+                      ${
 
-                <td className="py-6">
+                        trade.side === "BUY"
 
-                  {trade.exit}
+                        ? "text-green-400"
 
-                </td>
-
-
-
-
-                {/* PROFIT */}
-
-                <td className={`py-6 font-bold
-
-                  ${trade.profit > 0
-
-                    ? "text-green-400"
-
-                    : "text-red-400"
-
-                  }`}>
-
-                  {trade.profit}
-
-                </td>
-
-
-
-
-                {/* Lot Size */}
-
-                <td className="py-6">
-
-                  {trade.lotsize}
-
-                </td>
-
-
-
-
-                {/* ACTIONS */}
-
-                <td className="py-6">
-
-                  <div className="flex gap-3">
-
-
-
-
-                    {/* EDIT */}
-
-                    <button
-
-                      onClick={()=>
-
-                        handleEdit(trade)
+                        : "text-red-400"
 
                       }
 
-                      className="w-10 h-10 rounded-xl bg-blue-500/20 hover:bg-blue-500 flex items-center justify-center transition-all">
+                      `}
 
-                      <Pencil size={18} />
+                    >
 
-                    </button>
+                      {trade.side}
+
+                    </td>
 
 
 
 
-                    {/* DELETE */}
+                    {/* ENTRY */}
 
-                    <button
+                    <td
+                      className="
+                      px-4
+                      sm:px-6
 
-                      onClick={()=>
+                      py-5
 
-                        handleDelete(trade._id)
+                      text-sm
+                      sm:text-base
+
+                      truncate
+                      "
+                    >
+
+                      {trade.entry}
+
+                    </td>
+
+
+
+
+                    {/* EXIT */}
+
+                    <td
+                      className="
+                      px-4
+                      sm:px-6
+
+                      py-5
+
+                      text-sm
+                      sm:text-base
+
+                      truncate
+                      "
+                    >
+
+                      {trade.exit}
+
+                    </td>
+
+
+
+
+                    {/* PROFIT */}
+
+                    <td
+
+                      className={`
+
+                      px-4
+                      sm:px-6
+
+                      py-5
+
+                      font-bold
+
+                      text-sm
+                      sm:text-base
+
+                      truncate
+
+                      ${
+
+                        Number(trade.profit) > 0
+
+                        ? "text-green-400"
+
+                        : "text-red-400"
 
                       }
 
-                      className="w-10 h-10 rounded-xl bg-red-500/20 hover:bg-red-500 flex items-center justify-center transition-all">
+                      `}
 
-                      <Trash2 size={18} />
+                    >
 
-                    </button>
+                      $
 
-                  </div>
+                      {
 
-                </td>
+                        Number(
+                          trade.profit || 0
+                        ).toFixed(2)
 
-              </tr>
+                      }
 
-            ))}
+                    </td>
+
+
+
+
+                    {/* LOT */}
+
+                    <td
+                      className="
+                      px-4
+                      sm:px-6
+
+                      py-5
+
+                      text-sm
+                      sm:text-base
+
+                      truncate
+                      "
+                    >
+
+                      {trade.lotsize}
+
+                    </td>
+
+
+
+
+                    {/* ACTION */}
+
+                    <td
+                      className="
+                      px-4
+                      sm:px-6
+
+                      py-5
+                      "
+                    >
+
+                      <div
+                        className="
+                        flex
+                        items-center
+                        gap-2
+                        "
+                      >
+
+                        {/* EDIT */}
+
+                        <button
+
+                          onClick={() =>
+
+                            handleEdit(trade)
+
+                          }
+
+                          className="
+                          w-9
+                          h-9
+
+                          rounded-xl
+
+                          bg-blue-500/20
+                          hover:bg-blue-500
+
+                          flex
+                          items-center
+                          justify-center
+
+                          transition-all
+                          duration-300
+                          "
+
+                        >
+
+                          <Pencil size={16} />
+
+                        </button>
+
+
+
+
+                        {/* DELETE */}
+
+                        <button
+
+                          onClick={() =>
+
+                            handleDelete(
+                              trade._id
+                            )
+
+                          }
+
+                          className="
+                          w-9
+                          h-9
+
+                          rounded-xl
+
+                          bg-red-500/20
+                          hover:bg-red-500
+
+                          flex
+                          items-center
+                          justify-center
+
+                          transition-all
+                          duration-300
+                          "
+
+                        >
+
+                          <Trash2 size={16} />
+
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )
+
+              : (
+
+                <tr>
+
+                  <td
+                    colSpan={8}
+                    className="
+                    py-20
+                    text-center
+                    "
+                  >
+
+                    <div
+                      className="
+                      flex
+                      flex-col
+                      items-center
+                      gap-4
+                      "
+                    >
+
+                      <div className="text-5xl">
+
+                        📈
+
+                      </div>
+
+                      <h2
+                        className="
+                        text-2xl
+                        font-bold
+                        "
+                      >
+
+                        No Trades Found
+
+                      </h2>
+
+                      <p
+                        className="
+                        text-gray-400
+
+                        max-w-md
+
+                        leading-7
+                        "
+                      >
+
+                        Start adding trades
+                        to unlock analytics.
+
+                      </p>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              )
+
+            }
 
           </tbody>
 
@@ -823,223 +1126,364 @@ export default function TradeTable() {
 
 
 
-      {/* MODAL */}
+      {/* =====================================================
+          MODAL
+      ===================================================== */}
 
-      {showModal && (
+      {
 
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-5">
+        showModal && (
 
-          <form
+          <div
+            className="
+            fixed
+            inset-0
+            z-[999]
 
-            onSubmit={handleSubmit}
+            bg-black/70
+            backdrop-blur-sm
 
-            className="bg-[#0B1120] border border-white/10 rounded-3xl p-8 w-full max-w-lg">
+            flex
+            items-center
+            justify-center
 
+            p-4
 
+            overflow-y-auto
+            "
+          >
 
+            <form
 
-            <h2 className="text-3xl font-bold mb-6">
+              onSubmit={handleSubmit}
 
-              {editId
+              className="
+              w-full
+              max-w-2xl
 
-                ? "Edit Trade"
+              bg-[#0B1120]
 
-                : "Add Trade"
+              border
+              border-white/10
 
-              }
+              rounded-[30px]
 
-            </h2>
+              p-5
+              sm:p-8
 
+              shadow-2xl
 
+              space-y-5
+              "
+            >
 
+              {/* HEADER */}
 
-            <div className="space-y-4">
+              <div
+                className="
+                flex
+                items-center
+                justify-between
+                "
+              >
 
+                <h2
+                  className="
+                  text-2xl
+                  font-bold
+                  "
+                >
 
+                  {
 
+                    editId
 
-              {/* SYMBOL */}
+                    ? "Edit Trade"
 
-              <input
-                type="text"
-                name="symbol"
-                placeholder="Symbol"
-                value={formData.symbol}
-                onChange={handleChange}
-                required
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none"
-              />
+                    : "Add Trade"
 
+                  }
 
+                </h2>
 
 
-              {/* SESSION */}
 
-              <select
-                name="session"
-                value={formData.session}
-                onChange={handleChange}
-                required
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none">
 
-                <option value="">
+                <button
 
-                  Select Session
+                  type="button"
 
-                </option>
+                  onClick={() =>
 
-                <option value="London">
+                    setShowModal(false)
 
-                  London
+                  }
 
-                </option>
+                  className="
+                  w-10
+                  h-10
 
-                <option value="New York">
+                  rounded-xl
 
-                  New York
+                  bg-white/5
 
-                </option>
+                  flex
+                  items-center
+                  justify-center
+                  "
+
+                >
+
+                  <X size={18} />
+
+                </button>
+
+              </div>
+
+
+
+
+              {/* FORM */}
+
+              <div
+                className="
+                grid
+                grid-cols-1
+                sm:grid-cols-2
+
+                gap-4
+                "
+              >
+
+                <input
+                  type="text"
+                  name="symbol"
+                  placeholder="Symbol"
+                  value={formData.symbol}
+                  onChange={handleChange}
+                  required
+                  className={inputStyle}
+                />
+
+                <select
+                  name="session"
+                  value={formData.session}
+                  onChange={handleChange}
+                  required
+                  className={inputStyle}
+                >
+
+                  <option value="">
+                    Session
+                  </option>
+
+                  <option value="London">
+                    London
+                  </option>
 
-                <option value="Asia">
+                  <option value="New York">
+                    New York
+                  </option>
 
-                  Asia
+                  <option value="Asia">
+                    Asia
+                  </option>
 
-                </option>
+                </select>
 
-              </select>
+                <select
+                  name="side"
+                  value={formData.side}
+                  onChange={handleChange}
+                  className={inputStyle}
+                >
 
+                  <option value="BUY">
+                    BUY
+                  </option>
 
+                  <option value="SELL">
+                    SELL
+                  </option>
 
+                </select>
 
-              {/* SIDE */}
+                <input
+                  type="number"
+                  step="0.01"
+                  name="lotsize"
+                  placeholder="Lot Size"
+                  value={formData.lotsize}
+                  onChange={handleChange}
+                  required
+                  className={inputStyle}
+                />
 
-              <select
-                name="side"
-                value={formData.side}
-                onChange={handleChange}
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none">
+                <input
+                  type="number"
+                  step="0.01"
+                  name="entry"
+                  placeholder="Entry"
+                  value={formData.entry}
+                  onChange={handleChange}
+                  required
+                  className={inputStyle}
+                />
 
-                <option value="BUY">
+                <input
+                  type="number"
+                  step="0.01"
+                  name="exit"
+                  placeholder="Exit"
+                  value={formData.exit}
+                  onChange={handleChange}
+                  required
+                  className={inputStyle}
+                />
 
-                  BUY
+                <input
+                  type="number"
+                  step="0.01"
+                  name="profit"
+                  placeholder="Profit"
+                  value={formData.profit}
+                  onChange={handleChange}
+                  required
+                  className="
+                  sm:col-span-2
+                  w-full
 
-                </option>
+                  p-4
 
-                <option value="SELL">
+                  rounded-2xl
 
-                  SELL
+                  bg-black/20
 
-                </option>
+                  border
+                  border-white/10
 
-              </select>
+                  outline-none
 
+                  text-white
 
+                  placeholder:text-gray-500
 
+                  focus:border-purple-500
 
-              {/* ENTRY */}
+                  transition-all
+                  duration-300
+                  "
+                />
 
-              <input
-                type="number"
-                name="entry"
-                placeholder="Entry Price"
-                value={formData.entry}
-                onChange={handleChange}
-                required
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none"
-              />
+              </div>
 
 
 
 
-              {/* EXIT */}
+              {/* BUTTONS */}
 
-              <input
-                type="number"
-                name="exit"
-                placeholder="Exit Price"
-                value={formData.exit}
-                onChange={handleChange}
-                required
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none"
-              />
+              <div
+                className="
+                flex
+                flex-col-reverse
+                sm:flex-row
 
+                gap-4
 
+                pt-2
+                "
+              >
 
+                <button
 
-              {/* PROFIT */}
+                  type="button"
 
-              <input
-                type="number"
-                name="profit"
-                placeholder="Profit"
-                value={formData.profit}
-                onChange={handleChange}
-                required
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none"
-              />
+                  onClick={() =>
 
+                    setShowModal(false)
 
+                  }
 
+                  className="
+                  flex-1
 
-              {/* STRATEGY */}
+                  py-4
 
-              <input
-                type="text"
-                name="lotsize"
-                placeholder="Lot Size"
-                value={formData.strategy}
-                onChange={handleChange}
-                required
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 outline-none"
-              />
+                  rounded-2xl
 
-            </div>
+                  bg-white/5
+                  hover:bg-white/10
 
+                  border
+                  border-white/10
 
+                  font-semibold
+                  "
 
+                >
 
-            {/* BUTTONS */}
+                  Cancel
 
-            <div className="flex gap-4 mt-8">
+                </button>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 bg-purple-600 hover:bg-purple-700 py-4 rounded-2xl transition-all">
 
-                {loading
 
-                  ? "Saving..."
 
-                  : "Save Trade"
+                <button
 
-                }
+                  type="submit"
 
-              </button>
+                  disabled={loading}
 
+                  className="
+                  flex-1
 
+                  py-4
 
+                  rounded-2xl
 
-              <button
-                type="button"
-                onClick={()=>
+                  bg-gradient-to-r
+                  from-purple-600
+                  to-fuchsia-600
 
-                  setShowModal(false)
+                  font-bold
 
-                }
-                className="flex-1 bg-white/10 hover:bg-white/20 py-4 rounded-2xl transition-all">
+                  hover:scale-[1.02]
 
-                Cancel
+                  transition-all
+                  duration-300
 
-              </button>
+                  shadow-xl
+                  shadow-purple-500/20
+                  "
 
-            </div>
+                >
 
-          </form>
+                  {
 
-        </div>
+                    loading
 
-      )}
+                    ? "Saving..."
+
+                    : editId
+
+                    ? "Update Trade"
+
+                    : "Save Trade"
+
+                  }
+
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        )
+
+      }
 
     </div>
 
