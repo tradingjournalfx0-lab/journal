@@ -1,9 +1,7 @@
-
 import {
-
   useEffect,
   useState,
-
+  useRef,
 } from "react";
 
 import logo from "../../assets/icon.png";
@@ -11,55 +9,104 @@ import logo from "../../assets/icon.png";
 import api from "../../services/api";
 
 import {
-
   useNavigate,
-  Link
-
+  Link,
 } from "react-router-dom";
+
+
 
 export default function HomeNavbar() {
 
-  // =========================
+  // =====================================================
   // STATES
-  // =========================
+  // =====================================================
 
-  const [profile,setProfile] =
+  const [profile, setProfile] =
   useState(null);
 
-  const [showMenu,setShowMenu] =
+  const [showMenu, setShowMenu] =
   useState(false);
 
-  const [mobileMenu,setMobileMenu] =
+  const [mobileMenu, setMobileMenu] =
   useState(false);
+
+
+
+
+  // =====================================================
+  // NAVIGATE
+  // =====================================================
 
   const navigate =
   useNavigate();
 
+
+
+
+  // =====================================================
+  // REFS
+  // =====================================================
+
+  const dropdownRef =
+  useRef(null);
+
+
+
+
+  // =====================================================
+  // TOKEN
+  // =====================================================
+
   const token =
   localStorage.getItem(
-
     "token"
-
   );
+
+
 
   const isLoggedIn =
   !!token;
 
 
 
-  // =========================
+
+  // =====================================================
   // FETCH PROFILE
-  // =========================
+  // =====================================================
 
   const fetchProfile =
   async()=>{
 
     try{
 
+      if(!token){
+
+        return;
+
+      }
+
+
+
+
+      // =================================================
+      // API
+      // =================================================
+
       const response =
       await api.get(
 
-        "/profile"
+        "/profile",
+
+        {
+
+          headers:{
+
+            Authorization:
+            `Bearer ${token}`
+
+          }
+
+        }
 
       );
 
@@ -74,6 +121,11 @@ export default function HomeNavbar() {
       );
 
 
+
+
+      // =================================================
+      // SAVE PROFILE
+      // =================================================
 
       setProfile(
 
@@ -97,9 +149,10 @@ export default function HomeNavbar() {
 
 
 
-  // =========================
-  // AUTO FETCH
-  // =========================
+
+  // =====================================================
+  // LOAD PROFILE
+  // =====================================================
 
   useEffect(()=>{
 
@@ -109,110 +162,182 @@ export default function HomeNavbar() {
 
     }
 
+  },[token]);
+
+
+
+
+  // =====================================================
+  // OUTSIDE CLICK
+  // =====================================================
+
+  useEffect(()=>{
+
+    const handleClickOutside =
+    (event)=>{
+
+      if(
+
+        dropdownRef.current &&
+
+        !dropdownRef.current.contains(
+          event.target
+        )
+
+      ){
+
+        setShowMenu(false);
+
+      }
+
+    };
+
+
+
+    document.addEventListener(
+
+      "mousedown",
+
+      handleClickOutside
+
+    );
+
+
+
+    return ()=>{
+
+      document.removeEventListener(
+
+        "mousedown",
+
+        handleClickOutside
+
+      );
+
+    };
+
   },[]);
 
 
 
 
-  // =========================
+  // =====================================================
   // LOGOUT
-  // =========================
+  // =====================================================
 
   const handleLogout =
   ()=>{
 
     localStorage.removeItem(
-
       "token"
-
     );
 
 
 
     localStorage.removeItem(
-
       "userId"
-
     );
+
+
+
+    setShowMenu(false);
+
+    setMobileMenu(false);
+
 
 
 
     alert(
-
       "Logged Out ✅"
-
     );
 
 
 
-    navigate(
-
-      "/login"
-
-    );
+    navigate("/login");
 
   };
 
 
 
+
+  // =====================================================
+  // UI
+  // =====================================================
+
   return (
 
-    <div className="
-    border-b
-    border-white/10
-    ">
+    <div
+      className="
+      sticky
+      top-0
+      z-50
+
+      border-b
+      border-white/10
+
+      bg-[#050816]/80
+
+      backdrop-blur-2xl
+
+      w-full
+      max-w-full
+
+      overflow-hidden
+      "
+    >
 
 
 
 
-
-      {/* =========================
+      {/* =====================================================
           NAVBAR
-      ========================= */}
+      ===================================================== */}
 
-      <div className="
-      max-w-7xl
-      mx-auto
-      flex
-      items-center
-      justify-between
-      px-4 sm:px-6 lg:px-8
-      py-5
-         fixed
-         top-0
-         left-0
-          right-0
-          w-full
-          z-50
-          backdrop-blur-2xl
-          bg-white/5
-          border-b
-          border-white/10
-      ">
+      <div
+        className="
+        max-w-7xl
 
+        mx-auto
 
+        flex
+        items-center
+        justify-between
+
+        gap-4
+
+        px-4
+        sm:px-6
+        lg:px-8
+
+        py-4
+        "
+      >
 
 
-       
 
-        {/* =========================
+
+        {/* =====================================================
             LOGO
-        ========================= */}
+        ===================================================== */}
 
         <Link
 
           to="/"
 
           className="
-          text-xl sm:text-2xl lg:text-3xl
           flex
-          gap-3
           items-center
-          font-bold
-          text-purple-500
+
+          gap-3
+
+          min-w-0
+
+          shrink-0
           "
 
         >
+
+          {/* LOGO */}
 
           <img
 
@@ -221,44 +346,111 @@ export default function HomeNavbar() {
             alt="logo"
 
             className="
-            w-10 h-10
-            sm:w-12 sm:h-12
+            w-10
+            h-10
+
+            sm:w-11
+            sm:h-11
+
+            lg:w-12
+            lg:h-12
+
             object-contain
+
+            shrink-0
             "
 
           />
 
-          <span>
 
-            Trading Journal FX
 
-          </span>
+
+          {/* TEXT */}
+
+          <div
+            className="
+            min-w-0
+            "
+          >
+
+            <h1
+              className="
+              text-lg
+              sm:text-xl
+              lg:text-2xl
+
+              font-black
+
+              bg-gradient-to-r
+              from-purple-400
+              via-pink-500
+              to-fuchsia-500
+
+              bg-clip-text
+              text-transparent
+
+              truncate
+              "
+            >
+
+              Trading Journal
+
+            </h1>
+
+
+
+            <p
+              className="
+              hidden
+              sm:block
+
+              text-xs
+
+              text-gray-400
+
+              truncate
+              "
+            >
+
+              Powered by Raftar Trader FX
+
+            </p>
+
+          </div>
 
         </Link>
 
 
 
 
-
-
-
-        {/* =========================
+        {/* =====================================================
             DESKTOP MENU
-        ========================= */}
+        ===================================================== */}
 
-        <div className="
-        hidden
-        lg:flex
-        items-center
-        gap-8
-        ">
+        <div
+          className="
+          hidden
+          lg:flex
+
+          items-center
+
+          gap-8
+          "
+        >
 
           <Link
+
             to="/"
+
             className="
+            text-gray-300
+
             hover:text-purple-400
+
             transition-all
+            duration-300
             "
+
           >
 
             Home
@@ -267,12 +459,20 @@ export default function HomeNavbar() {
 
 
 
+
           <Link
+
             to="/feature"
+
             className="
+            text-gray-300
+
             hover:text-purple-400
+
             transition-all
+            duration-300
             "
+
           >
 
             Features
@@ -281,12 +481,20 @@ export default function HomeNavbar() {
 
 
 
+
           <Link
+
             to="/plan"
+
             className="
+            text-gray-300
+
             hover:text-purple-400
+
             transition-all
+            duration-300
             "
+
           >
 
             Pricing
@@ -295,12 +503,20 @@ export default function HomeNavbar() {
 
 
 
+
           <a
-            href="/about"
+
+            href="#about"
+
             className="
+            text-gray-300
+
             hover:text-purple-400
+
             transition-all
+            duration-300
             "
+
           >
 
             About
@@ -312,19 +528,22 @@ export default function HomeNavbar() {
 
 
 
-
-
-
-        {/* =========================
+        {/* =====================================================
             RIGHT SIDE
-        ========================= */}
+        ===================================================== */}
 
-        <div className="
-        hidden
-        md:flex
-        items-center
-        gap-4
-        ">
+        <div
+          className="
+          hidden
+          md:flex
+
+          items-center
+
+          gap-4
+
+          shrink-0
+          "
+        >
 
           {
 
@@ -339,11 +558,21 @@ export default function HomeNavbar() {
                   to="/dashboard"
 
                   className="
-                  px-5 py-3
+                  px-5
+                  py-3
+
                   rounded-2xl
+
                   bg-purple-600
                   hover:bg-purple-700
+
                   transition-all
+                  duration-300
+
+                  font-semibold
+
+                  shadow-lg
+                  shadow-purple-500/20
                   "
 
                 >
@@ -360,7 +589,10 @@ export default function HomeNavbar() {
 
                 {/* PROFILE */}
 
-                <div className="relative">
+                <div
+                  ref={dropdownRef}
+                  className="relative"
+                >
 
                   <div
 
@@ -377,12 +609,24 @@ export default function HomeNavbar() {
                     className="
                     flex
                     items-center
+
                     gap-3
+
                     bg-white/5
+
                     p-2
-                    rounded-xl
-                    border border-white/10
+
+                    rounded-2xl
+
+                    border
+                    border-white/10
+
                     cursor-pointer
+
+                    hover:bg-white/10
+
+                    transition-all
+                    duration-300
                     "
 
                   >
@@ -402,7 +646,7 @@ export default function HomeNavbar() {
 
                           ? profile.avatar
 
-                          : `/uploads/${profile.avatar}`
+                          : `http://localhost:5000/uploads/${profile.avatar}`
 
                         : `https://ui-avatars.com/api/?name=${
                             profile?.fullName ||
@@ -415,10 +659,17 @@ export default function HomeNavbar() {
                       alt="avatar"
 
                       className="
-                      w-10 h-10
+                      w-11
+                      h-11
+
                       rounded-full
+
                       object-cover
-                      border border-white/10
+
+                      border
+                      border-white/10
+
+                      shrink-0
                       "
 
                     />
@@ -431,12 +682,24 @@ export default function HomeNavbar() {
 
                     {/* INFO */}
 
-                    <div>
+                    <div
+                      className="
+                      hidden
+                      lg:block
+                      "
+                    >
 
-                      <h4 className="
-                      font-semibold
-                      text-white
-                      ">
+                      <h4
+                        className="
+                        font-semibold
+
+                        text-white
+
+                        max-w-[140px]
+
+                        truncate
+                        "
+                      >
 
                         {
 
@@ -452,10 +715,12 @@ export default function HomeNavbar() {
 
 
 
-                      <p className="
-                      text-xs
-                      text-gray-400
-                      ">
+                      <p
+                        className="
+                        text-xs
+                        text-gray-400
+                        "
+                      >
 
                         {
 
@@ -463,7 +728,7 @@ export default function HomeNavbar() {
 
                           "Personal"
 
-                        } Trader
+                        }
 
                       </p>
 
@@ -477,45 +742,62 @@ export default function HomeNavbar() {
 
 
 
-                  {/* =========================
+                  {/* =====================================================
                       DROPDOWN
-                  ========================= */}
+                  ===================================================== */}
 
                   {
 
                     showMenu && (
 
-                      <div className="
-                      absolute
-                      right-0
-                      mt-3
-                      w-52
-                      bg-[#0b1120]
-                      border border-white/10
-                      rounded-2xl
-                      overflow-hidden
-                      shadow-2xl
-                      z-50
-                      ">
+                      <div
+                        className="
+                        absolute
+                        right-0
+
+                        mt-3
+
+                        w-56
+
+                        bg-[#0b1120]/95
+
+                        backdrop-blur-2xl
+
+                        border
+                        border-white/10
+
+                        rounded-2xl
+
+                        overflow-hidden
+
+                        shadow-2xl
+
+                        z-50
+                        "
+                      >
 
                         <button
 
-                          onClick={()=>
+                          onClick={()=>{
 
-                            navigate(
+                            navigate("/profile");
 
-                              "/profile"
+                            setShowMenu(false);
 
-                            )
-
-                          }
+                          }}
 
                           className="
                           w-full
+
                           text-left
-                          px-5 py-4
+
+                          px-5
+                          py-4
+
                           hover:bg-white/5
+
                           transition-all
+                          duration-300
                           "
 
                         >
@@ -526,24 +808,29 @@ export default function HomeNavbar() {
 
 
 
+
                         <button
 
-                          onClick={()=>
+                          onClick={()=>{
 
-                            navigate(
+                            navigate("/settings");
 
-                              "/settings"
+                            setShowMenu(false);
 
-                            )
-
-                          }
+                          }}
 
                           className="
                           w-full
+
                           text-left
-                          px-5 py-4
+
+                          px-5
+                          py-4
+
                           hover:bg-white/5
+
                           transition-all
+                          duration-300
                           "
 
                         >
@@ -554,17 +841,25 @@ export default function HomeNavbar() {
 
 
 
+
                         <button
 
                           onClick={handleLogout}
 
                           className="
                           w-full
+
                           text-left
-                          px-5 py-4
+
+                          px-5
+                          py-4
+
                           hover:bg-red-500/10
+
                           text-red-400
+
                           transition-all
+                          duration-300
                           "
 
                         >
@@ -594,11 +889,18 @@ export default function HomeNavbar() {
                   to="/login"
 
                   className="
-                  px-5 py-3
+                  px-5
+                  py-3
+
                   rounded-2xl
+
                   bg-white/10
                   hover:bg-white/20
+
                   transition-all
+                  duration-300
+
+                  font-medium
                   "
 
                 >
@@ -620,11 +922,21 @@ export default function HomeNavbar() {
                   to="/register"
 
                   className="
-                  px-5 py-3
+                  px-5
+                  py-3
+
                   rounded-2xl
+
                   bg-purple-600
                   hover:bg-purple-700
+
                   transition-all
+                  duration-300
+
+                  font-semibold
+
+                  shadow-lg
+                  shadow-purple-500/20
                   "
 
                 >
@@ -647,9 +959,9 @@ export default function HomeNavbar() {
 
 
 
-        {/* =========================
+        {/* =====================================================
             MOBILE MENU BUTTON
-        ========================= */}
+        ===================================================== */}
 
         <button
 
@@ -665,13 +977,38 @@ export default function HomeNavbar() {
 
           className="
           md:hidden
-          text-3xl
+
+          w-11
+          h-11
+
+          rounded-xl
+
+          bg-white/5
+
+          border
+          border-white/10
+
+          flex
+          items-center
+          justify-center
+
+          text-2xl
           text-white
+
+          shrink-0
           "
 
         >
 
-          ☰
+          {
+
+            mobileMenu
+
+            ? "✕"
+
+            : "☰"
+
+          }
 
         </button>
 
@@ -683,25 +1020,53 @@ export default function HomeNavbar() {
 
 
 
-      {/* =========================
+      {/* =====================================================
           MOBILE MENU
-      ========================= */}
+      ===================================================== */}
 
       {
 
         mobileMenu && (
 
-          <div className="
-          md:hidden
-          border-t border-white/10
-          px-4 py-5
-          space-y-5
-          bg-[#050816]
-          ">
+          <div
+            className="
+            md:hidden
+
+            border-t
+            border-white/10
+
+            px-4
+            py-5
+
+            space-y-5
+
+            bg-[#050816]/95
+
+            backdrop-blur-2xl
+
+            w-full
+            max-w-full
+
+            overflow-hidden
+            "
+          >
 
             <Link
+
               to="/"
-              className="block hover:text-purple-400"
+
+              onClick={()=>setMobileMenu(false)}
+
+              className="
+              block
+
+              text-gray-300
+
+              hover:text-purple-400
+
+              transition-all
+              "
+
             >
 
               Home
@@ -710,9 +1075,23 @@ export default function HomeNavbar() {
 
 
 
+
             <Link
+
               to="/feature"
-              className="block hover:text-purple-400"
+
+              onClick={()=>setMobileMenu(false)}
+
+              className="
+              block
+
+              text-gray-300
+
+              hover:text-purple-400
+
+              transition-all
+              "
+
             >
 
               Features
@@ -721,9 +1100,23 @@ export default function HomeNavbar() {
 
 
 
+
             <Link
+
               to="/plan"
-              className="block hover:text-purple-400"
+
+              onClick={()=>setMobileMenu(false)}
+
+              className="
+              block
+
+              text-gray-300
+
+              hover:text-purple-400
+
+              transition-all
+              "
+
             >
 
               Pricing
@@ -732,9 +1125,21 @@ export default function HomeNavbar() {
 
 
 
+
             <a
+
               href="#about"
-              className="block hover:text-purple-400"
+
+              className="
+              block
+
+              text-gray-300
+
+              hover:text-purple-400
+
+              transition-all
+              "
+
             >
 
               About
@@ -747,20 +1152,27 @@ export default function HomeNavbar() {
 
 
 
-            {/* MOBILE PROFILE */}
+            {/* =====================================================
+                MOBILE PROFILE
+            ===================================================== */}
 
             {
 
               isLoggedIn && (
 
-                <div className="
-                flex
-                items-center
-                gap-3
-                pt-4
-                border-t
-                border-white/10
-                ">
+                <div
+                  className="
+                  flex
+                  items-center
+
+                  gap-3
+
+                  pt-4
+
+                  border-t
+                  border-white/10
+                  "
+                >
 
                   <img
 
@@ -772,7 +1184,7 @@ export default function HomeNavbar() {
 
                         ? profile.avatar
 
-                        : `/uploads/${profile.avatar}`
+                        : `http://localhost:5000/uploads/${profile.avatar}`
 
                       : `https://ui-avatars.com/api/?name=${
                           profile?.fullName ||
@@ -785,8 +1197,11 @@ export default function HomeNavbar() {
                     alt="avatar"
 
                     className="
-                    w-12 h-12
+                    w-12
+                    h-12
+
                     rounded-full
+
                     object-cover
                     "
 
@@ -794,9 +1209,19 @@ export default function HomeNavbar() {
 
 
 
-                  <div>
+                  <div
+                    className="
+                    min-w-0
+                    "
+                  >
 
-                    <h4 className="font-semibold">
+                    <h4
+                      className="
+                      font-semibold
+
+                      truncate
+                      "
+                    >
 
                       {
 
@@ -812,10 +1237,12 @@ export default function HomeNavbar() {
 
 
 
-                    <p className="
-                    text-sm
-                    text-gray-400
-                    ">
+                    <p
+                      className="
+                      text-sm
+                      text-gray-400
+                      "
+                    >
 
                       {
 
@@ -841,14 +1268,20 @@ export default function HomeNavbar() {
 
 
 
-            {/* MOBILE BUTTONS */}
+            {/* =====================================================
+                MOBILE BUTTONS
+            ===================================================== */}
 
-            <div className="
-            flex
-            flex-col
-            gap-4
-            pt-4
-            ">
+            <div
+              className="
+              flex
+              flex-col
+
+              gap-4
+
+              pt-4
+              "
+            >
 
               {
 
@@ -860,11 +1293,19 @@ export default function HomeNavbar() {
 
                       to="/dashboard"
 
+                      onClick={()=>setMobileMenu(false)}
+
                       className="
-                      px-5 py-3
+                      px-5
+                      py-3
+
                       rounded-2xl
+
                       bg-purple-600
+
                       text-center
+
+                      font-semibold
                       "
 
                     >
@@ -875,14 +1316,20 @@ export default function HomeNavbar() {
 
 
 
+
                     <button
 
                       onClick={handleLogout}
 
                       className="
-                      px-5 py-3
+                      px-5
+                      py-3
+
                       rounded-2xl
+
                       bg-red-500
+
+                      font-semibold
                       "
 
                     >
@@ -901,10 +1348,16 @@ export default function HomeNavbar() {
 
                       to="/login"
 
+                      onClick={()=>setMobileMenu(false)}
+
                       className="
-                      px-5 py-3
+                      px-5
+                      py-3
+
                       rounded-2xl
+
                       bg-white/10
+
                       text-center
                       "
 
@@ -916,15 +1369,24 @@ export default function HomeNavbar() {
 
 
 
+
                     <Link
 
                       to="/register"
 
+                      onClick={()=>setMobileMenu(false)}
+
                       className="
-                      px-5 py-3
+                      px-5
+                      py-3
+
                       rounded-2xl
+
                       bg-purple-600
+
                       text-center
+
+                      font-semibold
                       "
 
                     >
@@ -947,12 +1409,8 @@ export default function HomeNavbar() {
 
       }
 
-     
-
     </div>
-     
 
   );
 
 }
-

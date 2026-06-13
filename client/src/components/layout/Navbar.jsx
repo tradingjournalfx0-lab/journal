@@ -1,26 +1,41 @@
-import { useEffect,useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-// import axios from "axios";
+import {
+  useNavigate,
+  Link,
+} from "react-router-dom";
+
 import api from "../../services/api";
-
-import { useNavigate } from "react-router-dom";
 
 import ThemeToggle from "./ThemeToggle";
 
+
+
 export default function Navbar() {
 
-
-
-
-  // =========================
+  // =====================================================
   // STATES
-  // =========================
+  // =====================================================
 
-  const [profile,setProfile] =
+  const [profile, setProfile] =
   useState(null);
 
-  const [showMenu,setShowMenu] =
+  const [showMenu, setShowMenu] =
   useState(false);
+
+  const [mobileMenu, setMobileMenu] =
+  useState(false);
+
+
+
+
+  // =====================================================
+  // NAVIGATE
+  // =====================================================
 
   const navigate =
   useNavigate();
@@ -28,28 +43,44 @@ export default function Navbar() {
 
 
 
-  // =========================
+  // =====================================================
+  // REFS
+  // =====================================================
+
+  const menuRef =
+  useRef();
+
+
+
+
+  // =====================================================
   // FETCH PROFILE
-  // =========================
+  // =====================================================
 
   const fetchProfile =
-  async()=>{
+  async () => {
 
-    try{
-
-      // TOKEN
+    try {
 
       const token =
       localStorage.getItem(
-
         "token"
-
       );
 
 
 
+      if (!token) {
 
+        return;
+
+      }
+
+
+
+
+      // =================================================
       // API
+      // =================================================
 
       const response =
       await api.get(
@@ -58,10 +89,9 @@ export default function Navbar() {
 
         {
 
-          headers:{
+          headers: {
 
             Authorization:
-
             `Bearer ${token}`
 
           }
@@ -72,14 +102,25 @@ export default function Navbar() {
 
 
 
-
-      setProfile(
-
+      console.log(
+        "PROFILE:",
         response.data
-
       );
 
-    }catch(error){
+
+
+
+      // =================================================
+      // SAVE PROFILE
+      // =================================================
+
+      setProfile(
+        response.data
+      );
+
+    }
+
+    catch (error) {
 
       console.log(
 
@@ -96,70 +137,101 @@ export default function Navbar() {
 
 
 
-  // =========================
-  // AUTO REFRESH
-  // =========================
+  // =====================================================
+  // AUTO LOAD
+  // =====================================================
 
-  useEffect(()=>{
+  useEffect(() => {
 
     fetchProfile();
 
-
-
-
-    // REALTIME REFRESH
-
-    const interval =
-
-    setInterval(()=>{
-
-      fetchProfile();
-
-    },2000);
+  }, []);
 
 
 
 
-    return ()=>{
+  // =====================================================
+  // CLOSE DROPDOWN OUTSIDE CLICK
+  // =====================================================
 
-      clearInterval(interval);
+  useEffect(() => {
+
+    const handleClickOutside =
+    (event) => {
+
+      if (
+
+        menuRef.current &&
+
+        !menuRef.current.contains(
+          event.target
+        )
+
+      ) {
+
+        setShowMenu(false);
+
+      }
 
     };
 
-  },[]);
+
+
+    document.addEventListener(
+
+      "mousedown",
+
+      handleClickOutside
+
+    );
+
+
+
+    return () => {
+
+      document.removeEventListener(
+
+        "mousedown",
+
+        handleClickOutside
+
+      );
+
+    };
+
+  }, []);
 
 
 
 
-  // =========================
+  // =====================================================
   // LOGOUT
-  // =========================
+  // =====================================================
 
   const handleLogout =
-  ()=>{
+  () => {
 
     localStorage.removeItem(
-
       "token"
-
     );
 
 
 
-
-    alert(
-
-      "Logged Out ✅"
-
+    localStorage.removeItem(
+      "userId"
     );
+
+
+
+    setShowMenu(false);
+
+    setMobileMenu(false);
 
 
 
 
     navigate(
-
       "/login"
-
     );
 
   };
@@ -167,187 +239,709 @@ export default function Navbar() {
 
 
 
+  // =====================================================
+  // UI
+  // =====================================================
+
   return (
 
-    <div className="h-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-between px-8">
+    <>
+
+      <div
+        className="
+        sticky
+        top-0
+        z-40
+
+        w-full
+        max-w-full
+
+        overflow-hidden
+
+        bg-white/5
+
+        backdrop-blur-2xl
+
+        border
+        border-white/10
+
+        rounded-2xl
+
+        px-4
+        sm:px-6
+        lg:px-8
+
+        py-4
+        "
+      >
+
+        <div
+          className="
+          flex
+          items-center
+          justify-between
+
+          gap-4
+          "
+        >
 
 
 
 
-      {/* LEFT */}
-
-      <div>
-
-        <h2 className="text-2xl font-bold">
-
-          Dashboard
-
-        </h2>
-
-        <p className="text-gray-400 text-sm mt-1">
-
-          Welcome back trader 👋
-
-        </p>       
-      </div>
-
-      <div className="inline-flex items-center gap-3 bg-purple-500/10 border border-purple-500/20 px-5 py-3 rounded-2xl ">
-
-              <span className="w-3 h-3 bg-green-400 rounded-full" />
-
-              <span className="text-purple-300">
-
-                Smart Trading Journal Platform <br/>
-                Powered by Raftar Trader FX
-
-              </span>
-
-            </div>
-
-
-
-
-      {/* RIGHT */}
-
-      <div className="flex items-center gap-4">
-
-
-
-
-        {/* THEME */}
-
-        <ThemeToggle />
-
-         {/* Home */}
-
-           <a href="/" >Home</a>
-
-
-        {/* MT5 */}
-
-        <div className="bg-green-500/20 text-green-400 px-4 py-2 rounded-xl border border-green-500/20">
-
-          MT5 Connected
-
-        </div>
-
-
-
-
-        {/* PROFILE */}
-
-        <div className="relative">
+          {/* =================================================
+              LEFT
+          ================================================= */}
 
           <div
+            className="
+            min-w-0
+            "
+          >
 
-            onClick={()=>
+            <h2
+              className="
+              text-xl
+              sm:text-2xl
+              lg:text-3xl
 
-              setShowMenu(
+              font-bold
 
-                !showMenu
+              truncate
+              "
+            >
 
-              )
+              Dashboard
 
-            }
-
-            className="flex items-center gap-3 bg-white/5 p-2 rounded-xl border border-white/10 cursor-pointer">
-
-
-
-
-            {/* AVATAR */}
-
-            <img
-              src={
-
-                profile?.avatar
-
-                ? `/${profile.avatar}`
-
-                : "/avatar.png"
-
-              }
-              alt="avatar"
-              className="w-10 h-10 rounded-full object-cover"
-            />
+            </h2>
 
 
 
+            <p
+              className="
+              text-gray-400
 
-            {/* INFO */}
+              text-xs
+              sm:text-sm
 
-            <div>
+              mt-1
 
-              <h4 className="font-semibold">
+              truncate
+              "
+            >
 
-                {profile?.fullName ||
+              Welcome back trader 👋
 
-                  ""
-
-                }
-
-              </h4>
-
-              <p className="text-xs text-gray-400">
-
-                {profile?.accountType ||
-
-                  ""
-
-                }
-
-              </p>
-
-            </div>
+            </p>
 
           </div>
 
 
 
 
-          {/* DROPDOWN */}
+          {/* =================================================
+              CENTER BADGE
+          ================================================= */}
 
-          {showMenu && (
+          <div
+            className="
+            hidden
+            xl:inline-flex
 
-            <div className="absolute right-0 mt-3 w-52 bg-[#0b1120] border border-white/10 rounded-2xl overflow-hidden shadow-2xl z-50">
+            items-center
+
+            gap-3
+
+            bg-purple-500/10
+
+            border
+            border-purple-500/20
+
+            px-5
+            py-3
+
+            rounded-2xl
+            "
+          >
+
+            <span
+              className="
+              w-3
+              h-3
+
+              bg-green-400
+
+              rounded-full
+
+              animate-pulse
+              "
+            />
+
+
+
+            <span
+              className="
+              text-purple-200
+
+              text-sm
+
+              font-semibold
+
+              leading-6
+              "
+            >
+
+              Smart Trading Journal Platform
+
+              <br />
+
+              Powered by Raftar Trader FX
+
+            </span>
+
+          </div>
 
 
 
 
-              {/* PROFILE */}
+          {/* =================================================
+              RIGHT
+          ================================================= */}
 
-              <button
+          <div
+            className="
+            flex
+            items-center
 
-                onClick={()=>
+            gap-2
+            md:gap-3
+            lg:gap-4
 
-                  navigate("/profile")
+            shrink-0
+            "
+          >
+
+            {/* THEME */}
+
+            <ThemeToggle />
+
+
+
+
+            {/* HOME */}
+
+            <Link
+
+              to="/"
+
+              className="
+              hidden
+              sm:flex
+
+              items-center
+              justify-center
+
+              px-4
+              py-2
+
+              rounded-xl
+
+              bg-white/5
+
+              border
+              border-white/10
+
+              hover:bg-white/10
+
+              transition-all
+
+              text-sm
+              font-medium
+              "
+
+            >
+
+              Home
+
+            </Link>
+
+
+
+
+            {/* MOBILE MENU BUTTON */}
+
+            <button
+
+              onClick={() =>
+
+                setMobileMenu(
+                  !mobileMenu
+                )
+
+              }
+
+              className="
+              lg:hidden
+
+              flex
+              items-center
+              justify-center
+
+              w-10
+              h-10
+
+              rounded-xl
+
+              bg-white/5
+
+              border
+              border-white/10
+              "
+
+            >
+
+              {
+
+                mobileMenu
+
+                ? "✕"
+
+                : "☰"
+
+              }
+
+            </button>
+
+
+
+
+            {/* PROFILE */}
+
+            <div
+              className="
+              relative
+              "
+              ref={menuRef}
+            >
+
+              <div
+
+                onClick={() =>
+
+                  setShowMenu(
+                    !showMenu
+                  )
 
                 }
 
-                className="w-full text-left px-5 py-4 hover:bg-white/5 transition-all">
+                className="
+                flex
+                items-center
+
+                gap-3
+
+                bg-white/5
+                hover:bg-white/10
+
+                p-2
+
+                rounded-2xl
+
+                border
+                border-white/10
+
+                cursor-pointer
+
+                transition-all
+
+                min-w-0
+                "
+              >
+
+                {/* AVATAR */}
+
+                <img
+
+                  src={
+
+                    profile?.avatar
+
+                    ? profile.avatar.startsWith("http")
+
+                      ? profile.avatar
+
+                      : `http://localhost:5000/uploads/${profile.avatar}`
+
+                    : `https://ui-avatars.com/api/?name=${
+                        profile?.fullName || "Trader"
+                      }&background=7c3aed&color=fff`
+
+                  }
+
+                  alt="avatar"
+
+                  className="
+                  w-10
+                  h-10
+
+                  rounded-full
+
+                  object-cover
+
+                  border
+                  border-white/10
+
+                  shrink-0
+                  "
+                />
+
+
+
+
+                {/* INFO */}
+
+                <div
+                  className="
+                  hidden
+                  sm:block
+
+                  min-w-0
+                  "
+                >
+
+                  <h4
+                    className="
+                    font-semibold
+
+                    text-sm
+
+                    truncate
+
+                    max-w-[120px]
+                    "
+                  >
+
+                    {
+
+                      profile?.fullName ||
+
+                      "Trader"
+
+                    }
+
+                  </h4>
+
+
+
+                  <p
+                    className="
+                    text-xs
+                    text-gray-400
+
+                    truncate
+                    "
+                  >
+
+                    {
+
+                      profile?.accountType ||
+
+                      "Premium"
+
+                    }
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+
+
+              {/* =================================================
+                  DROPDOWN
+              ================================================= */}
+
+              {
+
+                showMenu && (
+
+                  <div
+                    className="
+                    absolute
+                    right-0
+
+                    mt-3
+
+                    w-56
+
+                    bg-[#0b1120]/95
+
+                    backdrop-blur-2xl
+
+                    border
+                    border-white/10
+
+                    rounded-2xl
+
+                    overflow-hidden
+
+                    shadow-2xl
+
+                    z-50
+                    "
+                  >
+
+                    {/* PROFILE */}
+
+                    <button
+
+                      onClick={() => {
+
+                        navigate(
+                          "/profile"
+                        );
+
+                        setShowMenu(false);
+
+                      }}
+
+                      className="
+                      w-full
+
+                      text-left
+
+                      px-5
+                      py-4
+
+                      hover:bg-white/5
+
+                      transition-all
+
+                      text-sm
+                      "
+
+                    >
+
+                      👤 Profile
+
+                    </button>
+
+
+
+
+                    {/* SETTINGS */}
+
+                    <button
+
+                      onClick={() => {
+
+                        navigate(
+                          "/settings"
+                        );
+
+                        setShowMenu(false);
+
+                      }}
+
+                      className="
+                      w-full
+
+                      text-left
+
+                      px-5
+                      py-4
+
+                      hover:bg-white/5
+
+                      transition-all
+
+                      text-sm
+                      "
+
+                    >
+
+                      ⚙️ Settings
+
+                    </button>
+
+
+
+
+                    {/* LOGOUT */}
+
+                    <button
+
+                      onClick={
+                        handleLogout
+                      }
+
+                      className="
+                      w-full
+
+                      text-left
+
+                      px-5
+                      py-4
+
+                      hover:bg-red-500/10
+
+                      text-red-400
+
+                      transition-all
+
+                      text-sm
+                      "
+
+                    >
+
+                      🚪 Logout
+
+                    </button>
+
+                  </div>
+
+                )
+
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+
+        {/* =====================================================
+            MOBILE MENU
+        ===================================================== */}
+
+        {
+
+          mobileMenu && (
+
+            <div
+              className="
+              lg:hidden
+
+              mt-4
+
+              animate-in
+              slide-in-from-top
+
+              duration-300
+
+              border-t
+              border-white/10
+
+              pt-4
+
+              flex
+              flex-col
+
+              gap-3
+
+              overflow-hidden
+              "
+            >
+
+              <Link
+
+                to="/"
+
+                onClick={() =>
+
+                  setMobileMenu(false)
+
+                }
+
+                className="
+                px-4
+                py-3
+
+                rounded-xl
+
+                bg-white/5
+
+                border
+                border-white/10
+
+                text-sm
+                "
+
+              >
+
+                🏠 Home
+
+              </Link>
+
+
+
+
+              <Link
+
+                to="/profile"
+
+                onClick={() =>
+
+                  setMobileMenu(false)
+
+                }
+
+                className="
+                px-4
+                py-3
+
+                rounded-xl
+
+                bg-white/5
+
+                border
+                border-white/10
+
+                text-sm
+                "
+
+              >
 
                 👤 Profile
 
-              </button>
+              </Link>
 
 
 
 
-              {/* SETTINGS */}
+              <Link
 
-              <button
+                to="/settings"
 
-                onClick={()=>
+                onClick={() =>
 
-                  navigate("/settings")
+                  setMobileMenu(false)
 
                 }
 
-                className="w-full text-left px-5 py-4 hover:bg-white/5 transition-all">
+                className="
+                px-4
+                py-3
+
+                rounded-xl
+
+                bg-white/5
+
+                border
+                border-white/10
+
+                text-sm
+                "
+
+              >
 
                 ⚙️ Settings
 
-              </button>
+              </Link>
 
 
 
@@ -358,7 +952,24 @@ export default function Navbar() {
 
                 onClick={handleLogout}
 
-                className="w-full text-left px-5 py-4 hover:bg-red-500/10 text-red-400 transition-all">
+                className="
+                px-4
+                py-3
+
+                rounded-xl
+
+                bg-red-500/10
+
+                border
+                border-red-500/20
+
+                text-red-400
+
+                text-sm
+                text-left
+                "
+
+              >
 
                 🚪 Logout
 
@@ -366,13 +977,14 @@ export default function Navbar() {
 
             </div>
 
-          )}
+          )
 
-        </div>
+        }
 
       </div>
 
-    </div>
+    </>
+
   );
 
 }
