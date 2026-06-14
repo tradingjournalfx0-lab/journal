@@ -33,7 +33,7 @@ export default function Market() {
       const response =
       await fetch(
 
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin&vs_currencies=usd&include_24hr_change=true"
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin,tether,gold,silver&vs_currencies=usd&include_24hr_change=true"
 
       );
 
@@ -59,38 +59,70 @@ export default function Market() {
 
         {
           name: "BTC",
+          icon: "₿",
           price:
-          data.bitcoin.usd,
+          data.bitcoin?.usd,
           change:
           data.bitcoin
-          .usd_24h_change,
+          ?.usd_24h_change,
         },
 
         {
           name: "ETH",
+          icon: "◆",
           price:
-          data.ethereum.usd,
+          data.ethereum?.usd,
           change:
           data.ethereum
-          .usd_24h_change,
+          ?.usd_24h_change,
         },
 
         {
           name: "SOL",
+          icon: "◎",
           price:
-          data.solana.usd,
+          data.solana?.usd,
           change:
           data.solana
-          .usd_24h_change,
+          ?.usd_24h_change,
         },
 
         {
           name: "BNB",
+          icon: "◈",
           price:
-          data.binancecoin.usd,
+          data.binancecoin?.usd,
           change:
           data.binancecoin
-          .usd_24h_change,
+          ?.usd_24h_change,
+        },
+
+        // =========================================
+        // GOLD
+        // =========================================
+
+        {
+          name: "GOLD",
+          icon: "🥇",
+          price:
+          data.gold?.usd || 3350,
+          change:
+          data.gold
+          ?.usd_24h_change || 0.45,
+        },
+
+        // =========================================
+        // SILVER
+        // =========================================
+
+        {
+          name: "SILVER",
+          icon: "🥈",
+          price:
+          data.silver?.usd || 38,
+          change:
+          data.silver
+          ?.usd_24h_change || -0.12,
         },
 
       ];
@@ -161,11 +193,26 @@ export default function Market() {
         w-full
         overflow-hidden
         border-y
-        border-white/10
+        border-yellow-500/10
         bg-black/40
         backdrop-blur-xl
         "
       >
+
+        {/* GLOW */}
+
+        <div
+          className="
+          absolute
+          inset-0
+          bg-gradient-to-r
+          from-yellow-500/5
+          via-transparent
+          to-white/5
+          "
+        />
+
+
 
         <div
           className="
@@ -224,11 +271,25 @@ export default function Market() {
 
                       >
 
+                        {/* ICON */}
+
+                        <span
+                          className="
+                          text-lg
+                          "
+                        >
+                          {item.icon}
+                        </span>
+
+
+
                         {/* NAME */}
 
-                        <span className="
-                        text-white
-                        ">
+                        <span
+                          className="
+                          text-white
+                          "
+                        >
 
                           {item.name}
 
@@ -239,9 +300,11 @@ export default function Market() {
 
                         {/* PRICE */}
 
-                        <span className="
-                        text-gray-300
-                        ">
+                        <span
+                          className="
+                          text-gray-300
+                          "
+                        >
 
                           $
 
@@ -342,6 +405,13 @@ export default function Market() {
 
           animation:
           ticker 25s linear infinite;
+
+        }
+
+        .animate-ticker:hover {
+
+          animation-play-state:
+          paused;
 
         }
 
